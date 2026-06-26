@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IRL Self-Assessment · EPFL Fast Track Programs</title>
+<meta name="description" content="A 5-minute founder self-assessment of your venture's Innovation Readiness, with a radar summary of where you stand.">
+<!--
+  Standalone founder self-assessment on the KTH Innovation Readiness Level model.
+  Six dimensions, nine cumulative checkpoints each. On submit it composes an email
+  (mailto) to the program with the founder's profile. Fully self-contained: logo inlined,
+  no external dependencies, no server. Recipient set in RECIPIENT below.
+-->
+<style>
+  :root{ color-scheme: light;
+    --ink:#212121; --parchment:#fafafa; --stone:#f0f0f0; --sand:#dcdcdc;
+    --clay:#6b6b6b; --ash:#8a8a8a; --smoke:#a1a1a1;
+    --ember:#e30713; --alert:#b3412a;
+    --blue:#4a90e2; --blue-d:#2275d7; --orange:#f5a623; --orange-d:#cf8509;
+    --teal:#007480; --teal-d:#005a63; --green:#7ed321; --green-d:#5d9c18;
+    --sans:"Suisse Int'l","SuisseIntl","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --r:3px; --maxw:880px;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; }
+  body{ background:#fff; color:var(--ink); font-family:var(--sans); font-size:16px; line-height:1.55;
+    letter-spacing:.005em; -webkit-font-smoothing:antialiased; display:flex; flex-direction:column; min-height:100vh; }
+  a{ color:var(--ember); text-decoration:none; } a:hover{ text-decoration:underline; }
+
+  .topbar{ display:flex; align-items:center; gap:12px; padding:14px clamp(16px,4vw,40px);
+    border-bottom:1px solid var(--sand); position:sticky; top:0; background:#fff; z-index:20; }
+  .logo{ height:22px; width:auto; display:block; }
+  .logo path,.logo polygon,.logo rect{ fill:var(--ember); }
+  .brand .sub{ color:var(--clay); font-size:13px; border-left:1px solid var(--sand); padding-left:10px; }
+
+  .wrap{ width:100%; max-width:var(--maxw); margin:0 auto; padding:clamp(22px,4vw,40px) clamp(16px,4vw,40px); flex:1; }
+  .eyebrow{ font:12px var(--mono); letter-spacing:.06em; text-transform:uppercase; color:var(--ember); }
+  h1{ font-size:clamp(28px,4.4vw,42px); line-height:1.05; letter-spacing:-.02em; font-weight:600; margin:.2em 0 .3em; }
+  .lead{ font-size:clamp(16px,2vw,19px); color:var(--clay); max-width:660px; }
+  .note{ font-size:13.5px; color:var(--clay); }
+
+  .panel{ border:1px solid var(--sand); border-radius:4px; padding:20px; margin-top:24px; background:#fff; }
+  .panel.who{ background:var(--parchment); }
+  .field{ display:flex; flex-direction:column; gap:5px; margin-bottom:14px; }
+  .field:last-child{ margin-bottom:0; }
+  .field label{ font:11px var(--mono); text-transform:uppercase; letter-spacing:.05em; color:var(--clay); }
+  .field input, .field textarea{ font:15px var(--sans); color:var(--ink); border:1px solid var(--sand);
+    border-radius:var(--r); padding:9px 11px; background:#fff; width:100%; }
+  .field input:focus, .field textarea:focus{ outline:none; border-color:var(--ember); box-shadow:0 0 0 1px var(--ember) inset; }
+  .field .err{ color:var(--alert); font:12px var(--mono); display:none; }
+  .field.invalid .err{ display:block; } .field.invalid input{ border-color:var(--alert); }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:0 18px; }
+  @media(max-width:600px){ .grid2{ grid-template-columns:1fr; } }
+
+  .dim{ border:1px solid var(--sand); border-left:4px solid var(--c,var(--ash)); border-radius:4px; padding:18px; margin-top:16px; }
+  .dim-head{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:4px; }
+  .dim-head .t{ font-size:17px; font-weight:600; letter-spacing:-.01em; }
+  .dim-head .code{ font:11px var(--mono); text-transform:uppercase; letter-spacing:.05em; color:var(--cd,var(--clay)); }
+  .dim-head .lvl{ margin-left:auto; font:12px var(--mono); color:#fff; background:var(--c,var(--ash));
+    border-radius:var(--r); padding:3px 10px; white-space:nowrap; }
+  .dim-q{ font-size:13.5px; color:var(--clay); margin:0 0 10px; }
+  .checks{ list-style:none; padding:0; margin:0; }
+  .checks li{ border-top:1px solid var(--sand); transition:opacity .12s; }
+  .dim.answered li.is-future{ opacity:.5; }
+  .checks li label{ display:flex; gap:10px; align-items:flex-start; padding:9px 2px; cursor:pointer; font-size:14.5px; }
+  .checks li input{ position:absolute; opacity:0; width:0; height:0; }
+  .mark{ flex:none; width:16px; height:16px; margin-top:2px; border:1.5px solid var(--ash); border-radius:50%;
+    display:inline-flex; align-items:center; justify-content:center; box-sizing:border-box; transition:all .12s; }
+  .is-future .mark{ border-radius:50%; border-color:var(--ash); background:transparent; }
+  .is-current .mark{ border-radius:50%; border-color:var(--ember); background:var(--ember); }
+  .is-current .mark::after{ content:""; width:6px; height:6px; border-radius:50%; background:#fff; }
+  .is-below .mark{ width:13px; height:13px; margin-top:3px; border-radius:3px; border-color:var(--green-d); background:var(--green-d); }
+  .is-below .mark::after{ content:"\2713"; font:10px/1 var(--mono); color:#fff; }
+  .checks li input:focus-visible + .mark{ box-shadow:0 0 0 2px rgba(227,7,19,.35); }
+  .is-below label .ln, .is-below label > span:last-child{ color:var(--clay); }
+  .checks li .ln{ font:11px var(--mono); color:var(--ash); flex:none; width:22px; padding-top:1px; }
+  .legend{ display:flex; flex-direction:column; gap:12px; font-size:13.5px; flex:1 1 220px; }
+  .legend .lg{ display:flex; align-items:flex-start; gap:9px; }
+  .legend .sw{ width:15px; height:15px; border-radius:2px; flex:none; margin-top:2px; }
+  .legend .lg small{ display:block; color:var(--clay); font-size:12px; }
+  .savebar{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:16px 0 4px; padding:11px 14px;
+    border:1px solid var(--sand); border-left:3px solid var(--orange); background:var(--parchment); border-radius:var(--r); }
+  .savebar .saveinfo{ font-size:12.5px; color:var(--clay); flex:1 1 320px; }
+  .savebar .saveinfo strong{ color:var(--ink); }
+  .savebar .saved{ font:11px var(--mono); text-transform:uppercase; letter-spacing:.05em; color:var(--green-d); min-width:58px; text-align:right; }
+  .savebar button{ font:12px var(--sans); border:1px solid var(--ink); background:transparent; color:var(--ink);
+    border-radius:var(--r); padding:5px 11px; cursor:pointer; white-space:nowrap; }
+  .savebar button:hover{ background:var(--stone); }
+  /* steps + objective (step 2) */
+  .step[hidden]{ display:none; }
+  .stepbar{ display:flex; align-items:baseline; gap:10px; margin:6px 0 12px; }
+  .stepnum{ font:11px var(--mono); text-transform:uppercase; letter-spacing:.06em; color:#fff; background:var(--ember); border-radius:var(--r); padding:3px 9px; }
+  .steptitle{ font-size:19px; font-weight:600; letter-spacing:-.01em; }
+  .seg{ display:inline-flex; gap:6px; }
+  .segbtn{ font:14px var(--sans); border:1px solid var(--sand); background:#fff; color:var(--ink); border-radius:var(--r); padding:9px 16px; cursor:pointer; }
+  .segbtn:hover{ background:var(--stone); }
+  .segbtn.active{ background:var(--ember); color:#fff; border-color:var(--ember); }
+  .deadline{ margin-top:9px; font:14px var(--sans); color:var(--clay); }
+  .deadline strong{ color:var(--ink); }
+  .glist{ list-style:none; padding:0; margin:6px 0 0; }
+  .glist li label{ display:flex; gap:10px; align-items:flex-start; padding:9px 2px; cursor:pointer; font-size:14.5px; border-top:1px solid var(--sand); }
+  .glist li:first-child label{ border-top:none; }
+  .glist input{ margin-top:2px; accent-color:var(--ember); flex:none; width:16px; height:16px; }
+  .gapbox{ margin-top:6px; }
+  .gaplabel{ font:11px var(--mono); text-transform:uppercase; letter-spacing:.05em; color:var(--clay); margin-bottom:8px; }
+  .gchips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .gchip{ font:12px var(--mono); border-radius:var(--r); padding:4px 10px; border:1px solid var(--sand); background:#fff; }
+  .gchip.lo{ color:#fff; background:var(--alert); border-color:var(--alert); }
+  .gchip.mid{ color:var(--orange-d); border-color:var(--orange); }
+  .gchip.hi{ color:var(--green-d); border-color:var(--green-d); }
+  .futq{ font-size:13.5px; color:var(--clay); margin:2px 0 7px; }
+  #future .field{ margin-bottom:18px; }
+  #future textarea{ width:100%; font:14px var(--sans); color:var(--ink); border:1px solid var(--sand); border-radius:var(--r); padding:9px 11px; }
+  #future textarea:focus{ outline:none; border-color:var(--ember); box-shadow:0 0 0 1px var(--ember) inset; }
+  .natoggle{ display:inline-flex; align-items:center; gap:8px; font:12px var(--mono); text-transform:uppercase;
+    letter-spacing:.04em; color:var(--clay); margin:0 0 10px; cursor:pointer; }
+  .natoggle input{ accent-color:var(--ember); width:15px; height:15px; }
+  .dim.na .checks, .dim.na .evidwrap{ opacity:.4; pointer-events:none; }
+  .dim.na .dim-head .lvl{ background:var(--ash); }
+  .evidwrap{ display:none; margin:8px 0 12px 30px; padding-left:14px; border-left:2px solid var(--c,var(--sand)); }
+  .evidwrap.show{ display:block; }
+  .evidlabel{ font:11px var(--mono); text-transform:uppercase; letter-spacing:.05em; color:var(--cd,var(--clay)); display:block; margin-bottom:5px; }
+  .dim textarea{ width:100%; font:14px var(--sans); color:var(--ink); border:1px solid var(--sand); border-radius:var(--r); padding:8px 10px; }
+  .dim textarea:focus{ outline:none; border-color:var(--ember); box-shadow:0 0 0 1px var(--ember) inset; }
+  .dim.invalid{ border-color:var(--alert); }
+  .dim .dimerr{ color:var(--alert); font:12px var(--mono); margin-top:8px; display:none; }
+  .dim.invalid .dimerr{ display:block; }
+
+  .actions{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:24px; }
+  .btn{ font:14px var(--sans); border:1px solid var(--ember); background:var(--ember); color:#fff;
+    border-radius:var(--r); padding:11px 20px; cursor:pointer; font-weight:600; }
+  .btn:hover{ background:#c20610; }
+  .btn.ghost{ background:transparent; color:var(--ink); border-color:var(--ink); font-weight:400; }
+  .btn.ghost:hover{ background:var(--stone); }
+
+  .results{ display:none; margin-top:30px; border-top:2px solid var(--ember); padding-top:24px; }
+  .results.show{ display:block; }
+  .radarwrap{ display:flex; flex-wrap:wrap; gap:24px; align-items:center; }
+  .radar{ width:100%; max-width:340px; flex:1 1 260px; height:auto; }
+  table.sc{ width:100%; border-collapse:collapse; flex:1 1 240px; font-size:14.5px; }
+  table.sc td{ padding:8px 10px; border-bottom:1px solid var(--sand); }
+  table.sc td.n{ text-align:right; font:14px var(--mono); font-variant-numeric:tabular-nums; }
+  table.sc td .dot{ display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:8px; background:var(--c,var(--ash)); }
+  .summary{ margin-top:18px; }
+  .callout{ border:1px solid var(--sand); border-left:4px solid var(--ember); background:var(--parchment);
+    border-radius:4px; padding:15px 17px; margin:16px 0; }
+  .callout .k{ font:11px var(--mono); text-transform:uppercase; letter-spacing:.06em; color:var(--ember); display:block; margin-bottom:6px; }
+  .footer{ border-top:1px solid var(--sand); padding:14px clamp(16px,4vw,40px); font:11px var(--mono);
+    text-transform:uppercase; letter-spacing:.05em; color:var(--ash); }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <a href="/" aria-label="Back to Fast Track home" style="display:flex;align-items:center"><svg class="logo" viewBox="0 0 182.4 53" xmlns="http://www.w3.org/2000/svg" aria-label="EPFL">
+      <polygon points="0,21.6 11.4,21.6 11.4,9.8 38.3,9.8 38.3,0 0,0"/>
+      <polygon points="0,53 38.3,53 38.3,43.2 11.4,43.2 11.4,31.4 0,31.4"/>
+      <rect x="11.4" y="21.6" width="24.6" height="9.8"/>
+      <path d="M86,4.9c-1.5-1.5-3.4-2.6-5.7-3.5C78,0.4,75.1,0,71.8,0H48.1v53h11.4V31.4h12.2c3.3,0,6.1-0.4,8.5-1.3c2.3-0.9,4.2-2.1,5.7-3.5c1.5-1.5,2.5-3.1,3.2-5s1-3.8,1-5.8s-0.3-4-1-5.8C88.5,8,87.4,6.3,86,4.9z M78,18.7c-0.6,0.8-1.3,1.4-2.3,1.8c-0.9,0.4-2,0.7-3.3,0.9c-1.2,0.1-2.5,0.2-3.9,0.2h-9.1V9.8h9.1c1.3,0,2.6,0.1,3.9,0.2c1.2,0.1,2.3,0.4,3.3,0.9c0.9,0.4,1.7,1,2.3,1.8c0.6,0.8,0.9,1.8,0.9,3S78.6,18,78,18.7z"/>
+      <polygon points="155.5,43.2 155.5,0 144,0 144,53 182.4,53 182.4,43.2"/>
+      <polygon points="97.4,21.6 108.9,21.6 108.9,9.8 135.8,9.8 135.8,0 97.4,0"/>
+      <rect x="97.4" y="31.4" width="11.4" height="21.6"/>
+      <rect x="108.9" y="21.6" width="24.6" height="9.8"/>
+    </svg></a>
+    <div class="brand"><span class="sub">Fast Track Programs · IRL self-assessment</span></div>
+  </div>
+
+  <div class="wrap">
+    <div class="eyebrow" id="heroEyebrow">Founder self-assessment · ~5 minutes</div>
+    <h1 id="heroTitle">Where is your venture, really?</h1>
+    <p class="lead" id="heroLead">A quick read on your Innovation Readiness. For each area, pick the single highest statement that is already true for you, then say what proves it: the numbers, names and dates that back the claim.</p>
+
+    <div class="savebar">
+      <span class="saveinfo"><strong>Saved on this device only.</strong> Not online: clearing your browser data will erase it. Submitting emails your results to the program.</span>
+      <span class="saved" id="savedDot"></span>
+      <button type="button" id="resetBtn">Start over</button>
+    </div>
+
+    <form id="form" novalidate>
+      <section class="step" id="step1">
+        <div class="stepbar"><span class="stepnum">Step 1 of 2</span><span class="steptitle">Where you are</span></div>
+        <div class="panel who">
+          <div class="field" id="f-venture"><label>Venture / project</label><input type="text" id="venture" placeholder="Your startup or project name"><span class="err">Please enter your venture name.</span></div>
+        </div>
+
+        <div id="dims"></div>
+
+        <p class="note" style="margin-top:18px">This self-assessment will soon be compared with the Blue Team's own diagnostic of your venture, so be honest: the gaps are the useful part.</p>
+
+        <div class="actions">
+          <button type="button" class="btn" id="nextBtn">Next: team objective →</button>
+          <span class="note">Then you'll set what you're getting ready for.</span>
+        </div>
+      </section>
+
+      <section class="step" id="step2" hidden>
+        <div class="stepbar"><span class="stepnum">Step 2 of 2</span><span class="steptitle">Where you want to be</span></div>
+        <div class="panel">
+          <p class="dim-q" style="margin-top:0">Picture the finish line for the next 3 to 6 months. Fill in only what matters to you, but be concrete: numbers, names and amounts, not adjectives.</p>
+
+          <div class="field" id="f-time"><label>Timeframe</label>
+            <div class="seg" id="seg">
+              <button type="button" class="segbtn" data-mo="3">3 months</button>
+              <button type="button" class="segbtn" data-mo="6">6 months</button>
+            </div>
+            <div class="deadline" id="deadline">Choose a timeframe to see your target date.</div>
+            <span class="err">Choose 3 or 6 months.</span>
+          </div>
+
+          <div id="future"></div>
+          <p class="note" id="futerr" style="color:var(--alert);display:none">Choose a timeframe and fill in at least one target.</p>
+        </div>
+
+        <div class="panel">
+          <div class="field"><label>Anything you'd like your coach to know (optional)</label>
+            <textarea id="notes" rows="3" placeholder="Context, blockers, what you want help with…"></textarea></div>
+        </div>
+
+        <div class="actions">
+          <button type="button" class="btn ghost" id="backBtn">← Back</button>
+          <button type="submit" class="btn" id="submit">Submit &amp; email results</button>
+          <span class="note">Opens your email app with everything filled in. Please send it as is, without editing the message.</span>
+        </div>
+      </section>
+    </form>
+
+    <section class="results" id="results">
+      <div class="eyebrow">Your readiness profile</div>
+      <h1 style="font-size:clamp(22px,3vw,30px)">Snapshot</h1>
+      <table class="sc"><tbody id="scbody"></tbody></table>
+      <div class="summary" id="summary"></div>
+      <div class="actions">
+        <a class="btn" id="mailtoBtn" href="#">Open email to send →</a>
+        <button type="button" class="btn ghost" id="editBtn">Back to edit</button>
+      </div>
+      <p class="note" style="margin-top:12px"><strong>Please send the email without editing it</strong>, just press send. If your email app didn't open, use the button above. Results go to the EPFL program team.</p>
+    </section>
+  </div>
+
+  <div class="footer">EPFL Startup Launchpad · Fast Track Programs · readiness self-assessment</div>
+
+<script>
+const RECIPIENT = "marius.conti@epfl.ch";
+const DIMS = [
+  { key:"crl", code:"CRL", name:"Customer", q:"Is the need real, and will customers adopt and pay?", hue:"--blue", hued:"--blue-d", checks:[
+    "We have a hypothesis that a need or problem might exist in a market.",
+    "We've done some desk research and written a clearer problem / need hypothesis.",
+    "We've spoken directly with a few potential customers/users or experts and refined the problem from their input.",
+    "Several customers/users have confirmed the problem and its importance; we know who the user, payer and decision-maker are.",
+    "Target customers confirm our solution would address their problem (initial problem-solution fit) and we've chosen a first segment.",
+    "Customer/user testing has confirmed the value and benefits, and we've started structured sales activity.",
+    "We have customer agreements and first or test sales of early versions, with a few active users.",
+    "We sell a market-ready product near target price to a substantial number of active users, with a real sales process.",
+    "We have widespread, repeatable, scalable sales to many customers and a large, growing user base."
+  ]},
+  { key:"trl", code:"TRL", name:"Technology", q:"Does the solution work, and is it fit for purpose?", hue:"--teal", hued:"--teal-d", checks:[
+    "We've identified research results or an idea with potential applications.",
+    "We've defined and described a technology concept (still unproven).",
+    "Lab tests of key functions suggest the concept could work; active R&D has started.",
+    "Basic components work together in the lab (initial validation).",
+    "The integrated technology has been tested in a realistic, relevant environment.",
+    "A representative prototype works in a relevant environment, meeting most key requirements.",
+    "A near-complete prototype works in a real operational environment.",
+    "The complete technology is proven in real operations by first users, meeting all specifications.",
+    "The technology is proven, scalable and in continuous real use by several users."
+  ]},
+  { key:"brl", code:"BRL", name:"Business model", q:"Is there a viable and sustainable model around it?", hue:"--orange", hued:"--orange-d", checks:[
+    "We have only a vague description of the business idea and value proposition.",
+    "We've described the business concept and value proposition in a structured form.",
+    "We've described the full business model (e.g. canvas), with target market, size estimates and competition.",
+    "A first simplified P&L (main costs and revenues) suggests economic viability.",
+    "We've validated the revenue and cost sides with feedback from customers, experts or suppliers.",
+    "We've tested the complete model in a realistic scenario (pilot, pre-order, tender) and projections show viability.",
+    "First commercial-terms sales show willingness to pay, and key supplier/partner agreements are in place.",
+    "1-3 years of operating metrics show the model holds and is sustainable.",
+    "The sustainable business model is operational and meets or exceeds profit, growth and impact expectations."
+  ]},
+  { key:"iprl", code:"IPRL", name:"IPR", q:"Is the IP identified, owned, and protectable?", hue:"--blue", hued:"--blue-d", na:true, checks:[
+    "We suspect our results or ideas might contain some IP, but it's undocumented.",
+    "We've mapped the possible forms of IP and clarified ownership (we can use it).",
+    "We've described the key IP in detail and assessed whether it can be protected.",
+    "A professional has confirmed what can be protected and why it matters for the business.",
+    "We have a draft IPR strategy and have filed a first formal application/registration of key IP.",
+    "We have a complete, professionally validated IPR strategy and an initial freedom-to-operate view.",
+    "Key IP has entered national/regional phases (US, EU, JP, etc.).",
+    "The IPR strategy is fully implemented and key IP is granted in a first country/region.",
+    "We have strong, granted and maintained IP protection in the countries relevant to the business."
+  ]},
+  { key:"tmrl", code:"TMRL", name:"Team", q:"Are the right people present, with capacity and alignment?", hue:"--teal", hued:"--teal-d", checks:[
+    "We're essentially one person and lack some key competencies, with little view of what's needed.",
+    "We're 1-2 people and have a first idea of which competencies we'll need.",
+    "We have some but not all needed competencies, and have identified the gaps and a near-term plan.",
+    "We have a clear route to market, a committed champion, and a recruitment plan underway.",
+    "A founding team works together, spending significant time, with agreed and signed roles and equity.",
+    "We have a complementary, diverse founding team with all near-term competencies and a clear CEO.",
+    "A well-functioning team with documented vision/goals/culture, a plan to grow, and operational board/advisors.",
+    "A professional leadership team, a diverse board, HR in place, and planned recruitment ongoing.",
+    "A high-performing organisation with continuous learning and a sustained management team."
+  ]},
+  { key:"frl", code:"FRL", name:"Funding", q:"Is there enough runway to reach a viable model?", hue:"--orange", hued:"--orange-d", checks:[
+    "We have little insight into the activities, costs or funding options to verify the idea.",
+    "We've described the initial activities/costs and a basic plan with funding options for the first milestones.",
+    "We've secured funding for initial verification / feasibility (e.g. 1-6 months).",
+    "We have an elaborated verification plan and have secured funding for a substantial part of it.",
+    "We have a tested funding pitch, a 12-month P&L and cash flow, and a decided funding strategy.",
+    "We have a 3-5 year P&L budget and cash flow clarifying near and medium-term funding needs.",
+    "We're discussing a defined offer with funders, with a complete, tested pitch and business plan.",
+    "We have term-sheet-level discussions with interested funders and are due-diligence ready.",
+    "We've secured 6-12 months runway (cash or recurring revenue) with full financial monitoring."
+  ]}
+];
+
+/* per-LEVEL evidence prompts: what would substantiate each level (quantitative) */
+const PROOF = {
+  crl:["Where did the hunch come from? Any notes on the market or problem.",
+    "Which sources? Market reports, competitor list, the problem statement you wrote.",
+    "How many people did you talk to, and who? Quotes that changed your view.",
+    "How many customers confirmed the problem? Who is user vs payer vs decision-maker?",
+    "Which segment, how many said it solves their problem, and your value proposition?",
+    "What did testing show? Which partners or sales steps are now in motion?",
+    "How many agreements or test sales, and how many active users?",
+    "How many active users, at what price, and what sales process / CRM?",
+    "What are your sales numbers, growth rate and number of customers?"],
+  trl:["Which research result or application idea? Any references.",
+    "How is the concept described? Sketches, spec, the approach.",
+    "Which lab tests, on what parameters, with what result?",
+    "Which components were integrated, and what did the lab test show?",
+    "Which relevant environment did you test in, and what were the results?",
+    "What does the prototype do, in which environment, against which requirements?",
+    "Which operational environment, and how complete is the prototype?",
+    "Which first users, in real operations, meeting which specifications?",
+    "How many users over what period, and what scale / uptime have you proven?"],
+  brl:["Whatever you have on the idea or value proposition so far.",
+    "How is the concept / value proposition structured? Main competitors.",
+    "Your canvas, target market and size estimates (TAM / SAM), competition.",
+    "Your first P&L: main costs, main revenue streams, the key assumptions.",
+    "Who gave feedback on pricing / costs, and how did it change the numbers?",
+    "Which pilot, pre-order or tender, and what do the projections show?",
+    "How much revenue on commercial terms, from how many customers? Which agreements?",
+    "Which operating metrics over 1-3 years show the model holds?",
+    "What profit, growth and impact figures prove it is sustainable?"],
+  iprl:["What makes you think there is protectable IP?",
+    "Which forms of IP, and is ownership / assignment clarified?",
+    "How is the key IP described, and what did your protectability check show?",
+    "What did the professional confirm can be protected, and why does it matter?",
+    "Which key IP did you file, and what does your draft strategy cover?",
+    "What does your full strategy and freedom-to-operate view cover?",
+    "Which national / regional phases, and current status?",
+    "Which IP is granted, in which country / region, and what is managed?",
+    "Which granted / maintained rights, in which countries, plus access to external IP?"],
+  tmrl:["Who is in the team today, and which competencies are missing?",
+    "How many people, and which competencies do you know you'll need?",
+    "Which competencies are present, what are the gaps, and the near-term plan?",
+    "Who is the committed champion, and what is the recruitment plan?",
+    "How many founders, time committed, and are roles / equity signed?",
+    "Who covers each near-term need, who is CEO, and how diverse is the team?",
+    "What is documented (vision / roles), the growth plan, and who advises?",
+    "Who leads, who is on the board, and what HR / recruitment is in place?",
+    "What shows the organisation performs and is sustained over time?"],
+  frl:["Whatever you know about the costs and funding options so far.",
+    "Your initial cost estimate and the funding options for first milestones.",
+    "How much is secured, for how long, for which activities?",
+    "Your verification plan and how much of it is funded.",
+    "Your 12-month P&L / cash flow, pitch status, and chosen funding strategy.",
+    "Your 3-5 year budget and cash flow, and the funding need it shows.",
+    "Which funders, what offer, and is the pitch / plan complete?",
+    "Which term-sheet-level talks, and is the data room due-diligence ready?",
+    "How many months runway, from cash or revenue, and what monitoring is in place?"]
+};
+
+/* ---------- build form ---------- */
+const dimsEl=document.getElementById("dims");
+dimsEl.innerHTML=DIMS.map(d=>`<div class="dim" data-key="${d.key}" style="--c:var(${d.hue});--cd:var(${d.hued})">
+  <div class="dim-head"><span class="t">${d.name}</span><span class="code">${d.code}</span><span class="lvl" data-lvl>Not set</span></div>
+  <p class="dim-q">${d.q} <span style="color:var(--ash)">Pick the highest statement that is already true.</span></p>
+  ${d.na?`<label class="natoggle"><input type="checkbox" class="nachk"> We have no IP</label>`:""}
+  <ul class="checks">${d.checks.map((c,i)=>`<li data-li="${i}" class="is-future"><label><input type="radio" name="r-${d.key}" data-i="${i}"><span class="mark"></span><span class="ln">L${i+1}</span><span>${c}</span></label></li>`).join("")}</ul>
+  <div class="evidwrap"><label class="evidlabel">What proves this? Numbers, names, dates.</label>
+    <textarea data-evid rows="2"></textarea></div>
+  <div class="dimerr">Pick the highest true statement and add the evidence that backs it.</div>
+</div>`).join("");
+
+/* ---------- scoring ---------- */
+function levelOf(dimEl){ const r=dimEl.querySelector('input[type=radio]:checked'); return r?(+r.dataset.i+1):0; }
+function evidenceOf(dimEl){ return dimEl.querySelector("[data-evid]").value.trim(); }
+function scores(){ const s={}; DIMS.forEach(d=>{ s[d.key]=levelOf(dimsEl.querySelector(`.dim[data-key="${d.key}"]`)); }); return s; }
+function isNA(key){ const el=dimsEl.querySelector(`.dim[data-key="${key}"]`); return !!el && el.classList.contains('na'); }
+
+function setBadge(dimEl){ const lv=levelOf(dimEl); dimEl.querySelector("[data-lvl]").textContent = lv ? ("Level "+lv) : "Not set"; }
+function paintMarks(dimEl){
+  const lv=levelOf(dimEl);
+  dimEl.classList.toggle('answered', !!lv);   /* once a level is set, dim future levels to 50% */
+  dimEl.querySelectorAll('li[data-li]').forEach(li=>{
+    const i=+li.dataset.li; li.classList.remove('is-below','is-current','is-future');
+    if(!lv || i>lv-1) li.classList.add('is-future');
+    else if(i===lv-1) li.classList.add('is-current');
+    else li.classList.add('is-below');   /* completed lower level -> small check */
+  });
+}
+function renderLiveRadar(){ const box=document.getElementById('radarbox-live'); if(box) box.innerHTML=radarSVG(scores()); }
+function positionEvid(dimEl){
+  const r=dimEl.querySelector('input[type=radio]:checked'); if(!r) return;
+  const ew=dimEl.querySelector('.evidwrap'); const lv=+r.dataset.i+1;
+  r.closest('li').appendChild(ew);            /* move proof field right under the chosen level */
+  ew.classList.add('show');
+  ew.querySelector('[data-evid]').placeholder = PROOF[dimEl.dataset.key][lv-1];
+  ew.querySelector('.evidlabel').textContent = "What proves Level "+lv+"? Numbers, names, dates.";
+}
+/* radios fire change: reposition + retarget the proof field (never on keystrokes, to keep focus) */
+dimsEl.addEventListener("change",e=>{
+  const na=e.target.closest('.nachk');
+  if(na){ const dimEl=na.closest('.dim'); dimEl.classList.toggle('na',na.checked);
+    dimEl.querySelector('[data-lvl]').textContent = na.checked ? "No IP" : (levelOf(dimEl)?("Level "+levelOf(dimEl)):"Not set");
+    dimEl.classList.remove('invalid'); renderLiveRadar(); if(results.classList.contains("show")) renderResults(); return; }
+  const r=e.target.closest('input[type=radio]'); if(!r) return;
+  const dimEl=r.closest('.dim'); setBadge(dimEl); positionEvid(dimEl); paintMarks(dimEl); dimEl.classList.remove('invalid');
+  renderLiveRadar(); if(results.classList.contains("show")) renderResults(); });
+/* typing in the proof field: just clear the error and refresh results if shown */
+dimsEl.addEventListener("input",e=>{ if(!e.target.matches('[data-evid]')) return; const dimEl=e.target.closest('.dim');
+  if(levelOf(dimEl) && evidenceOf(dimEl)) dimEl.classList.remove('invalid');
+  if(results.classList.contains("show")) renderResults(); });
+DIMS.forEach(d=>{ const el=dimsEl.querySelector(`.dim[data-key="${d.key}"]`); setBadge(el); paintMarks(el); });
+
+/* ---------- Step 2: where you want to be ---------- */
+const FUTURE=[
+  {key:"crl",  label:"Customers / users", q:"Do you want (more) customers or users? How many, and paying or free?", ph:"e.g. 20 paying customers, or 500 free users converting at 5%"},
+  {key:"brl",  label:"Revenue / model",   q:"Revenue or a proven business model? How much, and at what price?", ph:"e.g. CHF 10k monthly revenue, or a validated price of CHF 200 per seat"},
+  {key:"trl",  label:"Product",           q:"A more complete or proven product? What must it do, and for whom?", ph:"e.g. v1 live with the 3 core features, used daily by 5 pilot users"},
+  {key:"tmrl", label:"Team",              q:"Grow the team or make a key hire? Which role?", ph:"e.g. a technical co-founder, or a first commercial hire"},
+  {key:"frl",  label:"Funding",           q:"Funding or investment? What kind, and how much?", ph:"e.g. CHF 150k Innosuisse grant, or a CHF 500k pre-seed angel round"}
+];
+let selMonths=0, deadlineStr="";
+function escHtml(s){ return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;"); }
+function futVal(k){ const t=document.querySelector('[data-fut="'+k+'"]'); return t?t.value.trim():""; }
+
+document.getElementById("future").innerHTML=FUTURE.map(f=>`<div class="field"><label>${f.label}</label>
+  <p class="futq">${f.q}</p>
+  <textarea data-fut="${f.key}" rows="2" placeholder="${f.ph}"></textarea></div>`).join("");
+document.getElementById("future").addEventListener("input",()=>{ document.getElementById("futerr").style.display="none"; });
+
+function addMonths(n){ const d=new Date(); d.setMonth(d.getMonth()+n); return d; }
+function fmtDate(d){ return d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}); }
+function setMonths(n){ selMonths=n; deadlineStr=fmtDate(addMonths(n));
+  document.querySelectorAll('#seg .segbtn').forEach(b=>b.classList.toggle('active',+b.dataset.mo===n));
+  document.getElementById('deadline').innerHTML="Target date: <strong>"+deadlineStr+"</strong>";
+  document.getElementById('f-time').classList.remove('invalid'); document.getElementById('futerr').style.display="none"; schedulePersist(); }
+document.getElementById("seg").addEventListener("click",e=>{ const b=e.target.closest('.segbtn'); if(b) setMonths(+b.dataset.mo); });
+
+function objectiveLines(){
+  const out=["Where they want to be (Step 2):"];
+  out.push("- Timeframe: "+(selMonths?(selMonths+" months (by "+deadlineStr+")"):"-"));
+  FUTURE.forEach(f=>{ const v=futVal(f.key); if(v) out.push("- "+f.label+": "+v); });
+  return out;
+}
+
+/* ---------- radar ---------- */
+function radarSVG(s){
+  const cx=180,cy=180,R=130;
+  const ang={crl:-90,trl:-30,brl:30,iprl:90,tmrl:150,frl:210};
+  const pt=(k,v)=>{ const a=ang[k]*Math.PI/180, r=v/9*R; return [cx+r*Math.cos(a), cy+r*Math.sin(a)]; };
+  const active=DIMS.filter(d=>!isNA(d.key));
+  const poly=active.map(d=>pt(d.key,s[d.key]).map(n=>n.toFixed(1)).join(",")).join(" ");
+  const axisEnd=k=>{ const a=ang[k]*Math.PI/180; return [cx+R*Math.cos(a), cy+R*Math.sin(a)]; };
+  const lbl={crl:["CRL",180,34,"middle"],trl:["TRL",300,112,"start"],brl:["BRL",300,252,"start"],iprl:["IPRL",180,332,"middle"],tmrl:["TMRL",60,252,"end"],frl:["FRL",60,112,"end"]};
+  const labels=DIMS.map(d=>{ const l=lbl[d.key]; const na=isNA(d.key);
+    return `<text x="${l[1]}" y="${l[2]}" text-anchor="${l[3]}" style="fill:${na?'var(--ash)':'var(--ink)'}">${l[0]}${na?' n/a':''}</text>`; }).join("");
+  return `<svg class="radar" viewBox="0 0 360 360" role="img" aria-label="Readiness radar">
+    <circle cx="180" cy="180" r="43.33" fill="none" style="stroke:var(--sand)"/>
+    <circle cx="180" cy="180" r="86.67" fill="none" style="stroke:var(--sand)"/>
+    <circle cx="180" cy="180" r="130" fill="none" style="stroke:var(--sand)"/>
+    <g style="stroke:var(--sand)">${DIMS.map(d=>{const e=axisEnd(d.key);return `<line x1="180" y1="180" x2="${e[0].toFixed(1)}" y2="${e[1].toFixed(1)}"/>`;}).join("")}</g>
+    <g style="fill:var(--ash)" font-family="var(--mono)" font-size="9"><text x="185" y="139">3</text><text x="185" y="95">6</text><text x="185" y="52">9</text></g>
+    <polygon points="${poly}" style="fill:var(--ember);fill-opacity:.10;stroke:var(--ember);stroke-width:2;stroke-dasharray:4 3;stroke-linejoin:round"/>
+    <g font-family="var(--mono)" font-size="11">${labels}</g>
+  </svg>`;
+}
+
+/* ---------- results ---------- */
+const results=document.getElementById("results");
+function analysis(s){
+  const active=DIMS.filter(d=>!isNA(d.key));
+  const vals=active.map(d=>s[d.key]); const min=Math.min(...vals), max=Math.max(...vals);
+  const lagging=active.filter(d=>s[d.key]===min);
+  return { min, max, gap:max-min, lagging };
+}
+function renderResults(){
+  const s=scores(); const a=analysis(s);
+  document.getElementById("scbody").innerHTML=DIMS.map(d=>`<tr><td><span class="dot" style="--c:var(${d.hue})"></span>${d.name} <span style="color:var(--clay);font:11px var(--mono)">${d.code}</span></td><td class="n">${isNA(d.key)?"no IP":s[d.key]+" / 9"}</td></tr>`).join("");
+  const lagNames=a.lagging.map(d=>`${d.name} (${d.code} ${s[d.key]})`).join(", ");
+  let html=`<div class="callout"><span class="k">Where to focus first</span><p>Your lowest axis ${a.lagging.length>1?"es are":"is"} <strong>${lagNames}</strong>. The readiness model says you and your coach should target the lagging dimension before pushing your stronger ones higher.</p></div>`;
+  if(a.gap>=3){ html+=`<div class="callout" style="border-left-color:var(--orange)"><span class="k" style="color:var(--orange-d)">Mind the gap</span><p>There's a ${a.gap}-step gap between your strongest and weakest axes. Gaps of more than two or three steps tend to hold the whole venture back, so closing it matters more than advancing the leaders.</p></div>`; }
+  const targets=FUTURE.filter(f=>futVal(f.key));
+  if(targets.length){
+    html+=`<div class="callout" style="border-left-color:var(--teal)"><span class="k" style="color:var(--teal-d)">Where you want to be${selMonths?` by ${deadlineStr}`:""}</span><ul style="margin:6px 0 0;padding-left:18px">`+
+      targets.map(f=>`<li><strong>${escHtml(f.label)}:</strong> ${escHtml(futVal(f.key))}</li>`).join("")+`</ul></div>`;
+  }
+  html+=`<p class="note">This is a snapshot, not a grade. A low score just means there's validation still to do. Your coach will compare this with the Blue Team's own diagnostic, so bring the single experiment that would raise your lowest axis by one level.</p>`;
+  document.getElementById("summary").innerHTML=html;
+  document.getElementById("mailtoBtn").href=mailtoHref(s,a);
+}
+
+/* ---------- mailto ---------- */
+function val(id){ return document.getElementById(id).value.trim(); }
+function mailtoBody(s,a){
+  const L=[];
+  L.push("IRL self-assessment · EPFL Fast Track Programs","");
+  L.push("Venture: "+val("venture"));
+  L.push("Date: "+new Date().toISOString().slice(0,10));
+  L.push("Self-assessment (to be compared with the staff diagnostic).","");
+  L.push("Readiness scores (1-9) with founder's evidence:");
+  DIMS.forEach(d=>{ const el=dimsEl.querySelector(`.dim[data-key="${d.key}"]`);
+    if(isNA(d.key)){ L.push("- "+d.name+" ("+d.code+"): no IP"); return; }
+    L.push("- "+d.name+" ("+d.code+"): "+s[d.key]);
+    L.push("    proof: "+(evidenceOf(el)||"-")); });
+  L.push("");
+  L.push("Lagging: "+a.lagging.map(d=>d.name+" "+d.code+" "+s[d.key]).join(", "));
+  L.push("Largest gap: "+a.gap+" step(s)");
+  L.push("");
+  objectiveLines().forEach(x=>L.push(x));
+  const notes=val("notes");
+  if(notes){ L.push("","Founder notes:",notes); }
+  L.push("","Please send this email as is, without editing the content above.");
+  return L.join("\n");
+}
+function mailtoHref(s,a){
+  const subj="IRL self-assessment: "+(val("venture")||"founder");
+  return "mailto:"+RECIPIENT+"?subject="+encodeURIComponent(subj)+"&body="+encodeURIComponent(mailtoBody(s,a));
+}
+
+/* ---------- validation + steps + submit ---------- */
+function setInvalid(id,bad){ document.getElementById(id).classList.toggle("invalid",bad); }
+const step1=document.getElementById("step1"), step2=document.getElementById("step2");
+function validateStep1(){
+  const badVen=!val("venture"); setInvalid("f-venture",badVen);
+  let firstBad = badVen ? document.querySelector("#f-venture input") : null;
+  DIMS.forEach(d=>{ const el=dimsEl.querySelector(`.dim[data-key="${d.key}"]`);
+    const bad = !isNA(d.key) && (!levelOf(el) || !evidenceOf(el)); el.classList.toggle("invalid",bad);
+    if(bad && !firstBad) firstBad=el; });
+  if(firstBad){ firstBad.scrollIntoView({behavior:"smooth",block:"center"}); if(firstBad.tagName==="INPUT") firstBad.focus(); return false; }
+  return true;
+}
+function validateStep2(){
+  const badTime=!selMonths; setInvalid("f-time",badTime);
+  const filled=FUTURE.some(f=>futVal(f.key));
+  document.getElementById("futerr").style.display=(badTime||!filled)?"block":"none";
+  return !(badTime||!filled);
+}
+const HERO={
+  1:["Founder self-assessment · ~5 minutes","Where is your venture, really?","A quick read on your Innovation Readiness. For each area, pick the single highest statement that is already true for you, then say what proves it: the numbers, names and dates that back the claim."],
+  2:["Step 2 · Your target","Where do you want to be?","Picture the finish line for the next 3 to 6 months. Fill in what matters, but make it concrete: numbers and names, not adjectives."]
+};
+function setHero(n){ const h=HERO[n]; document.getElementById("heroEyebrow").textContent=h[0]; document.getElementById("heroTitle").textContent=h[1]; document.getElementById("heroLead").textContent=h[2]; }
+function goStep(n){ step1.hidden=(n!==1); step2.hidden=(n!==2); setHero(n); window.scrollTo({top:0,behavior:"smooth"}); }
+document.getElementById("nextBtn").addEventListener("click",()=>{ if(validateStep1()) goStep(2); });
+document.getElementById("backBtn").addEventListener("click",()=>goStep(1));
+document.getElementById("form").addEventListener("submit",e=>{
+  e.preventDefault();
+  if(!validateStep2()) return;
+  if(!validateStep1()){ goStep(1); return; }
+  const s=scores(), a=analysis(s);
+  renderResults();
+  results.classList.add("show");
+  results.scrollIntoView({behavior:"smooth",block:"start"});
+  window.location.href=mailtoHref(s,a);
+});
+document.getElementById("editBtn").addEventListener("click",()=>{
+  results.classList.remove("show"); goStep(2); step2.scrollIntoView({behavior:"smooth"});
+});
+/* ---------- local autosave (this device only) ---------- */
+const STORE_KEY="epfl-irl-self-assessment-v1";
+let persistT=null, flashT=null;
+function schedulePersist(){ clearTimeout(persistT); persistT=setTimeout(persist,300); }
+function flashSaved(){ const el=document.getElementById("savedDot"); if(!el) return; el.textContent="✓ Saved";
+  clearTimeout(flashT); flashT=setTimeout(()=>{ el.textContent=""; },1500); }
+function collectState(){
+  const st={ venture: val("venture"), notes: val("notes"), months: selMonths, dims:{}, future:{} };
+  DIMS.forEach(d=>{ const el=dimsEl.querySelector(`.dim[data-key="${d.key}"]`);
+    st.dims[d.key]={ level: levelOf(el), evidence: evidenceOf(el), na: isNA(d.key) }; });
+  FUTURE.forEach(f=>{ st.future[f.key]=futVal(f.key); });
+  return st;
+}
+function persist(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(collectState())); }catch(e){} flashSaved(); }
+function restoreState(){
+  let st; try{ st=JSON.parse(localStorage.getItem(STORE_KEY)); }catch(e){}
+  if(!st) return;
+  if(st.venture) document.getElementById("venture").value=st.venture;
+  if(st.notes) document.getElementById("notes").value=st.notes;
+  DIMS.forEach(d=>{ const el=dimsEl.querySelector(`.dim[data-key="${d.key}"]`); const ds=st.dims&&st.dims[d.key]; if(!ds) return;
+    if(ds.na){ const chk=el.querySelector('.nachk'); if(chk){ chk.checked=true; el.classList.add('na'); el.querySelector('[data-lvl]').textContent="No IP"; } }
+    else if(ds.level){ const rb=el.querySelectorAll('input[type=radio]')[ds.level-1]; if(rb){ rb.checked=true; setBadge(el); positionEvid(el); paintMarks(el); } }
+    const ev=el.querySelector('[data-evid]'); if(ev && ds.evidence) ev.value=ds.evidence;
+  });
+  FUTURE.forEach(f=>{ const t=document.querySelector(`[data-fut="${f.key}"]`); if(t && st.future && st.future[f.key]) t.value=st.future[f.key]; });
+  if(st.months) setMonths(st.months);
+}
+["input","change"].forEach(ev=>document.getElementById("form").addEventListener(ev, schedulePersist));
+document.getElementById("resetBtn").addEventListener("click",()=>{
+  if(!confirm("Start over? This erases your saved answers on this device.")) return;
+  try{ localStorage.removeItem(STORE_KEY); }catch(e){}
+  location.reload();
+});
+restoreState();
+</script>
+</body>
+</html>

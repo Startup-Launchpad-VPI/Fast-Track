@@ -41,9 +41,9 @@ function prettify(name) {
   return name.replace(/^\d+[_-]/, "").replace(/[_-]+/g, " ").trim();
 }
 
-function meta(html, re) {
+function meta(html, re, g = 1) {
   const m = html.match(re);
-  return m ? m[1].trim() : "";
+  return m ? m[g].trim() : "";
 }
 
 function escapeHtml(s) {
@@ -57,7 +57,7 @@ const pages = readdirSync(ROOT)
   .map((dir) => {
     const html = readFileSync(join(ROOT, dir, "index.html"), "utf8");
     const title = meta(html, /<title>([\s\S]*?)<\/title>/i);
-    const desc = meta(html, /<meta\s+name=["']description["']\s+content=["']([\s\S]*?)["']/i);
+    const desc = meta(html, /<meta\s+name=["']description["']\s+content=(["'])([\s\S]*?)\1/i, 2);
     return { dir, name: prettify(dir), title, desc, private: PRIVATE.has(dir) };
   });
 
