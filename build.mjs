@@ -108,6 +108,7 @@ const page = `<!doctype html>
   .topbar{ display:flex; align-items:center; gap:14px; padding:16px clamp(16px,4vw,40px);
     border-bottom:1px solid var(--sand); position:sticky; top:0; background:#fff; z-index:20; }
   .brand{ display:flex; align-items:center; gap:12px; }
+  .brand a{ display:flex; align-items:center; }
   .brand .logo{ height:22px; width:auto; display:block; }
   .brand .logo .st0{ fill:var(--ember); }
   .brand .sub{ color:var(--clay); font-size:13px; border-left:1px solid var(--sand); padding-left:12px; }
@@ -145,7 +146,7 @@ const page = `<!doctype html>
 <body>
   <div class="topbar">
     <div class="brand">
-      ${LOGO}
+      <a href="/" aria-label="Fast Track home">${LOGO}</a>
       <span class="sub">Startup Launchpad · Fast Track Programs</span>
     </div>
   </div>
