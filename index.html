@@ -1,83 +1,4 @@
-#!/usr/bin/env node
-/**
- * Fast-Track homepage generator.
- *
- * Scans top-level folders that contain an `index.html` and (re)writes the root
- * `index.html` — a branded list of those pages, by folder name. The generated
- * index.html is committed, so Cloudflare serves the repo root directly with no
- * build step.
- *
- * Workflow: add a folder with an index.html, run `node build.mjs`, commit, push.
- * Folders listed in private.json get a "Restricted" badge (see functions/_middleware.js).
- * No dependencies.
- */
-import { readdirSync, statSync, readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
-
-const ROOT = process.cwd();
-
-// Folders never treated as pages.
-const IGNORE = new Set(["dist", "node_modules", "functions", "00_Brand", "Contributors-assets"]);
-
-// Folders that require the shared password (see functions/_middleware.js + the
-// SITE_PASSWORD env var in Cloudflare). Listed in private.json at the repo root.
-let PRIVATE = new Set();
-try {
-  PRIVATE = new Set(JSON.parse(readFileSync(join(ROOT, "private.json"), "utf8")));
-} catch {}
-
-function isPageDir(name) {
-  if (name.startsWith(".") || IGNORE.has(name)) return false;
-  try {
-    if (!statSync(join(ROOT, name)).isDirectory()) return false;
-    return statSync(join(ROOT, name, "index.html")).isFile();
-  } catch {
-    return false;
-  }
-}
-
-// "01_Red_Team" -> "Red Team"; "Contributors" -> "Contributors"
-function prettify(name) {
-  return name.replace(/^\d+[_-]/, "").replace(/[_-]+/g, " ").trim();
-}
-
-function meta(html, re) {
-  const m = html.match(re);
-  return m ? m[1].trim() : "";
-}
-
-function escapeHtml(s) {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-}
-
-// Collect pages
-const pages = readdirSync(ROOT)
-  .filter(isPageDir)
-  .sort((a, b) => a.localeCompare(b))
-  .map((dir) => {
-    const html = readFileSync(join(ROOT, dir, "index.html"), "utf8");
-    const title = meta(html, /<title>([\s\S]*?)<\/title>/i);
-    const desc = meta(html, /<meta\s+name=["']description["']\s+content=["']([\s\S]*?)["']/i);
-    return { dir, name: prettify(dir), title, desc, private: PRIVATE.has(dir) };
-  });
-
-// EPFL logo (inline SVG, matches the page brand bar)
-const LOGO = `<svg class="logo" viewBox="0 0 182.4 53" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="EPFL"><g class="st0"><polygon points="0,21.6 11.4,21.6 11.4,9.8 38.3,9.8 38.3,0 0,0"/><polygon points="0,53 38.3,53 38.3,43.2 11.4,43.2 11.4,31.4 0,31.4"/><rect x="11.4" y="21.6" width="24.6" height="9.8"/><path d="M86,4.9c-1.5-1.5-3.4-2.6-5.7-3.5C78,0.4,75.1,0,71.8,0H48.1v53h11.4V31.4h12.2c3.3,0,6.1-0.4,8.5-1.3 c2.3-0.9,4.2-2.1,5.7-3.5c1.5-1.5,2.5-3.1,3.2-5s1-3.8,1-5.8s-0.3-4-1-5.8C88.5,8,87.4,6.3,86,4.9z M78,18.7 c-0.6,0.8-1.3,1.4-2.3,1.8c-0.9,0.4-2,0.7-3.3,0.9c-1.2,0.1-2.5,0.2-3.9,0.2h-9.1V9.8h9.1c1.3,0,2.6,0.1,3.9,0.2 c1.2,0.1,2.3,0.4,3.3,0.9c0.9,0.4,1.7,1,2.3,1.8c0.6,0.8,0.9,1.8,0.9,3S78.6,18,78,18.7z"/><polygon points="155.5,43.2 155.5,0 144,0 144,53 182.4,53 182.4,43.2"/><polygon points="97.4,21.6 108.9,21.6 108.9,9.8 135.8,9.8 135.8,0 97.4,0"/><rect x="97.4" y="31.4" width="11.4" height="21.6"/><rect x="108.9" y="21.6" width="24.6" height="9.8"/></g></svg>`;
-
-const cards = pages.map((p) => {
-  const sub = escapeHtml(p.desc || p.title || "");
-  const restricted = p.private ? `<span class="opentag">Restricted</span>` : "";
-  return `        <a class="card" href="./${encodeURI(p.dir)}/">
-          <div class="tags"><span class="tag">${escapeHtml(p.dir)}</span>${restricted}</div>
-          <h3>${escapeHtml(p.name)}</h3>
-          <p>${sub}</p>
-          <span class="more">${p.private ? "Unlock ›" : "Open ›"}</span>
-        </a>`;
-}).join("\n");
-
-const empty = `        <div class="empty"><span class="opentag">No pages yet</span><p>Add a folder with an <code>index.html</code> and rebuild.</p></div>`;
-
-const page = `<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -145,7 +66,7 @@ const page = `<!doctype html>
 <body>
   <div class="topbar">
     <div class="brand">
-      ${LOGO}
+      <svg class="logo" viewBox="0 0 182.4 53" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="EPFL"><g class="st0"><polygon points="0,21.6 11.4,21.6 11.4,9.8 38.3,9.8 38.3,0 0,0"/><polygon points="0,53 38.3,53 38.3,43.2 11.4,43.2 11.4,31.4 0,31.4"/><rect x="11.4" y="21.6" width="24.6" height="9.8"/><path d="M86,4.9c-1.5-1.5-3.4-2.6-5.7-3.5C78,0.4,75.1,0,71.8,0H48.1v53h11.4V31.4h12.2c3.3,0,6.1-0.4,8.5-1.3 c2.3-0.9,4.2-2.1,5.7-3.5c1.5-1.5,2.5-3.1,3.2-5s1-3.8,1-5.8s-0.3-4-1-5.8C88.5,8,87.4,6.3,86,4.9z M78,18.7 c-0.6,0.8-1.3,1.4-2.3,1.8c-0.9,0.4-2,0.7-3.3,0.9c-1.2,0.1-2.5,0.2-3.9,0.2h-9.1V9.8h9.1c1.3,0,2.6,0.1,3.9,0.2 c1.2,0.1,2.3,0.4,3.3,0.9c0.9,0.4,1.7,1,2.3,1.8c0.6,0.8,0.9,1.8,0.9,3S78.6,18,78,18.7z"/><polygon points="155.5,43.2 155.5,0 144,0 144,53 182.4,53 182.4,43.2"/><polygon points="97.4,21.6 108.9,21.6 108.9,9.8 135.8,9.8 135.8,0 97.4,0"/><rect x="97.4" y="31.4" width="11.4" height="21.6"/><rect x="108.9" y="21.6" width="24.6" height="9.8"/></g></svg>
       <span class="sub">Startup Launchpad · Fast Track Programs</span>
     </div>
   </div>
@@ -156,7 +77,12 @@ const page = `<!doctype html>
     <p class="lead">Public resources supporting the Fast Track programs run by the EPFL Startup Launchpad.</p>
 
     <div class="grid">
-${pages.length ? cards : empty}
+        <a class="card" href="./Contributors/">
+          <div class="tags"><span class="tag">Contributors</span></div>
+          <h3>Contributors</h3>
+          <p>Four ways for EPFL alumni and operators to support early-stage EPFL ventures: Red Team, Coaches, Advisors, and Speakers.</p>
+          <span class="more">Open ›</span>
+        </a>
     </div>
   </main>
 
@@ -167,7 +93,3 @@ ${pages.length ? cards : empty}
   </footer>
 </body>
 </html>
-`;
-
-writeFileSync(join(ROOT, "index.html"), page, "utf8");
-console.log(`Wrote index.html with ${pages.length} page(s): ${pages.map((p) => p.dir).join(", ") || "(none)"}`);
