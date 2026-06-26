@@ -1,0 +1,166 @@
+#!/usr/bin/env node
+/**
+ * Fast-Track site builder.
+ *
+ * Scans top-level folders for an `index.html`, copies each into `dist/`,
+ * and generates a branded `dist/index.html` that lists them (by folder name).
+ *
+ * Add a folder with an index.html, push, and it appears on the homepage.
+ * No dependencies. Run: `node build.mjs`
+ */
+import { readdirSync, statSync, readFileSync, rmSync, mkdirSync, cpSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+
+const ROOT = process.cwd();
+const OUT = join(ROOT, "dist");
+
+// Folders never treated as pages.
+const IGNORE = new Set(["dist", "node_modules", "00_Brand", "Contributors-assets"]);
+
+function isPageDir(name) {
+  if (name.startsWith(".") || IGNORE.has(name)) return false;
+  try {
+    if (!statSync(join(ROOT, name)).isDirectory()) return false;
+    return statSync(join(ROOT, name, "index.html")).isFile();
+  } catch {
+    return false;
+  }
+}
+
+// "01_Red_Team" -> "Red Team"; "Contributors" -> "Contributors"
+function prettify(name) {
+  return name.replace(/^\d+[_-]/, "").replace(/[_-]+/g, " ").trim();
+}
+
+function meta(html, re) {
+  const m = html.match(re);
+  return m ? m[1].trim() : "";
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+// Collect pages
+const pages = readdirSync(ROOT)
+  .filter(isPageDir)
+  .sort((a, b) => a.localeCompare(b))
+  .map((dir) => {
+    const html = readFileSync(join(ROOT, dir, "index.html"), "utf8");
+    const title = meta(html, /<title>([\s\S]*?)<\/title>/i);
+    const desc = meta(html, /<meta\s+name=["']description["']\s+content=["']([\s\S]*?)["']/i);
+    return { dir, name: prettify(dir), title, desc };
+  });
+
+// Build dist/
+rmSync(OUT, { recursive: true, force: true });
+mkdirSync(OUT, { recursive: true });
+for (const p of pages) {
+  cpSync(join(ROOT, p.dir), join(OUT, p.dir), { recursive: true });
+}
+
+// EPFL logo (inline SVG, matches the page brand bar)
+const LOGO = `<svg class="logo" viewBox="0 0 182.4 53" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="EPFL"><g class="st0"><polygon points="0,21.6 11.4,21.6 11.4,9.8 38.3,9.8 38.3,0 0,0"/><polygon points="0,53 38.3,53 38.3,43.2 11.4,43.2 11.4,31.4 0,31.4"/><rect x="11.4" y="21.6" width="24.6" height="9.8"/><path d="M86,4.9c-1.5-1.5-3.4-2.6-5.7-3.5C78,0.4,75.1,0,71.8,0H48.1v53h11.4V31.4h12.2c3.3,0,6.1-0.4,8.5-1.3 c2.3-0.9,4.2-2.1,5.7-3.5c1.5-1.5,2.5-3.1,3.2-5s1-3.8,1-5.8s-0.3-4-1-5.8C88.5,8,87.4,6.3,86,4.9z M78,18.7 c-0.6,0.8-1.3,1.4-2.3,1.8c-0.9,0.4-2,0.7-3.3,0.9c-1.2,0.1-2.5,0.2-3.9,0.2h-9.1V9.8h9.1c1.3,0,2.6,0.1,3.9,0.2 c1.2,0.1,2.3,0.4,3.3,0.9c0.9,0.4,1.7,1,2.3,1.8c0.6,0.8,0.9,1.8,0.9,3S78.6,18,78,18.7z"/><polygon points="155.5,43.2 155.5,0 144,0 144,53 182.4,53 182.4,43.2"/><polygon points="97.4,21.6 108.9,21.6 108.9,9.8 135.8,9.8 135.8,0 97.4,0"/><rect x="97.4" y="31.4" width="11.4" height="21.6"/><rect x="108.9" y="21.6" width="24.6" height="9.8"/></g></svg>`;
+
+const cards = pages.map((p) => {
+  const sub = escapeHtml(p.desc || p.title || "");
+  return `        <a class="card" href="./${encodeURI(p.dir)}/">
+          <span class="tag">${escapeHtml(p.dir)}</span>
+          <h3>${escapeHtml(p.name)}</h3>
+          <p>${sub}</p>
+          <span class="more">Open ›</span>
+        </a>`;
+}).join("\n");
+
+const empty = `        <div class="empty"><span class="opentag">No pages yet</span><p>Add a folder with an <code>index.html</code> and rebuild.</p></div>`;
+
+const page = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fast Track Programs — EPFL Startup Launchpad</title>
+<meta name="description" content="Public resources for the Fast Track programs at the EPFL Startup Launchpad.">
+<style>
+  :root{ color-scheme: light;
+    --ink:#212121; --charcoal:#000000;
+    --parchment:#fafafa; --stone:#f0f0f0; --sand:#dcdcdc; --inset:#cdcdc9;
+    --clay:#6b6b6b; --ash:#8a8a8a; --smoke:#a1a1a1;
+    --ember:#e30713; --alert:#b3412a;
+    --blue:#4a90e2; --blue-d:#2275d7;
+    --orange:#f5a623; --orange-d:#cf8509;
+    --teal:#007480; --teal-d:#005a63;
+    --green:#7ed321; --green-d:#5d9c18;
+    --sans:"Suisse Int'l","SuisseIntl","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --r:3px; --maxw:1180px;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; }
+  body{ background:#fff; color:var(--ink); font-family:var(--sans);
+    font-size:16px; line-height:1.5; letter-spacing:.005em; -webkit-font-smoothing:antialiased; }
+  a{ color:var(--ember); text-decoration:none; }
+
+  .topbar{ display:flex; align-items:center; gap:14px; padding:16px clamp(16px,4vw,40px);
+    border-bottom:1px solid var(--sand); position:sticky; top:0; background:#fff; z-index:20; }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand .logo{ height:22px; width:auto; display:block; }
+  .brand .logo .st0{ fill:var(--ember); }
+  .brand .sub{ color:var(--clay); font-size:13px; border-left:1px solid var(--sand); padding-left:12px; }
+
+  .wrap{ max-width:var(--maxw); margin:0 auto; padding:clamp(28px,5vw,64px) clamp(16px,4vw,40px); }
+  .eyebrow{ font:12px var(--mono); text-transform:uppercase; letter-spacing:.06em; color:var(--ember); margin:0 0 10px; }
+  h1{ font-size:clamp(32px,5vw,52px); font-weight:600; line-height:1.04; letter-spacing:-.02em; margin:0 0 14px; }
+  .lead{ font-size:clamp(18px,2.1vw,21px); color:var(--clay); max-width:740px; margin:0 0 40px; }
+
+  .grid{ display:grid; gap:16px; grid-template-columns:repeat(3,1fr); }
+  @media(max-width:900px){ .grid{ grid-template-columns:repeat(2,1fr); } }
+  @media(max-width:600px){ .grid{ grid-template-columns:1fr; } }
+
+  .card{ display:flex; flex-direction:column; background:var(--stone); border:1px solid var(--sand);
+    border-radius:4px; padding:22px; color:var(--ink); transition:box-shadow .12s ease, transform .12s ease; }
+  .card:hover{ box-shadow:rgba(0,0,0,.14) 0 14px 30px -14px; transform:translateY(-3px); }
+  .card .tag{ align-self:flex-start; font:11px var(--mono); color:var(--clay); border:1px solid var(--sand);
+    border-radius:var(--r); padding:2px 8px; letter-spacing:.03em; margin-bottom:12px; }
+  .card h3{ margin:0 0 6px; font-size:18px; font-weight:600; letter-spacing:-.01em; }
+  .card p{ margin:0 0 16px; color:var(--clay); font-size:14.5px; }
+  .card .more{ margin-top:auto; font:12px var(--mono); text-transform:uppercase; letter-spacing:.05em; color:var(--ember); }
+
+  .empty{ grid-column:1/-1; border:1.5px dashed var(--orange); background:#fdfbf3; border-radius:4px; padding:28px; }
+  .opentag{ font:10.5px var(--mono); color:var(--orange-d); border:1px dashed var(--orange-d); border-radius:var(--r); padding:2px 10px; }
+  .empty p{ color:var(--clay); margin:12px 0 0; }
+
+  footer{ border-top:1px solid var(--sand); margin-top:48px; padding:24px clamp(16px,4vw,40px); }
+  footer .inner{ max-width:var(--maxw); margin:0 auto; color:var(--clay); font-size:13px; }
+  footer a{ color:var(--ember); }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">
+      ${LOGO}
+      <span class="sub">Startup Launchpad · Fast Track Programs</span>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <p class="eyebrow">Fast Track Programs</p>
+    <h1>Resources &amp; pages</h1>
+    <p class="lead">Public resources supporting the Fast Track programs run by the EPFL Startup Launchpad.</p>
+
+    <div class="grid">
+${pages.length ? cards : empty}
+    </div>
+  </main>
+
+  <footer>
+    <div class="inner">
+      EPFL Startup Launchpad · <a href="https://startup.epfl.ch">startup.epfl.ch</a>
+    </div>
+  </footer>
+</body>
+</html>
+`;
+
+writeFileSync(join(OUT, "index.html"), page, "utf8");
+console.log(`Built dist/ with ${pages.length} page(s): ${pages.map((p) => p.dir).join(", ") || "(none)"}`);
