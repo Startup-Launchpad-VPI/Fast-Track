@@ -1,0 +1,12 @@
+# EPFL brand assets (kept local, not published)
+00_Brand/
+
+# Local Claude working instructions
+CLAUDE.md
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

@@ -1,0 +1,815 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Put your experience behind EPFL's next founders — Fast Track Programs</title>
+<meta name="description" content="Four ways for EPFL alumni and operators to support early-stage EPFL ventures: Red Team, Coaches, Advisors, and Speakers.">
+<!--
+  EPFL Startup Launchpad — Fast Track Programs · Alumni & operator recruitment page.
+  Follows EPFL Brand/EPFL-design-system.md (Part A). Single self-contained HTML doc.
+  Audience: EPFL alumni, founders and senior operators. Purpose: explain + recruit.
+  Colour code (one hue = one meaning): Red = Red Team, Blue = Coaches,
+  Teal = Advisors, Orange = Speakers.
+  Form version: 1.0 (2026-06-26) — FORM_VERSION + BUILD_DATE in the script; sent with every submission.
+-->
+<style>
+  :root{ color-scheme: light;
+    --ink:#212121; --charcoal:#000000;
+    --parchment:#fafafa; --stone:#f0f0f0; --sand:#dcdcdc; --inset:#cdcdc9;
+    --clay:#6b6b6b; --ash:#8a8a8a; --smoke:#a1a1a1;
+    --ember:#e30713; --alert:#b3412a;
+    --blue:#4a90e2; --blue-d:#2275d7;
+    --orange:#f5a623; --orange-d:#cf8509;
+    --teal:#007480; --teal-d:#005a63;
+    --green:#7ed321; --green-d:#5d9c18;
+    --sans:"Suisse Int'l","SuisseIntl","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --r:3px; --maxw:1180px;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; }
+  html{ scroll-behavior:smooth; }
+  body{ background:#fff; color:var(--ink); font-family:var(--sans);
+    font-size:16px; line-height:1.55; letter-spacing:.005em; -webkit-font-smoothing:antialiased; }
+  a{ color:var(--ember); text-decoration:none; } a:hover{ text-decoration:underline; }
+
+  /* top bar */
+  .topbar{ display:flex; align-items:center; gap:16px; padding:14px clamp(16px,4vw,40px);
+    border-bottom:1px solid var(--sand); position:sticky; top:0; background:#fff; z-index:30; }
+  .brand{ display:flex; align-items:center; gap:10px; font-weight:600; letter-spacing:.01em; }
+  .brand .logo{ height:22px; width:auto; display:block; }
+  .brand .logo .st0{ fill:var(--ember); }
+  .brand .sub{ color:var(--clay); font-weight:400; font-size:13px; border-left:1px solid var(--sand); padding-left:10px; }
+  .tools{ margin-left:auto; display:flex; gap:8px; align-items:center; }
+  .tbtn{ font:13px var(--sans); border:1px solid var(--sand); background:var(--parchment); color:var(--ink);
+    border-radius:var(--r); padding:6px 12px; cursor:pointer; }
+  .tbtn:hover{ background:var(--stone); }
+  .modeswitch{ display:inline-flex; border:1px solid var(--sand); border-radius:var(--r); overflow:hidden; }
+  .modeswitch.center{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); }
+  @media(max-width:560px){ .modeswitch.center{ position:static; transform:none; left:auto; top:auto; } }
+  .modeswitch .mbtn{ font:12.5px var(--sans); border:0; background:#fff; color:var(--clay); padding:6px 12px; cursor:pointer; }
+  .modeswitch .mbtn+.mbtn{ border-left:1px solid var(--sand); }
+  .modeswitch .mbtn.active{ background:var(--ember); color:#fff; }
+
+  /* reading modes + hidden pipeline */
+  .is-off{ display:none !important; }
+  .brief-only{ display:none; }
+  .print-only{ display:none; }
+  body.mode-brief .full-only{ display:none !important; }
+  body.mode-brief .brief-only{ display:block; }
+  body.mode-brief .side{ display:none; }
+  body.mode-brief .layout{ grid-template-columns:1fr; }
+  body.mode-brief main{ margin:0 auto; }
+  body.mode-brief #glance{ border-top:none; margin-top:0; }
+
+  .layout{ max-width:var(--maxw); margin:0 auto; display:grid; grid-template-columns:248px 1fr; gap:36px;
+    padding:0 clamp(16px,4vw,40px); }
+
+  /* sidebar nav */
+  .side{ position:sticky; top:62px; align-self:start; height:calc(100vh - 62px); overflow:auto; padding:26px 0 40px; }
+  .side .navlabel{ font:11px var(--mono); text-transform:uppercase; letter-spacing:.07em; color:var(--ash); margin:0 0 12px; }
+  .side nav{ display:flex; flex-direction:column; gap:3px; }
+  .side a{ display:flex; gap:10px; align-items:baseline; font:14px var(--sans); color:var(--clay);
+    border:1px solid transparent; border-radius:var(--r); padding:8px 12px; }
+  .side a .n{ font:11px var(--mono); color:var(--ash); }
+  .side a:hover{ color:#fff; background:var(--ember); text-decoration:none; }
+  .side a:hover .n{ color:rgba(255,255,255,.85); }
+  .side a.active{ color:#fff; background:var(--ember); }
+  .side a.active .n{ color:rgba(255,255,255,.85); }
+
+  /* content */
+  main{ padding:30px 0 80px; min-width:0; max-width:800px; }
+  .hero{ border-bottom:1px solid var(--sand); padding-bottom:26px; margin-bottom:34px; }
+  .eyebrow{ font:12px var(--mono); letter-spacing:.06em; text-transform:uppercase; color:var(--ember); }
+  h1{ font-size:clamp(30px,4.6vw,48px); line-height:1.04; letter-spacing:-.02em; font-weight:600; margin:.25em 0 .3em; }
+  .hero .lead{ font-size:clamp(17px,2vw,21px); color:var(--clay); max-width:700px; }
+  .meta{ margin-top:18px; display:flex; flex-wrap:wrap; gap:8px; }
+  .badge{ display:inline-flex; align-items:center; font:11px var(--mono); letter-spacing:.02em;
+    border:1px solid var(--sand); border-radius:var(--r); padding:4px 11px; color:var(--ink); background:var(--parchment); }
+  .badge .dot{ width:9px; height:9px; border-radius:50%; background:var(--c,var(--ash)); margin-right:7px; }
+
+  section.doc{ padding-top:18px; margin-top:30px; border-top:1px solid var(--sand); scroll-margin-top:74px; }
+  section.doc:first-of-type{ border-top:none; margin-top:0; }
+  section.doc > .eyebrow{ display:block; color:var(--cd,var(--ember)); }
+  h2{ font-size:clamp(22px,3vw,30px); line-height:1.12; letter-spacing:-.018em; font-weight:600; margin:.18em 0 .5em; color:var(--cd,var(--ink)); }
+  h3{ font-size:17px; font-weight:600; letter-spacing:-.01em; margin:26px 0 8px; }
+  p{ margin:0 0 14px; } .muted{ color:var(--clay); }
+  .lead2{ font-size:17px; color:var(--clay); max-width:680px; }
+
+  .grid{ display:grid; gap:14px; margin:18px 0; }
+  .cols-2{ grid-template-columns:repeat(2,1fr); } .cols-3{ grid-template-columns:repeat(3,1fr); }
+  @media(max-width:680px){ .cols-2,.cols-3{ grid-template-columns:1fr; } }
+  .card{ background:var(--stone); border:1px solid var(--sand); border-radius:4px; padding:18px; }
+  .card.accent{ background:#fff; border-left:4px solid var(--c,var(--blue)); }
+  .card .tag{ display:inline-block; font:11px var(--mono); text-transform:uppercase; letter-spacing:.05em;
+    color:var(--cd,var(--clay)); margin-bottom:8px; }
+  .card h3{ margin:0 0 6px; font-size:16px; color:var(--cd,var(--ink)); }
+  .card p{ margin:0; color:var(--clay); font-size:14px; }
+  a.card{ display:block; }
+  a.card:hover{ text-decoration:none; box-shadow:rgba(0,0,0,.14) 0 14px 30px -14px; transform:translateY(-3px);
+    transition:.12s; }
+  a.card .more{ display:inline-block; margin-top:10px; font:11px var(--mono); text-transform:uppercase;
+    letter-spacing:.05em; color:var(--cd,var(--ember)); }
+
+  .callout{ border:1px solid var(--sand); border-left:4px solid var(--ember); background:var(--parchment);
+    border-radius:4px; padding:16px 18px; margin:20px 0; }
+  .callout .k{ font:11px var(--mono); text-transform:uppercase; letter-spacing:.06em; color:var(--ember); display:block; margin-bottom:6px; }
+  .callout p:last-child{ margin-bottom:0; }
+  .callout.blue{ border-left-color:var(--blue); } .callout.blue .k{ color:var(--blue-d); }
+  .callout.amber{ border-left-color:var(--orange); } .callout.amber .k{ color:var(--orange-d); }
+  .callout.teal{ border-left-color:var(--teal); } .callout.teal .k{ color:var(--teal-d); }
+
+  ul.checks{ list-style:none; padding:0; margin:14px 0; }
+  ul.checks li{ padding:8px 0 8px 26px; position:relative; border-bottom:1px solid var(--sand); }
+  ul.checks li:before{ content:"\203A"; position:absolute; left:6px; color:var(--c,var(--ember)); font-weight:600; }
+  ul.checks li:last-child{ border-bottom:none; }
+  ul.no li:before{ content:"\00D7"; color:var(--clay); }
+  ul.plain{ padding-left:18px; margin:14px 0; } ul.plain li{ margin:6px 0; }
+
+  table.t{ width:100%; border-collapse:collapse; margin:18px 0; font-size:14px; }
+  table.t th{ text-align:left; font:11px var(--mono); text-transform:uppercase; letter-spacing:.05em; color:var(--clay);
+    font-weight:400; padding:10px 12px; background:var(--stone); border-bottom:1px solid var(--sand); }
+  table.t td{ padding:11px 12px; border-bottom:1px solid var(--sand); vertical-align:top; }
+  table.t td .role{ font-weight:600; display:inline-flex; align-items:center; gap:8px; white-space:nowrap; }
+  table.t td .role .dot{ width:9px; height:9px; border-radius:50%; background:var(--c,var(--ash)); flex:none; }
+  table.t td .when{ font:12px var(--mono); color:var(--ink); }
+
+  .kv{ display:grid; grid-template-columns:auto 1fr; gap:8px 18px; margin:16px 0; font-size:14.5px; }
+  .kv .k{ color:var(--clay); font:12px var(--mono); text-transform:uppercase; letter-spacing:.04em; padding-top:1px; }
+
+  .flow{ display:flex; flex-wrap:wrap; align-items:stretch; gap:10px; margin:18px 0 6px; }
+  .beat{ flex:1 1 200px; border:1px solid var(--sand); border-top:4px solid var(--ember); border-radius:4px; padding:14px 16px; background:#fff; }
+  .beat .n{ font:11px var(--mono); color:var(--ember); letter-spacing:.05em; }
+  .beat h3{ margin:4px 0 6px; font-size:15px; }
+  .beat p{ margin:0; color:var(--clay); font-size:13.5px; }
+
+  .rolechips{ display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 4px; }
+  .rolechip{ display:inline-flex; align-items:center; gap:8px; font:13.5px var(--sans); color:var(--ink);
+    border:1px solid var(--sand); border-left:4px solid var(--c,var(--ash)); background:var(--parchment);
+    border-radius:var(--r); padding:8px 13px; }
+  a.rolechip:hover{ text-decoration:none; background:var(--stone); }
+  .rolechip .dot{ width:9px; height:9px; border-radius:50%; background:var(--c,var(--ash)); }
+  .rolechip b{ font-weight:600; } .rolechip small{ color:var(--clay); font-size:12px; }
+  .cta{ display:inline-flex; align-items:center; gap:9px; background:var(--ember); color:#fff;
+    border:1px solid var(--ember); border-radius:var(--r); padding:13px 24px; font:15px var(--sans); font-weight:600;
+    margin:20px 0 6px; }
+  .cta:hover{ text-decoration:none; background:#c70612; }
+  button.cta{ cursor:pointer; }
+
+  /* in-page application form */
+  form.bench{ margin:20px 0 6px; }
+  .field{ margin:0 0 16px; }
+  .field .lbl{ display:block; font:11px var(--mono); text-transform:uppercase; letter-spacing:.05em; color:var(--clay); margin:0 0 6px; }
+  .field .req{ color:var(--ember); }
+  .field input[type=text], .field input[type=email], .field input[type=url], .field textarea, .field select{
+    width:100%; font:15px var(--sans); color:var(--ink); background:#fff; border:1px solid var(--sand);
+    border-radius:var(--r); padding:10px 12px; }
+  .field textarea{ min-height:82px; resize:vertical; }
+  .field input:focus, .field textarea:focus, .field select:focus{ outline:none; border-color:var(--ember); box-shadow:0 0 0 1px var(--ember); }
+  .hint{ font-size:12.5px; color:var(--clay); margin:6px 0 0; }
+  .grouplbl{ display:block; font:11px var(--mono); text-transform:uppercase; letter-spacing:.05em; color:var(--clay); margin:0 0 8px; }
+
+  .rolepick{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin:6px 0 4px; }
+  @media(max-width:680px){ .rolepick{ grid-template-columns:1fr; } }
+  .rolepick label{ display:flex; gap:10px; align-items:flex-start; border:1px solid var(--sand);
+    border-left:4px solid var(--c,var(--ash)); border-radius:4px; padding:12px 14px; cursor:pointer; background:#fff; }
+  .rolepick label:hover{ background:var(--parchment); }
+  .rolepick input{ margin-top:3px; accent-color:var(--ember); }
+  .rolepick .rl b{ display:block; font-size:14.5px; }
+  .rolepick .rl small{ color:var(--clay); font-size:12.5px; }
+  .rolepick label:has(input:checked){ border-color:var(--c,var(--ember)); box-shadow:0 0 0 1px var(--c,var(--ember)) inset; background:var(--parchment); }
+
+  .rolepanel{ display:none; border:1px solid var(--sand); border-radius:4px; padding:16px 18px; margin:6px 0 16px; background:var(--parchment); }
+  .rolepanel.show{ display:block; animation:fade .2s ease; }
+  @keyframes fade{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;} }
+  .rolepanel h3{ margin:0 0 12px; font-size:15px; }
+
+  .opts{ display:flex; flex-direction:column; gap:8px; margin:6px 0 0; }
+  .opts.inline{ flex-direction:row; flex-wrap:wrap; gap:8px 18px; }
+  .opts label{ display:flex; gap:9px; align-items:center; font-size:14.5px; }
+  .opts input{ accent-color:var(--ember); }
+
+  .formbody{ display:none; border-top:1px solid var(--sand); margin-top:18px; padding-top:18px; }
+  .formbody.show{ display:block; animation:fade .22s ease; }
+  .prior-detail{ display:none; } .prior-detail.show{ display:block; }
+  .formfoot{ display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-top:10px; }
+  .formnote{ font-size:13px; color:var(--clay); } .formnote.err{ color:var(--ember); }
+
+  footer.foot{ border-top:1px solid var(--sand); margin-top:50px; padding-top:18px;
+    font:11px var(--mono); text-transform:uppercase; letter-spacing:.05em; color:var(--ash); }
+
+  @media(max-width:900px){
+    .layout{ grid-template-columns:1fr; gap:0; }
+    .side{ position:sticky; top:55px; height:auto; overflow:auto; padding:10px 0; background:#fff;
+      border-bottom:1px solid var(--sand); z-index:20; }
+    .side .navlabel{ display:none; }
+    .side nav{ flex-direction:row; gap:6px; overflow-x:auto; padding-bottom:4px; }
+    .side a{ white-space:nowrap; }
+    main{ padding-top:24px; }
+    table.t{ font-size:13px; }
+  }
+  @media print{
+    @page{ margin:15mm 14mm; }
+    *{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    html, body{ background:#fff; }
+    body{ font-size:10.5pt; line-height:1.42; }
+
+    /* drop all interactive chrome */
+    .topbar .tools, .modeswitch, .side, #benchForm, .formfoot{ display:none !important; }
+    .topbar{ position:static; padding:0 0 10px; margin-bottom:14px; border-bottom:1px solid var(--sand); }
+    .brand .logo{ height:19px; }
+    .layout{ display:block; max-width:none; margin:0; padding:0; gap:0; }
+    main{ max-width:none; min-width:0; padding:0; margin:0; }
+
+    /* always print the full content, even if the page is in 30-sec mode */
+    .full-only{ display:block !important; }
+    .grid.cols-2.full-only{ display:grid !important; }
+    .brief-only{ display:none !important; }
+    .print-only{ display:block !important; }
+    body.mode-brief #glance{ border-top:1px solid var(--sand) !important; margin-top:20px !important; }
+
+    /* print typography */
+    .hero{ padding-bottom:14px; margin-bottom:18px; }
+    h1{ font-size:24pt; line-height:1.05; margin:.1em 0 .25em; }
+    .hero .lead{ font-size:12pt; color:var(--clay); }
+    section.doc{ margin-top:20px; padding-top:14px; }
+    h2{ font-size:15pt; }
+    h3{ font-size:11.5pt; }
+    .lead2{ font-size:11pt; }
+    p{ margin:0 0 9px; }
+
+    /* keep related blocks together, avoid orphan headings */
+    .card, .callout, .beat, .step, .reffields li, ul.checks li, .rolechips, .meta, .scale{ break-inside:avoid; }
+    table.t tr{ break-inside:avoid; }
+    .eyebrow, h2, h3{ break-after:avoid; }
+
+    a{ color:var(--ink); text-decoration:none; }
+    .callout, .card, table.t th{ background:var(--parchment); }
+    footer.foot{ margin-top:26px; border-top:1px solid var(--sand); }
+  }
+</style>
+</head>
+<body class="mode-full">
+
+  <div class="topbar">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 182.4 53" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="EPFL">
+        <g class="st0">
+          <polygon points="0,21.6 11.4,21.6 11.4,9.8 38.3,9.8 38.3,0 0,0"/>
+          <polygon points="0,53 38.3,53 38.3,43.2 11.4,43.2 11.4,31.4 0,31.4"/>
+          <rect x="11.4" y="21.6" width="24.6" height="9.8"/>
+          <path d="M86,4.9c-1.5-1.5-3.4-2.6-5.7-3.5C78,0.4,75.1,0,71.8,0H48.1v53h11.4V31.4h12.2c3.3,0,6.1-0.4,8.5-1.3 c2.3-0.9,4.2-2.1,5.7-3.5c1.5-1.5,2.5-3.1,3.2-5s1-3.8,1-5.8s-0.3-4-1-5.8C88.5,8,87.4,6.3,86,4.9z M78,18.7 c-0.6,0.8-1.3,1.4-2.3,1.8c-0.9,0.4-2,0.7-3.3,0.9c-1.2,0.1-2.5,0.2-3.9,0.2h-9.1V9.8h9.1c1.3,0,2.6,0.1,3.9,0.2 c1.2,0.1,2.3,0.4,3.3,0.9c0.9,0.4,1.7,1,2.3,1.8c0.6,0.8,0.9,1.8,0.9,3S78.6,18,78,18.7z"/>
+          <polygon points="155.5,43.2 155.5,0 144,0 144,53 182.4,53 182.4,43.2"/>
+          <polygon points="97.4,21.6 108.9,21.6 108.9,9.8 135.8,9.8 135.8,0 97.4,0"/>
+          <rect x="97.4" y="31.4" width="11.4" height="21.6"/>
+          <rect x="108.9" y="21.6" width="24.6" height="9.8"/>
+        </g>
+      </svg>
+      <span class="sub">Startup Launchpad · Fast Track Programs</span>
+    </div>
+    <div class="modeswitch center" role="group" aria-label="Reading time">
+      <button type="button" class="mbtn" data-mode="brief">30 sec</button>
+      <button type="button" class="mbtn active" data-mode="full">3 min</button>
+    </div>
+    <div class="tools">
+      <button type="button" class="tbtn" onclick="window.print()">⎙ Print / PDF</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <aside class="side">
+      <p class="navlabel">Ways to contribute</p>
+      <nav id="nav">
+        <a class="full-only" href="#why"><span class="n">01</span><span>Why we back founders</span></a>
+        <a href="#glance"><span class="n">02</span><span>The four roles at a glance</span></a>
+        <a class="full-only" href="#red"><span class="n">03</span><span>Red Team</span></a>
+        <a class="full-only" href="#coaches"><span class="n">04</span><span>Coaches</span></a>
+        <a class="full-only" href="#advisors"><span class="n">05</span><span>Advisors</span></a>
+        <a class="full-only" href="#speakers"><span class="n">06</span><span>Speakers</span></a>
+        <a class="is-off" href="#ventures"><span class="n">07</span><span>Ventures you'll meet</span></a>
+        <a href="#apply"><span class="n">08</span><span>Get on the bench</span></a>
+      </nav>
+    </aside>
+
+    <main>
+      <div class="hero">
+        <div class="eyebrow">EPFL Startup Launchpad · Fast Track Programs</div>
+        <h1>Put your experience behind EPFL's next founders</h1>
+        <p class="lead">Four ways for alumni and senior operators to help early-stage EPFL ventures de-risk faster. Pick the one that fits your time and your experience.</p>
+        <div class="meta">
+          <span class="badge"><span class="dot" style="--c:var(--ember)"></span>For EPFL alumni &amp; operators</span>
+          <span class="badge"><span class="dot" style="--c:var(--green)"></span>Evergreen · actively recruiting for late August 2026</span>
+        </div>
+      </div>
+
+      <!-- 01 -->
+      <section class="doc full-only" id="why">
+        <div class="eyebrow">01 · The bigger picture</div>
+        <h2>Why we back founders</h2>
+        <p>EPFL backs founders as a <strong>strategic investment</strong>, not charity and not a public service. Turning research and talent into companies is how value, capability and jobs stay in Switzerland. The support exists to de-risk a venture to the point where it can reach its next real milestone: the first investor conversation worth having, the first pilot customer, the first competitive grant from outside EPFL. It is a <strong>bridge to that point, not a destination</strong>. The aim is to make founders ready to no longer need it.</p>
+        <p>That is where you come in. Your experience is a <strong>multiplier on the founder's own work</strong>, not a substitute for it. The four roles below are different ways to apply it, from a single sharp hour to a few months of companionship.</p>
+        <p><strong>Fast Track</strong> is EPFL's route for fast-to-market ventures. It spans three programs: the <a href="https://www.epfl.ch/innovation/startup/programs/blaze/" target="_blank" rel="noopener">Blaze Accelerator</a>, the <a href="https://www.epfl.ch/innovation/startup/programs/ai-track/" target="_blank" rel="noopener">AI Track</a>, and the <a href="https://www.epfl.ch/innovation/startup/programs/master-project-in-your-startup-pdm/" target="_blank" rel="noopener">Master Project in your Startup (PDM)</a>. Deep-tech ventures follow a separate Deep Track (Innogrants, Ignition grants), so the founders you'll meet here are building for rapid market entry, not long research timelines.</p>
+        <div class="callout">
+          <span class="k">The line we hold</span>
+          <p>We help founders increase validation so they reach a clearer, less-risky roadmap to scale, or kill the wrong project fast before more time is spent on it. <strong>Both are wins.</strong> The only failure is staying busy in the middle.</p>
+        </div>
+      </section>
+
+      <!-- 02 -->
+      <section class="doc" id="glance">
+        <div class="eyebrow">02 · Choose your lane</div>
+        <h2>The four roles at a glance</h2>
+        <p class="lead2 full-only">Same goal, four intensities. Skim the table, then jump to the one that fits.</p>
+        <p class="lead2 brief-only">Same goal, four intensities. The essentials are in the table; switch to <strong>3 min</strong> for the full detail on any role.</p>
+        <table class="t">
+          <thead><tr><th style="width:120px">Role</th><th>What you do</th><th>Format &amp; commitment</th><th>Recognition / token</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="role"><span class="dot" style="--c:var(--ember)"></span>Red Team</span></td>
+              <td>Pressure-test a founder's riskiest, load-bearing assumptions.</td>
+              <td>One adversarial session, 60–90 min, remote. On-call, per match.</td>
+              <td>200 CHF / session. Public "red team" mention after 2 sessions.</td>
+            </tr>
+            <tr>
+              <td><span class="role"><span class="dot" style="--c:var(--blue)"></span>Coach</span></td>
+              <td>Companion a team through structured de-risking over a few months.</td>
+              <td>7–10 check-ins over 3–6 months, ~18h / team. 1–3 teams in parallel.</td>
+              <td>2,000 CHF / team (mandate). Listed on site, public mention after induction.</td>
+            </tr>
+            <tr>
+              <td><span class="role"><span class="dot" style="--c:var(--teal)"></span>Advisor</span></td>
+              <td>Solve one specific challenge where your profile or asset fits.</td>
+              <td>One 60-min session, on-call, per match. Optional follow-up.</td>
+              <td>Listed in advisor pool. Can be invited to speak. Recognition-based.</td>
+            </tr>
+            <tr>
+              <td><span class="role"><span class="dot" style="--c:var(--orange)"></span>Speaker</span></td>
+              <td>Share an honest founder story, or hard-won professional expertise.</td>
+              <td>Talks, firesides, panels. A single talk or a recurring presence.</td>
+              <td>High visibility on our channels. Possible founders club place.</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="muted brief-only">Fast Track covers <a href="https://www.epfl.ch/innovation/startup/programs/blaze/" target="_blank" rel="noopener">Blaze</a>, the <a href="https://www.epfl.ch/innovation/startup/programs/ai-track/" target="_blank" rel="noopener">AI Track</a> and <a href="https://www.epfl.ch/innovation/startup/programs/master-project-in-your-startup-pdm/" target="_blank" rel="noopener">PDM</a> (fast-to-market ventures, not deep-tech). Apply for a role below, or join the pool for later. We're recruiting for late August 2026.</p>
+        <div class="grid cols-2 full-only">
+          <a class="card accent" style="--c:var(--ember); --cd:var(--ember)" href="#red"><span class="tag" style="--cd:var(--ember)">High intensity, one hour</span><h3>Red Team</h3><p>You think natively in zero-to-one terms and enjoy reconciling a big claim with an empty starting position.</p><span class="more" style="--cd:var(--ember)">Read more ›</span></a>
+          <a class="card accent" style="--c:var(--blue); --cd:var(--blue-d)" href="#coaches"><span class="tag" style="--cd:var(--blue-d)">Sustained, a few months</span><h3>Coaches</h3><p>You can hold a standard without lecturing and want to walk a team through real de-risking.</p><span class="more" style="--cd:var(--blue-d)">Read more ›</span></a>
+          <a class="card accent" style="--c:var(--teal); --cd:var(--teal-d)" href="#advisors"><span class="tag" style="--cd:var(--teal-d)">Spot expertise, on-call</span><h3>Advisors</h3><p>You have a specific edge or asset and can unlock a team in a single focused hour.</p><span class="more" style="--cd:var(--teal-d)">Read more ›</span></a>
+          <a class="card accent" style="--c:var(--orange); --cd:var(--orange-d)" href="#speakers"><span class="tag" style="--cd:var(--orange-d)">Inspiration, your cadence</span><h3>Speakers</h3><p>You have a story or a message worth putting in front of EPFL founders and the community.</p><span class="more" style="--cd:var(--orange-d)">Read more ›</span></a>
+        </div>
+      </section>
+
+      <!-- 03 -->
+      <section class="doc full-only" id="red" style="--cd:var(--ember); --c:var(--ember)">
+        <div class="eyebrow">03 · Pressure-testing · Red Team</div>
+        <h2>Red Team</h2>
+        <p class="lead2">A standing challenge engine: experienced operators who red-team founders on the assumptions that actually carry weight. Not mentorship, not validation. Pressure-testing.</p>
+        <p>We match each founder to a challenger with the right scar tissue, run one focused session, and our coaches hold the continuity so the challenge converts into follow-through instead of evaporating. The goal isn't to demolish founders. It's to surface the weakest load-bearing assumption before the market or daily operations do it for them.</p>
+        <h3>How a session runs</h3>
+        <div class="flow">
+          <div class="beat"><span class="n">BEAT 1</span><h3>Where they say they're going</h3><p>The founder lays out the destination and the claim behind it.</p></div>
+          <div class="beat"><span class="n">BEAT 2</span><h3>What that takes</h3><p>You bring the reality: the real cost, the real timeline, the conditions that have to hold.</p></div>
+          <div class="beat"><span class="n">BEAT 3</span><h3>What that means today</h3><p>You translate it into the decisions they should make now, with what they actually have.</p></div>
+        </div>
+        <h3>What we ask of you</h3>
+        <ul class="checks" style="--c:var(--ember)">
+          <li>Read a one-page brief and an initial profile review before the session.</li>
+          <li>Run <strong>one focused session, 60–90 min, remote</strong>. Direct, specific, adversarial in the productive sense.</li>
+          <li>Sign an <strong>NDA</strong> before any session. Founder material is pre-launch and sensitive.</li>
+          <li>Send a short, structured candid note to the program afterwards on how solid and how coachable the founder looks. It stays between you and us, never shared with the founder, so the session stays honest.</li>
+        </ul>
+        <h3>What you don't do</h3>
+        <ul class="checks no"><li>Ongoing mentorship, hand-holding, or pitching the founder anything.</li></ul>
+        <div class="callout">
+          <span class="k">Token &amp; recognition</span>
+          <p><strong>200 CHF per session</strong>, as a token of recognition rather than a market rate for your time. After two sessions you can publicly mention being part of the EPFL Startup Launchpad red team.</p>
+        </div>
+        <h3>The challenge domains</h3>
+        <p class="muted">Each case names one or two of these as the priority:</p>
+        <ul class="checks" style="--c:var(--ember)">
+          <li><strong>Technology state-of-the-art</strong> — is the claimed edge real and defensible?</li>
+          <li><strong>Technology vs. product</strong> — what is shippable vs. what is a research bet?</li>
+          <li><strong>Product design</strong> — does the thing solve the problem people actually have?</li>
+          <li><strong>B2B &amp; institutional sales</strong> — who buys, why now, and through what motion?</li>
+          <li><strong>Financial forecast</strong> — what has to be true for the numbers to hold?</li>
+        </ul>
+        <div class="callout">
+          <span class="k">Who we're looking for</span>
+          <p>Operators who think natively in zero-to-one terms: builders, not pure managers. If reconciling a big claim with an empty starting position sounds energizing rather than annoying, you're who we want.</p>
+        </div>
+      </section>
+
+      <!-- 04 -->
+      <section class="doc full-only" id="coaches" style="--cd:var(--blue-d); --c:var(--blue)">
+        <div class="eyebrow">04 · Sustained support · Blue Team</div>
+        <h2>Coaches</h2>
+        <p class="lead2">The program's companion for a team. You walk a venture through structured de-risking over a few months, using a shared readiness framework, so progress is real and visible.</p>
+        <h3>Format &amp; commitment</h3>
+        <div class="kv">
+          <div class="k">Rhythm</div><div>7 to 10 check-in sessions of 60–90 min, mostly bi-weekly, across a 3 to 6 month window. Remote (in person is possible, but expenses are not covered or facilitated).</div>
+          <div class="k">Load</div><div>1 to 3 teams in parallel, your choice.</div>
+          <div class="k">Per team</div><div>About <strong>18 hours</strong>: a 1.5–2h initial team profiling, the check-in sessions, a 1h one-third pulse check with the program manager, a 1.5h mid-term review, and a 1.5h closing session. Plus a one-time 1h intro call before your first team.</div>
+          <div class="k">Reporting</div><div>A 5-minute pulse-check form to the program team after each session.</div>
+        </div>
+        <h3>What we ask of you</h3>
+        <ul class="checks" style="--c:var(--blue-d)">
+          <li>Keep the team <strong>actively de-risking</strong> their project, and strengthen their use of the framework.</li>
+          <li>Make sure they have the resources to do the work, and that they feel genuinely supported and motivated.</li>
+          <li>Give the program visibility on progress against the team's defined objectives, or <strong>flag disengagement</strong> early.</li>
+        </ul>
+        <div class="callout blue">
+          <span class="k">Compensation</span>
+          <p><strong>2,000 CHF per team.</strong> This is a mandate, not an employment contract: you are responsible for your own taxes and contributions. No extras.</p>
+        </div>
+        <h3>Recognition</h3>
+        <ul class="checks" style="--c:var(--blue-d)">
+          <li>After a short induction (your first 5 sessions) you can publicly mention the program and your role, with guidelines provided, and we endorse it.</li>
+          <li>Active-role mention pauses if you go more than 6 months without supporting a team.</li>
+          <li>Active coaches are listed on the website and invited to all Launchpad events.</li>
+          <li>A signed <strong>NDA</strong> is required for every team.</li>
+        </ul>
+        <div class="callout blue">
+          <span class="k">Who we're looking for · draft</span>
+          <p>Founders or operators who have built something real and can hold a standard without lecturing. Comfortable with the de-risk-or-kill logic, equally able to challenge and to support, and reliable on cadence. You receive a coach handbook with the full method before you start.</p>
+        </div>
+      </section>
+
+      <!-- 05 -->
+      <section class="doc full-only" id="advisors" style="--cd:var(--teal-d); --c:var(--teal)">
+        <div class="eyebrow">05 · Spot expertise · Blue Team</div>
+        <h2>Advisors</h2>
+        <p class="lead2">One-off, high-leverage help when your specific profile matches a team's specific challenge. You bring clarity and, where you can, an asset the team can't easily reach.</p>
+        <h3>Format &amp; commitment</h3>
+        <ul class="checks" style="--c:var(--teal-d)">
+          <li><strong>One 60-minute session, on-call.</strong> We contact you when a relevant challenge appears, the same matchmaking model as the Red Team.</li>
+          <li><strong>Accountability is built in.</strong> The team documents the follow-up actions and you validate them at the end of the call.</li>
+        </ul>
+        <h3>What you provide</h3>
+        <ul class="checks" style="--c:var(--teal-d)">
+          <li>Clarity, insight, honest and constructive feedback, and your personal opinion on strategic questions.</li>
+          <li>Where possible, a personal introduction to a relevant contact, or access to a useful asset.</li>
+        </ul>
+        <h3>What you don't do</h3>
+        <ul class="checks no">
+          <li>Your commitment is bounded by the session and what you offer in it. You're free to do no further follow-up.</li>
+          <li>No endorsement of the project.</li>
+        </ul>
+        <div class="callout teal">
+          <span class="k">Want to keep advising afterwards?</span>
+          <p>Just contact us to clarify status. It can stay <strong>pro-bono within the program</strong>, or move <strong>outside it</strong> if there's an investment interest. In that case terms are between you and the founders, and the program does not support that arrangement.</p>
+        </div>
+        <h3>Recognition</h3>
+        <ul class="checks" style="--c:var(--teal-d)">
+          <li>Listed in the advisor pool on the website.</li>
+          <li>Can be invited to speak, and invited to all Launchpad events.</li>
+          <li>A signed <strong>NDA</strong> is required.</li>
+        </ul>
+        <div class="callout teal">
+          <span class="k">Who we're looking for</span>
+          <p>Successful founders and entrepreneurs, top technical profiles, executives, business and strategy consultants, senior people in relevant industries, and investors. Senior, with noticeable achievements or a high level of expertise.</p>
+        </div>
+      </section>
+
+      <!-- 06 -->
+      <section class="doc full-only" id="speakers" style="--cd:var(--orange-d); --c:var(--orange)">
+        <div class="eyebrow">06 · Inspiration &amp; expertise</div>
+        <h2>Speakers</h2>
+        <p class="lead2">Two kinds of voice: founders sharing an honest personal story, and professionals sharing hard-won expertise.</p>
+        <h3>Format &amp; commitment</h3>
+        <ul class="checks" style="--c:var(--orange-d)">
+          <li>Launchpad talks and EPFL startup events. Format and setting vary; you decide what works for you, and can suggest your own.</li>
+          <li>A single talk or a recurring presence, your call.</li>
+          <li>Audience is open, but the focus is creating value for EPFL founders, entrepreneurs and the wider community.</li>
+        </ul>
+        <div class="callout amber">
+          <span class="k">Compensation &amp; recognition</span>
+          <p>No specific fee; for larger-scope events it can be discussed. You get high visibility on our channels, and potentially a place in the founders club if there's mutual interest.</p>
+        </div>
+        <div class="callout amber">
+          <span class="k">Who we're looking for</span>
+          <p>The same calibre as our advisors, plus a real desire to share a message and have impact.</p>
+        </div>
+      </section>
+
+      <!-- 07 — hidden for now -->
+      <section class="doc is-off" id="ventures">
+        <div class="eyebrow">07 · The pipeline</div>
+        <h2>The kind of ventures you'll meet</h2>
+        <p class="lead2">Early sight of EPFL's fast-to-market AI and software ventures, ahead of the field. A few anonymized examples of what's in front of founders right now, one per Fast Track program.</p>
+        <div class="grid cols-3">
+          <div class="card" style="--cd:var(--ember)"><span class="tag" style="--cd:var(--ember)">AI Track</span><h3>AI-native cyber operations</h3><p>An AI-first security product targeting government and institutional buyers. Working prototype, pre-incorporation.</p></div>
+          <div class="card" style="--cd:var(--blue-d)"><span class="tag" style="--cd:var(--blue-d)">Blaze · B2B SaaS</span><h3>Operations mapping for SMBs</h3><p>In pilot in a regulated vertical, about to start charging non-tech SMBs for the first time.</p></div>
+          <div class="card" style="--cd:var(--teal-d)"><span class="tag" style="--cd:var(--teal-d)">PDM · Student venture</span><h3>From Master's project to product</h3><p>A student team turning a Master thesis built in an EPFL lab into a market-ready tool while they finish their degree.</p></div>
+        </div>
+        <p class="muted">Names withheld. These are illustrative of the stage and ambition you'll meet, not a current roster.</p>
+      </section>
+
+      <!-- 08 -->
+      <section class="doc" id="apply">
+        <div class="eyebrow">08 · Next step</div>
+        <h2>Get on the bench</h2>
+        <p class="lead2">One short form. Pick the role that fits and answer a few questions specific to it. We review every profile, and confirmed contributors are added. We're evergreen, and actively looking for new contributors for <strong>late August 2026</strong>. New to the roles? <a href="#glance">Read each one first</a>.</p>
+
+        <form class="bench" id="benchForm" novalidate>
+          <div class="field">
+            <span class="grouplbl">Which role fits you best? <span class="req">*</span></span>
+            <p class="hint" style="margin:-2px 0 8px">Pick one to open the form.</p>
+            <div class="rolepick">
+              <label style="--c:var(--ember)"><input type="radio" name="role" value="Red Team" data-panel="red"><span class="rl"><b>Red Team</b><small>Pressure-test, one session</small></span></label>
+              <label style="--c:var(--blue)"><input type="radio" name="role" value="Coach" data-panel="coach"><span class="rl"><b>Coach</b><small>Companion a team for months</small></span></label>
+              <label style="--c:var(--teal)"><input type="radio" name="role" value="Advisor" data-panel="advisor"><span class="rl"><b>Advisor</b><small>On-call spot expertise</small></span></label>
+              <label style="--c:var(--orange)"><input type="radio" name="role" value="Speaker" data-panel="speaker"><span class="rl"><b>Speaker</b><small>Share a story or expertise</small></span></label>
+              <label style="--c:var(--ash)"><input type="radio" name="role" value="Not sure yet (pool)" data-panel="pool"><span class="rl"><b>Not sure yet</b><small>Just keep me in the pool</small></span></label>
+            </div>
+          </div>
+
+          <div id="formBody" class="formbody">
+          <div class="field">
+            <span class="lbl">Full name <span class="req">*</span></span>
+            <input type="text" id="fullname" data-q="Name" autocomplete="name">
+          </div>
+          <div class="field">
+            <span class="lbl">Email <span class="req">*</span></span>
+            <input type="email" id="email" data-q="Email" autocomplete="email">
+          </div>
+          <div class="field">
+            <span class="lbl">LinkedIn or CV link</span>
+            <input type="url" id="linkedin" data-q="LinkedIn / CV" placeholder="https://">
+          </div>
+          <div class="field">
+            <span class="lbl">Current role &amp; organization</span>
+            <input type="text" id="current" data-q="Current role &amp; org">
+          </div>
+          <div class="field">
+            <span class="lbl">EPFL graduation year (if you're an alum)</span>
+            <input type="text" id="gradyear" data-q="EPFL graduation year" inputmode="numeric" placeholder="e.g. 2018 — leave blank if not an EPFL alum">
+          </div>
+          <div class="field">
+            <span class="lbl">Your areas of expertise</span>
+            <textarea id="expertise" data-q="Expertise" placeholder="Sectors, functions, what you bring..."></textarea>
+          </div>
+
+          <!-- Red Team -->
+          <div class="rolepanel" id="panel-red">
+            <h3>Red Team specifics</h3>
+            <div class="field">
+              <span class="grouplbl">Which challenge domains can you pressure-test?</span>
+              <div class="opts">
+                <label><input type="checkbox" name="red_domains" data-q="Red Team domains" value="Technology state-of-the-art"> Technology state-of-the-art</label>
+                <label><input type="checkbox" name="red_domains" value="Technology vs. product"> Technology vs. product</label>
+                <label><input type="checkbox" name="red_domains" value="Product design"> Product design</label>
+                <label><input type="checkbox" name="red_domains" value="B2B &amp; institutional sales"> B2B &amp; institutional sales</label>
+                <label><input type="checkbox" name="red_domains" value="Financial forecast"> Financial forecast</label>
+              </div>
+            </div>
+            <div class="field">
+              <span class="lbl">Sectors you know deeply</span>
+              <input type="text" id="red_sectors" data-q="Red Team sectors">
+            </div>
+            <div class="opts"><label><input type="checkbox" id="red_nda" data-q="Red Team confirm" value="OK with a 60-90 min remote adversarial session and signing an NDA"> I'm OK with a 60&ndash;90 min remote adversarial session and signing an NDA.</label></div>
+          </div>
+
+          <!-- Coach -->
+          <div class="rolepanel" id="panel-coach">
+            <h3>Coach specifics</h3>
+            <div class="field">
+              <span class="lbl">How many teams could you take in parallel?</span>
+              <select id="coach_teams" data-q="Coach capacity"><option value="">Select...</option><option>1 team</option><option>2 teams</option><option>3 teams</option></select>
+            </div>
+            <div class="field">
+              <span class="lbl">Sectors or stages you're strongest coaching</span>
+              <input type="text" id="coach_sectors" data-q="Coach strengths">
+            </div>
+            <div class="opts"><label><input type="checkbox" id="coach_terms" data-q="Coach confirm" value="OK with ~18h per team over 3-6 months, mandate at 2000 CHF/team, NDA per team"> I understand it's ~18h per team over 3&ndash;6 months, a mandate at 2,000 CHF/team (I handle my own taxes), with an NDA per team.</label></div>
+          </div>
+
+          <!-- Advisor -->
+          <div class="rolepanel" id="panel-advisor">
+            <h3>Advisor specifics</h3>
+            <div class="field">
+              <span class="lbl">The specific edge or asset you bring</span>
+              <textarea id="adv_asset" data-q="Advisor asset" placeholder="Network, data, distribution, deep expertise..."></textarea>
+            </div>
+            <div class="field">
+              <span class="lbl">Domains where a team should call you</span>
+              <input type="text" id="adv_domains" data-q="Advisor domains">
+            </div>
+            <div class="opts"><label><input type="checkbox" id="adv_terms" data-q="Advisor confirm" value="OK with on-call, one-off 60-min sessions and signing an NDA"> I'm OK with on-call, one-off 60-minute sessions and signing an NDA.</label></div>
+          </div>
+
+          <!-- Speaker -->
+          <div class="rolepanel" id="panel-speaker">
+            <h3>Speaker specifics</h3>
+            <div class="field">
+              <span class="grouplbl">What would you bring?</span>
+              <div class="opts inline">
+                <label><input type="radio" name="spk_kind" data-q="Speaker kind" value="A founder story"> A founder story</label>
+                <label><input type="radio" name="spk_kind" value="Professional expertise"> Professional expertise</label>
+                <label><input type="radio" name="spk_kind" value="Both"> Both</label>
+              </div>
+            </div>
+            <div class="field">
+              <span class="lbl">Topic or message</span>
+              <input type="text" id="spk_topic" data-q="Speaker topic">
+            </div>
+            <div class="field">
+              <span class="grouplbl">Formats you're open to</span>
+              <div class="opts inline">
+                <label><input type="checkbox" name="spk_formats" data-q="Speaker formats" value="Talk"> Talk</label>
+                <label><input type="checkbox" name="spk_formats" value="Fireside"> Fireside</label>
+                <label><input type="checkbox" name="spk_formats" value="Panel"> Panel</label>
+                <label><input type="checkbox" name="spk_formats" value="Open to suggestions"> Open to suggestions</label>
+              </div>
+            </div>
+            <div class="field">
+              <span class="grouplbl">Single talk or recurring?</span>
+              <div class="opts inline">
+                <label><input type="radio" name="spk_freq" data-q="Speaker frequency" value="Single"> A single talk</label>
+                <label><input type="radio" name="spk_freq" value="Recurring"> Recurring</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pool -->
+          <div class="rolepanel" id="panel-pool">
+            <h3>Keep me in the pool</h3>
+            <p class="hint" style="margin-top:0">No commitment now. Tell us what you'd be open to later and we'll reach out at the right moment.</p>
+            <div class="field" style="margin-bottom:0">
+              <span class="grouplbl">Roles you'd consider later</span>
+              <div class="opts inline">
+                <label><input type="checkbox" name="pool_roles" data-q="Pool interests" value="Red Team"> Red Team</label>
+                <label><input type="checkbox" name="pool_roles" value="Coach"> Coach</label>
+                <label><input type="checkbox" name="pool_roles" value="Advisor"> Advisor</label>
+                <label><input type="checkbox" name="pool_roles" value="Speaker"> Speaker</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="lbl">Why are you a fit for this role? <span class="req">*</span></span>
+            <textarea id="why" data-q="Why a fit" placeholder="What specifically makes you relevant for the role you picked."></textarea>
+          </div>
+          <div class="field" style="margin-bottom:8px">
+            <span class="grouplbl">Have you done this kind of thing before?</span>
+            <div class="opts inline">
+              <label><input type="radio" name="prior" data-q="Prior experience" value="Yes"> Yes</label>
+              <label><input type="radio" name="prior" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field prior-detail" id="priorDetail">
+            <span class="lbl">If yes, briefly</span>
+            <input type="text" id="prior_detail" data-q="Prior experience detail" placeholder="When, where, and what you did.">
+          </div>
+
+          <div class="field">
+            <span class="grouplbl">Your availability</span>
+            <div class="opts inline">
+              <label><input type="radio" name="avail" data-q="Availability" value="Available now"> Available now</label>
+              <label><input type="radio" name="avail" value="On-call only"> On-call only</label>
+              <label><input type="radio" name="avail" value="Later — keep me in the pool"> Later, keep me in the pool</label>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="lbl">Anything else?</span>
+            <textarea id="note" data-q="Note"></textarea>
+          </div>
+
+          <div class="formfoot">
+            <button type="submit" class="cta">Send application ›</button>
+            <span class="formnote" id="formNote">Submitting opens your email app with everything pre-filled. Just hit send.</span>
+          </div>
+          </div><!-- /#formBody -->
+        </form>
+
+        <div class="print-only apply-print">
+          <p class="grouplbl" style="margin-bottom:10px">How to join</p>
+          <p>Pick the role that fits and register online, or get in touch directly. Choose from:</p>
+          <div class="rolechips" style="display:flex">
+            <span class="rolechip" style="--c:var(--ember)"><span class="dot"></span><b>Red Team</b></span>
+            <span class="rolechip" style="--c:var(--blue)"><span class="dot"></span><b>Coach</b></span>
+            <span class="rolechip" style="--c:var(--teal)"><span class="dot"></span><b>Advisor</b></span>
+            <span class="rolechip" style="--c:var(--orange)"><span class="dot"></span><b>Speaker</b></span>
+          </div>
+          <p style="margin-top:12px">Not available right now? Register anyway to join the pool, with no commitment.</p>
+        </div>
+        <p class="muted">Prefer to just reach out? Marius Conti, Program Lead · <a href="mailto:marius.conti@epfl.ch">marius.conti@epfl.ch</a>.</p>
+      </section>
+
+      <footer class="foot">EPFL Startup Launchpad · Fast Track Programs · ways to contribute · alumni &amp; operators</footer>
+    </main>
+  </div>
+
+<script>
+/* scroll-spy: highlight the active section in the sidebar */
+(function(){
+  const links=[...document.querySelectorAll('#nav a')];
+  const map=new Map(links.map(a=>[a.getAttribute('href').slice(1), a]));
+  const secs=[...document.querySelectorAll('section.doc')];
+  function setActive(id){ links.forEach(a=>a.classList.remove('active')); const a=map.get(id); if(a) a.classList.add('active'); }
+  const obs=new IntersectionObserver(entries=>{
+    const vis=entries.filter(e=>e.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);
+    if(vis.length) setActive(vis[0].target.id);
+  },{ rootMargin:'-70px 0px -70% 0px', threshold:0 });
+  secs.forEach(s=>obs.observe(s));
+  links.forEach(a=>a.addEventListener('click',()=>setActive(a.getAttribute('href').slice(1))));
+})();
+
+/* application form: reveal role panel + build a pre-filled mailto on submit */
+(function(){
+  const f=document.getElementById('benchForm'); if(!f) return;
+  const panels=[...f.querySelectorAll('.rolepanel')];
+  const noteEl=document.getElementById('formNote');
+  const TO='startup@epfl.ch';
+  const FORM_VERSION='1.0';        /* bump this when the form changes */
+  const BUILD_DATE='2026-06-26';   /* date this version shipped; both are sent with every submission */
+
+  const formBody=document.getElementById('formBody');
+  const priorDetail=document.getElementById('priorDetail');
+  function showPanel(key){
+    panels.forEach(p=>p.classList.toggle('show', p.id==='panel-'+key));
+  }
+  f.querySelectorAll('input[name="role"]').forEach(r=>{
+    r.addEventListener('change',()=>{ if(r.checked){ showPanel(r.dataset.panel); formBody.classList.add('show'); } });
+  });
+  f.querySelectorAll('input[name="prior"]').forEach(r=>{
+    r.addEventListener('change',()=>{ priorDetail.classList.toggle('show', r.checked && r.value==='Yes'); });
+  });
+
+  const txt=id=>{ const e=document.getElementById(id); return e?(e.value||'').trim():''; };
+  const radio=name=>{ const c=f.querySelector('input[name="'+name+'"]:checked'); return c?c.value:''; };
+  const checks=name=>[...f.querySelectorAll('input[name="'+name+'"]:checked')].map(c=>c.value.replace(/&amp;/g,'&'));
+  const cb=id=>{ const e=document.getElementById(id); return e&&e.checked?e.value:''; };
+  const add=(arr,label,val)=>{ if(val&&val.length) arr.push(label+': '+val); };
+
+  f.addEventListener('submit',e=>{
+    e.preventDefault();
+    const name=txt('fullname'), email=txt('email'), role=radio('role'), why=txt('why');
+    if(!name||!email||!role||!why){
+      noteEl.textContent='Please add your name, email, a role, and why you are a fit.';
+      noteEl.classList.add('err');
+      (!role?f.querySelector('input[name="role"]'):!name?document.getElementById('fullname'):!email?document.getElementById('email'):document.getElementById('why')).focus();
+      return;
+    }
+    noteEl.classList.remove('err');
+
+    const L=[];
+    L.push('Role: '+role); L.push('');
+    add(L,'Name',name); add(L,'Email',email);
+    add(L,'LinkedIn / CV',txt('linkedin'));
+    add(L,'Current role & org',txt('current'));
+    add(L,'EPFL graduation year',txt('gradyear'));
+    add(L,'Expertise',txt('expertise'));
+    add(L,'Availability',radio('avail'));
+    L.push('');
+
+    if(role.indexOf('Red')===0){
+      add(L,'Challenge domains',checks('red_domains').join(', '));
+      add(L,'Sectors',txt('red_sectors'));
+      add(L,'Confirms',cb('red_nda'));
+    } else if(role.indexOf('Coach')===0){
+      add(L,'Teams in parallel',txt('coach_teams'));
+      add(L,'Coaching strengths',txt('coach_sectors'));
+      add(L,'Confirms',cb('coach_terms'));
+    } else if(role.indexOf('Advisor')===0){
+      add(L,'Edge / asset',txt('adv_asset'));
+      add(L,'Domains',txt('adv_domains'));
+      add(L,'Confirms',cb('adv_terms'));
+    } else if(role.indexOf('Speaker')===0){
+      add(L,'Brings',radio('spk_kind'));
+      add(L,'Topic / message',txt('spk_topic'));
+      add(L,'Formats',checks('spk_formats').join(', '));
+      add(L,'Frequency',radio('spk_freq'));
+    } else {
+      add(L,'Roles considered later',checks('pool_roles').join(', '));
+    }
+    L.push('');
+    add(L,'Why a fit',why);
+    add(L,'Prior experience',radio('prior'));
+    add(L,'Prior experience detail',txt('prior_detail'));
+    const extra=txt('note'); if(extra){ L.push(''); add(L,'Note',extra); }
+    L.push(''); L.push('Form version: '+FORM_VERSION+' · '+BUILD_DATE);
+
+    const subject='Join the bench — '+role+' — '+name;
+    const href='mailto:'+TO+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(L.join('\n'));
+    window.location.href=href;
+    noteEl.textContent='Opening your email app with your application ready. Just hit send.';
+  });
+})();
+
+/* reading mode: 30 sec (brief) vs 3 min (full) */
+(function(){
+  const body=document.body, btns=[...document.querySelectorAll('.mbtn')];
+  if(!btns.length) return;
+  function set(mode){
+    body.classList.toggle('mode-brief', mode==='brief');
+    body.classList.toggle('mode-full', mode!=='brief');
+    btns.forEach(b=>b.classList.toggle('active', b.dataset.mode===mode));
+    window.scrollTo({top:0});
+  }
+  btns.forEach(b=>b.addEventListener('click',()=>set(b.dataset.mode)));
+})();
+</script>
+</body>
+</html>
