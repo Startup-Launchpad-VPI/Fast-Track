@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coaches Handbook — EPFL Fast Track Programs</title>
+<meta name="description" content="Reference handbook for external Blue Team mentors of the EPFL Fast Track Programs.">
+<!--
+  EPFL Fast Track Programs — Blue Team Mentor Handbook.
+  Follows EPFL Brand/EPFL-design-system.md (Part A). Single self-contained HTML doc site.
+  Audience: external Blue Team mentors. Adapted from the internal founder-support spec.
+-->
+<style>
+  :root{ color-scheme: light;
+    --ink:#212121; --charcoal:#000000;
+    --parchment:#fafafa; --stone:#f0f0f0; --sand:#dcdcdc; --inset:#cdcdc9;
+    --clay:#6b6b6b; --ash:#8a8a8a; --smoke:#a1a1a1;
+    --ember:#e30713; --alert:#b3412a;
+    --blue:#4a90e2; --blue-d:#2275d7;
+    --orange:#f5a623; --orange-d:#cf8509;
+    --teal:#007480; --teal-d:#005a63;
+    --green:#7ed321; --green-d:#5d9c18;
+    --sans:"Suisse Int'l","SuisseIntl","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --r:3px; --maxw:1180px;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; }
+  html{ scroll-behavior:smooth; }
+  body{ background:#fff; color:var(--ink); font-family:var(--sans);
+    font-size:16px; line-height:1.55; letter-spacing:.005em; -webkit-font-smoothing:antialiased; }
+  a{ color:var(--ember); text-decoration:none; } a:hover{ text-decoration:underline; }
+
+  /* top bar */
+  .topbar{ display:flex; align-items:center; gap:16px; padding:14px clamp(16px,4vw,40px);
+    border-bottom:1px solid var(--sand); position:sticky; top:0; background:#fff; z-index:30; }
+  .brand{ display:flex; align-items:center; gap:10px; font-weight:600; letter-spacing:.01em; }
+  .brand .logo{ height:22px; width:auto; display:block; }
+  .brand .sub{ color:var(--clay); font-weight:400; font-size:13px; border-left:1px solid var(--sand); padding-left:10px; }
+  .tools{ margin-left:auto; display:flex; gap:8px; align-items:center; }
+  .tbtn{ font:13px var(--sans); border:1px solid var(--sand); background:var(--parchment); color:var(--ink);
+    border-radius:var(--r); padding:6px 12px; cursor:pointer; }
+  .tbtn:hover{ background:var(--stone); }
+
+  .layout{ max-width:var(--maxw); margin:0 auto; display:grid; grid-template-columns:248px 1fr; gap:36px;
+    padding:0 clamp(16px,4vw,40px); }
+
+  /* sidebar nav */
+  .side{ position:sticky; top:62px; align-self:start; height:calc(100vh - 62px); overflow:auto;
+    padding:26px 0 40px; }
+  .side .navlabel{ font:11px var(--mono); text-transform:uppercase; letter-spacing:.07em; color:var(--ash); margin:0 0 12px; }
+  .side nav{ display:flex; flex-direction:column; gap:3px; }
+  .side a{ display:flex; gap:10px; align-items:baseline; font:14px var(--sans); color:var(--clay);
+    border:1px solid transparent; border-radius:var(--r); padding:8px 12px; }
+  .side a .n{ font:11px var(--mono); color:var(--ash); }
+  .side a:hover{ color:#fff; background:var(--ember); text-decoration:none; }
+  .side a:hover .n{ color:rgba(255,255,255,.85); }
+  .side a.active{ color:#fff; background:var(--ember); }
+  .side a.active .n{ color:rgba(255,255,255,.85); }
+
+  /* content */
+  main{ padding:30px 0 80px; min-width:0; max-width:760px; }
+  .hero{ border-bottom:1px solid var(--sand); padding-bottom:26px; margin-bottom:34px; }
+  .eyebrow{ font:12px var(--mono); letter-spacing:.06em; text-transform:uppercase; color:var(--ember); }
+  h1{ font-size:clamp(30px,4.6vw,46px); line-height:1.05; letter-spacing:-.02em; font-weight:600; margin:.25em 0 .3em; }
+  .hero .lead{ font-size:clamp(17px,2vw,20px); color:var(--clay); max-width:680px; }
+  .meta{ margin-top:18px; display:flex; flex-wrap:wrap; gap:8px; }
+  .badge{ display:inline-flex; align-items:center; font:11px var(--mono); letter-spacing:.02em;
+    border:1px solid var(--sand); border-radius:var(--r); padding:4px 11px; color:var(--ink); background:var(--parchment); }
+  .badge .dot{ width:9px; height:9px; border-radius:50%; background:var(--c,var(--ash)); margin-right:7px; }
+
+  section.doc{ padding-top:18px; margin-top:30px; border-top:1px solid var(--sand); scroll-margin-top:74px; }
+  section.doc:first-of-type{ border-top:none; margin-top:0; }
+  section.doc > .eyebrow{ display:block; }
+  h2{ font-size:clamp(22px,3vw,30px); line-height:1.12; letter-spacing:-.018em; font-weight:600; margin:.18em 0 .5em; }
+  h3{ font-size:17px; font-weight:600; letter-spacing:-.01em; margin:26px 0 8px; }
+  p{ margin:0 0 14px; }
+  .muted{ color:var(--clay); }
+
+  .grid{ display:grid; gap:14px; margin:18px 0; }
+  .cols-2{ grid-template-columns:repeat(2,1fr); } .cols-3{ grid-template-columns:repeat(3,1fr); }
+  @media(max-width:680px){ .cols-2,.cols-3{ grid-template-columns:1fr; } }
+  .card{ background:var(--stone); border:1px solid var(--sand); border-radius:4px; padding:18px; }
+  .card.accent{ background:#fff; border-left:4px solid var(--c,var(--blue)); }
+  .card .tag{ display:inline-block; font:11px var(--mono); text-transform:uppercase; letter-spacing:.05em;
+    color:var(--cd,var(--clay)); margin-bottom:8px; }
+  .card h3{ margin:0 0 6px; font-size:16px; }
+  .card p{ margin:0; color:var(--clay); font-size:14px; }
+
+  .callout{ border:1px solid var(--sand); border-left:4px solid var(--ember); background:var(--parchment);
+    border-radius:4px; padding:16px 18px; margin:20px 0; }
+  .callout .k{ font:11px var(--mono); text-transform:uppercase; letter-spacing:.06em; color:var(--ember); display:block; margin-bottom:6px; }
+  .callout p:last-child{ margin-bottom:0; }
+  .callout.amber{ border-left-color:var(--orange); } .callout.amber .k{ color:var(--orange-d); }
+  .callout.teal{ border-left-color:var(--teal); } .callout.teal .k{ color:var(--teal-d); }
+
+  ul.checks{ list-style:none; padding:0; margin:14px 0; }
+  ul.checks li{ padding:8px 0 8px 26px; position:relative; border-bottom:1px solid var(--sand); }
+  ul.checks li:before{ content:"\203A"; position:absolute; left:6px; color:var(--ember); font-weight:600; }
+  ul.checks li:last-child{ border-bottom:none; }
+  ul.plain{ padding-left:18px; margin:14px 0; } ul.plain li{ margin:6px 0; }
+
+  table.t{ width:100%; border-collapse:collapse; margin:18px 0; font-size:14.5px; }
+  table.t th{ text-align:left; font:11px var(--mono); text-transform:uppercase; letter-spacing:.05em; color:var(--clay);
+    font-weight:400; padding:10px 12px; background:var(--stone); border-bottom:1px solid var(--sand); }
+  table.t td{ padding:10px 12px; border-bottom:1px solid var(--sand); vertical-align:top; }
+  table.t td .when{ font:12px var(--mono); color:var(--ink); }
+
+  .steps{ margin:18px 0; }
+  .step{ display:grid; grid-template-columns:auto 1fr; gap:16px; padding:16px 0; border-bottom:1px solid var(--sand); }
+  .step:last-child{ border-bottom:none; }
+  .step .lvl{ font:11px var(--mono); text-transform:uppercase; letter-spacing:.05em; color:#fff;
+    background:var(--c,var(--ash)); border-radius:var(--r); padding:4px 10px; height:fit-content; white-space:nowrap; }
+  .step h3{ margin:0 0 6px; }
+  .step .trig{ font:12px var(--mono); color:var(--clay); }
+
+  .reffields{ counter-reset:f; list-style:none; padding:0; margin:14px 0; }
+  .reffields li{ position:relative; padding:9px 0 9px 34px; border-bottom:1px solid var(--sand); }
+  .reffields li:before{ counter-increment:f; content:counter(f); position:absolute; left:0; top:8px;
+    width:22px; height:22px; border:1px solid var(--sand); border-radius:50%; font:11px var(--mono); color:var(--ember);
+    display:flex; align-items:center; justify-content:center; }
+
+  .scale{ display:flex; border:1px solid var(--sand); border-radius:var(--r); overflow:hidden; margin:18px 0 8px; }
+  .scale .seg{ flex:1; padding:11px 13px; color:#fff; }
+  .scale .seg .rng{ font:12px var(--mono); letter-spacing:.04em; display:block; }
+  .scale .seg .lab{ font:13px var(--sans); font-weight:600; display:block; margin-top:2px; }
+  .scale .s1{ background:var(--blue); } .scale .s2{ background:var(--teal); } .scale .s3{ background:var(--green-d); }
+
+  .lvltabs{ display:flex; flex-wrap:wrap; gap:4px; margin:20px 0 0; }
+  .lvltab{ font:13px var(--sans); color:var(--clay); background:transparent; border:1px solid var(--sand);
+    border-radius:var(--r); padding:7px 12px; cursor:pointer; white-space:nowrap; }
+  .lvltab:hover, .lvltab.active{ color:#fff; background:var(--ember); border-color:var(--ember); }
+  table.lvl{ width:100%; border-collapse:collapse; margin:16px 0 4px; font-size:14px; }
+  table.lvl th{ text-align:left; font:11px var(--mono); text-transform:uppercase; letter-spacing:.05em;
+    color:var(--clay); font-weight:400; padding:9px 12px; background:var(--stone); border-bottom:1px solid var(--sand); }
+  table.lvl td{ padding:9px 12px; border-bottom:1px solid var(--sand); vertical-align:top; }
+  table.lvl td.lv{ width:52px; font:12px var(--mono); color:var(--ember); white-space:nowrap; }
+  table.lvl tr.band-mkt td.lv{ color:var(--green-d); }
+
+  .radarwrap{ display:flex; flex-wrap:wrap; gap:24px; align-items:center; margin:20px 0 8px; }
+  .radar{ width:100%; max-width:360px; height:auto; flex:1 1 280px; }
+  .legend{ display:flex; flex-direction:column; gap:10px; font-size:14px; flex:1 1 220px; }
+  .legend .lg{ display:flex; align-items:center; gap:9px; }
+  .legend .sw{ width:15px; height:15px; border-radius:2px; flex:none; border:1px solid rgba(0,0,0,.12); }
+  .legend .lg small{ display:block; color:var(--clay); font-size:12.5px; }
+  .flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:16px 0 6px; }
+  .flow .chip{ font:11px var(--mono); text-transform:uppercase; letter-spacing:.04em; color:var(--ink);
+    border:1px solid var(--sand); background:var(--parchment); border-radius:var(--r); padding:6px 11px; }
+  .flow .ar{ color:var(--ember); font:14px var(--mono); }
+
+  footer.foot{ border-top:1px solid var(--sand); margin-top:50px; padding-top:18px;
+    font:11px var(--mono); text-transform:uppercase; letter-spacing:.05em; color:var(--ash); }
+
+  /* responsive sidebar -> horizontal */
+  @media(max-width:900px){
+    .layout{ grid-template-columns:1fr; gap:0; }
+    .side{ position:sticky; top:55px; height:auto; overflow:auto; padding:10px 0; background:#fff;
+      border-bottom:1px solid var(--sand); z-index:20; }
+    .side .navlabel{ display:none; }
+    .side nav{ flex-direction:row; gap:6px; overflow-x:auto; padding-bottom:4px; }
+    .side a{ white-space:nowrap; }
+    main{ padding-top:24px; }
+  }
+
+  @media print{
+    .topbar .tools, .side{ display:none !important; }
+    .layout{ display:block; max-width:none; }
+    .topbar{ position:static; }
+    section.doc{ break-inside:avoid; }
+    a{ color:var(--ink); }
+  }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="brand">
+      <a href="/" aria-label="Back to Fast Track home" style="display:flex;align-items:center"><svg class="logo" viewBox="0 0 182.4 53" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="EPFL" fill="#e30713"><polygon points="0,21.6 11.4,21.6 11.4,9.8 38.3,9.8 38.3,0 0,0"/><polygon points="0,53 38.3,53 38.3,43.2 11.4,43.2 11.4,31.4 0,31.4"/><rect x="11.4" y="21.6" width="24.6" height="9.8"/><path d="M86,4.9c-1.5-1.5-3.4-2.6-5.7-3.5C78,0.4,75.1,0,71.8,0H48.1v53h11.4V31.4h12.2c3.3,0,6.1-0.4,8.5-1.3 c2.3-0.9,4.2-2.1,5.7-3.5c1.5-1.5,2.5-3.1,3.2-5s1-3.8,1-5.8s-0.3-4-1-5.8C88.5,8,87.4,6.3,86,4.9z M78,18.7 c-0.6,0.8-1.3,1.4-2.3,1.8c-0.9,0.4-2,0.7-3.3,0.9c-1.2,0.1-2.5,0.2-3.9,0.2h-9.1V9.8h9.1c1.3,0,2.6,0.1,3.9,0.2 c1.2,0.1,2.3,0.4,3.3,0.9c0.9,0.4,1.7,1,2.3,1.8c0.6,0.8,0.9,1.8,0.9,3S78.6,18,78,18.7z"/><polygon points="155.5,43.2 155.5,0 144,0 144,53 182.4,53 182.4,43.2"/><polygon points="97.4,21.6 108.9,21.6 108.9,9.8 135.8,9.8 135.8,0 97.4,0"/><rect x="97.4" y="31.4" width="11.4" height="21.6"/><rect x="108.9" y="21.6" width="24.6" height="9.8"/></svg></a>
+      <span class="sub">Fast Track Programs · Coaches</span>
+    </div>
+    <div class="tools">
+      <button type="button" class="tbtn" onclick="window.print()">⎙ Print / PDF</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <aside class="side">
+      <p class="navlabel">Mentor handbook</p>
+      <nav id="nav">
+        <a href="#overview"><span class="n">01</span><span>Welcome</span></a>
+        <a href="#why"><span class="n">02</span><span>Why we invest in founders</span></a>
+        <a href="#role"><span class="n">03</span><span>Your role as a mentor</span></a>
+        <a href="#irl"><span class="n">04</span><span>The readiness-level model</span></a>
+        <a href="#cadence"><span class="n">05</span><span>Cadence &amp; requirements</span></a>
+        <a href="#session"><span class="n">06</span><span>Running a session</span></a>
+        <a href="#escalation"><span class="n">07</span><span>Recognising disengagement</span></a>
+        <a href="#reference"><span class="n">08</span><span>Quick reference</span></a>
+        <a href="#appendix"><span class="n">A</span><span>Appendix · About the model</span></a>
+        <a href="#criteria"><span class="n">B</span><span>Appendix · Level criteria</span></a>
+        <a href="#advancing"><span class="n">C</span><span>Appendix · Levels &amp; profiles</span></a>
+      </nav>
+    </aside>
+
+    <main>
+      <div class="hero">
+        <div class="eyebrow">EPFL Startup Launchpad · Fast Track Programs</div>
+        <h1>Blue Team Mentor Handbook</h1>
+        <p class="lead">The shared method for everyone mentoring founders on the Blue Team. It explains what the support is for, how a session runs, and how we keep three different mentors applying the same logic the same way.</p>
+        <div class="meta">
+          <span class="badge"><span class="dot" style="--c:var(--blue)"></span>For external Blue Team mentors</span>
+          <span class="badge"><span class="dot" style="--c:var(--teal)"></span>Reference, not founder-facing</span>
+        </div>
+      </div>
+
+      <!-- 01 -->
+      <section class="doc" id="overview">
+        <div class="eyebrow">01 · Welcome</div>
+        <h2>What this handbook is for</h2>
+        <p>You are part of the <strong>Blue Team</strong>: the mentors who work alongside founders to help them reduce the uncertainty in their venture. This handbook is your reference for how that support works at EPFL, what we ask of founders in return, and how to run sessions so they produce real movement rather than pleasant conversation.</p>
+        <p>Its single purpose is consistency. When several mentors each improvise their own approach, founders get mixed signals and the hard conversations land differently depending on who they happen to be talking to. This handbook gives everyone the same map, the same cadence, and the same language, so support feels coherent across the whole team.</p>
+        <div class="grid cols-3">
+          <div class="card accent" style="--c:var(--ember)"><span class="tag" style="--cd:var(--ember)">Method</span><h3>One shared map</h3><p>The readiness-level model gives every founder and mentor the same axes to work on.</p></div>
+          <div class="card accent" style="--c:var(--blue)"><span class="tag" style="--cd:var(--blue-d)">Cadence</span><h3>Observable actions</h3><p>A weekly prep, a monthly update, a mid-term review. Things a founder visibly does.</p></div>
+          <div class="card accent" style="--c:var(--teal)"><span class="tag" style="--cd:var(--teal-d)">Fairness</span><h3>Clear, recorded, reversible</h3><p>Every requirement is named in advance and every step leaves a path back.</p></div>
+        </div>
+        <p class="muted">A separate, softer version of this material is shared directly with founders. This one is for you: it states the reasoning behind the rules so you can apply them with judgement.</p>
+      </section>
+
+      <!-- 02 -->
+      <section class="doc" id="why">
+        <div class="eyebrow">02 · The bigger picture</div>
+        <h2>Why we invest in founders</h2>
+        <p>EPFL supports founders as a <strong>strategic investment</strong>, not a public service and not charity. Turning research and talent into companies is part of how Switzerland keeps its economy strong: more jobs created here, more capability retained in the country, more value generated locally. A finite, public resource is placed behind a founder in the expectation of a return: a venture that becomes strong enough to stand on its own.</p>
+        <p>There is a specific reason institutions, rather than the market, carry this stage. External support almost always requires maturity before it engages. Investors, corporate partners, banks and competitive funding bodies price risk, and at the earliest stage the uncertainty is too high for them to commit. That leaves a gap at the front of every venture's life, where the idea is most uncertain and the outside world is least willing to back it. Institutional support exists to cover exactly that gap.</p>
+        <div class="callout">
+          <span class="k">The role, precisely</span>
+          <p>We help a founder de-risk their project to the point where they can connect with the next step: the first external milestone, the first investor conversation worth having, the first pilot customer, the first competitive grant from a body outside EPFL. We are a <strong>bridge to that point, not a destination</strong>. The aim of the support is to make the founder ready to no longer need it.</p>
+        </div>
+        <p>This framing matters for your work because it sets the direction of travel. A founder who stays comfortable on support without reducing uncertainty is moving away from the goal, not toward it. Recognising that early, and naming it kindly, is part of helping.</p>
+      </section>
+
+      <!-- 03 -->
+      <section class="doc" id="role">
+        <div class="eyebrow">03 · Positioning</div>
+        <h2>Your role as a mentor</h2>
+        <p>Support is a finite, allocated resource, invested where founders convert it into reduced uncertainty. Your mentoring is a <strong>multiplier on the founder's own de-risking work</strong>, not a substitute for it. A multiplier applied to zero returns zero, which is the whole reason the cadence in Section 5 exists.</p>
+        <p>The founder's job between sessions is not only to build. It is to produce evidence that kills or confirms the assumptions the venture depends on. Building without testing produces motion, not progress, and motion is the thing founders most often mistake for traction. A large part of your value is keeping the founder honest about that difference.</p>
+        <h3>Two framings that work, and one to avoid</h3>
+        <div class="grid cols-3">
+          <div class="card accent" style="--c:var(--teal)"><span class="tag" style="--cd:var(--teal-d)">Use</span><h3>Scarcity</h3><p>Our time is finite and we choose where it goes. Be transparent about how we choose.</p></div>
+          <div class="card accent" style="--c:var(--blue)"><span class="tag" style="--cd:var(--blue-d)">Use</span><h3>Identity</h3><p>This is what founders who make it actually do between sessions. Hold that standard.</p></div>
+          <div class="card accent" style="--c:var(--orange)"><span class="tag" style="--cd:var(--orange-d)">Avoid</span><h3>Debt</h3><p>Never tell a founder they "owe" us effort. Obligation framing produces performed effort, not real testing.</p></div>
+        </div>
+        <div class="callout teal">
+          <span class="k">Where you sit relative to EPFL staff</span>
+          <p>You mentor the founder and apply the cadence. You <strong>flag patterns</strong> when the exchange starts to break down (missed prep, no evidence, no de-risking). The EPFL program team owns the continuation decisions and runs any formal step-back conversation. You are never on your own for the hard part, and you are not the one who ends support. See Section 7.</p>
+        </div>
+        <p>One rule underpins everything we require: it must be something a founder <strong>visibly does or does not do</strong>. We never require a state of mind. "Understand the value of support" is unenforceable and we do not use it. "Submit a prep template before booking time" is observable, fair, and survives challenge.</p>
+      </section>
+
+      <!-- 04 -->
+      <section class="doc" id="irl">
+        <div class="eyebrow">04 · The shared structure</div>
+        <h2>The readiness-level model</h2>
+        <p>We use the <strong>KTH Innovation Readiness Level</strong> model as the shared structure for what "reduce uncertainty" actually means. We use it for structure only: it gives every founder and every mentor the same map, so de-risking stops being a vague instruction and becomes movement on named axes. Each dimension is scored 1 to 9.</p>
+        <div class="grid cols-2">
+          <div class="card"><span class="tag" style="--cd:var(--blue-d)">CRL · Customer</span><p>Is the need real, and will they adopt and pay?</p></div>
+          <div class="card"><span class="tag" style="--cd:var(--blue-d)">TRL · Technology</span><p>Does the solution work, and is it fit for purpose?</p></div>
+          <div class="card"><span class="tag" style="--cd:var(--blue-d)">BRL · Business model</span><p>Is there a viable and sustainable model around it?</p></div>
+          <div class="card"><span class="tag" style="--cd:var(--blue-d)">IPRL · IPR</span><p>Is the intellectual property identified, owned, and protectable?</p></div>
+          <div class="card"><span class="tag" style="--cd:var(--blue-d)">TMRL · Team</span><p>Are the right people present, with capacity and alignment to execute?</p></div>
+          <div class="card"><span class="tag" style="--cd:var(--blue-d)">FRL · Funding</span><p>Is there enough runway to reach a viable model?</p></div>
+        </div>
+        <p>A low score is not a bad mark. The model measures how far a venture has moved from idea toward market, not how good the idea is. Ventures move <strong>down</strong> as often as up, because one hard piece of evidence can reveal a founder was further from market than they thought. Moving down for the right reason is progress: they now know something true that they did not know before.</p>
+        <div class="callout">
+          <span class="k">The line we give founders</span>
+          <p>Support exists to help you increase validation across these dimensions, so you reach a clear, less-risky roadmap to scale. Or to help you kill the project fast, before more time is spent on something the evidence will not support. <strong>Both are wins.</strong> The only failure is staying busy in the middle, accumulating activity without moving any dimension and without learning enough to stop.</p>
+        </div>
+        <h3>Three working rules</h3>
+        <ul class="checks">
+          <li><strong>Target the lagging dimension, not the average.</strong> A composite score hides the weakest axis behind the strongest. A founder strong on technology and weak on customer is not "average", they are at risk on customer, and that is where support goes. A gap of more than two or three steps between dimensions holds the whole venture back, so the gap is the target.</li>
+          <li><strong>Measure evidence at the current level, not speed of climbing.</strong> Deep tech, medtech and anything regulatory move up the scale slowly and legitimately. A founder meets the bar by producing real evidence at their current level, even when the number is not moving fast. The trigger for concern is always "no de-risking work", never "too slow for their field".</li>
+          <li><strong>The model says what, not how.</strong> The levels define what a founder needs to have achieved. They never prescribe how. The how is the founder's own de-risking work between sessions, and your mentoring is the multiplier on it.</li>
+        </ul>
+      </section>
+
+      <!-- 05 -->
+      <section class="doc" id="cadence">
+        <div class="eyebrow">05 · The exchange</div>
+        <h2>Cadence &amp; requirements</h2>
+        <p>We make the exchange explicit so that any later step-back reads as a known rule taking effect, not a personal decision by a mentor.</p>
+        <div class="grid cols-2">
+          <div class="card accent" style="--c:var(--teal)"><span class="tag" style="--cd:var(--teal-d)">We commit</span><p>Regular coaching access, network and partner introductions, grant access, and the right to present as a current member of the program while active.</p></div>
+          <div class="card accent" style="--c:var(--ember)"><span class="tag" style="--cd:var(--ember)">We require</span><p>The observable actions below, on this cadence. Set once by the program, applied to everyone the same way.</p></div>
+        </div>
+        <table class="t">
+          <thead><tr><th style="width:130px">Cadence</th><th>What the founder submits</th></tr></thead>
+          <tbody>
+            <tr><td><span class="when">Weekly</span><br><span class="muted" style="font-size:12.5px">supports coaching</span></td>
+              <td>A <strong>prep template</strong>, submitted at least <strong>24h</strong> before each coaching session. Five fields (see below). No prep, no booked time — the missed-template rule is set by the program and applied without exception.</td></tr>
+            <tr><td><span class="when">Monthly</span><br><span class="muted" style="font-size:12.5px">tracks evolution</span></td>
+              <td>An update against the founder's <strong>own</strong> intake targets: progress on key metrics or milestones, what moved, what did not, what changed in the plan. The reference point is their own trajectory, never an external benchmark.</td></tr>
+            <tr><td><span class="when">Mid-term</span><br><span class="muted" style="font-size:12.5px">progress review</span></td>
+              <td>A structured review against the trajectory agreed at intake. The formal checkpoint where continued investment is explicitly reconfirmed or flagged. Output is recorded.</td></tr>
+            <tr><td><span class="when">End</span><br><span class="muted" style="font-size:12.5px">final report</span></td>
+              <td>Outcomes, learnings, and what the support produced. Closes the loop and feeds future cohort decisions.</td></tr>
+          </tbody>
+        </table>
+        <h3>The weekly prep template</h3>
+        <p>Before each session the founder names, in five lines:</p>
+        <ol class="reffields">
+          <li>The <strong>assumption</strong> being tested this week.</li>
+          <li><strong>What was done</strong> to test it.</li>
+          <li><strong>What was learned</strong> — the evidence, not the activity.</li>
+          <li>The <strong>decision</strong> that learning informs.</li>
+          <li>The specific <strong>ask</strong> for this session.</li>
+        </ol>
+        <div class="callout amber">
+          <span class="k">Watch for going through the motions</span>
+          <p>A template that is consistently full of activity but empty of evidence (things done, nothing learned, no decision) is a partial miss, and it is meant to be caught. A founder who fills the form without doing the work is the exact failure the form exists to surface. Field 3 is the one that matters most.</p>
+        </div>
+      </section>
+
+      <!-- 06 -->
+      <section class="doc" id="session">
+        <div class="eyebrow">06 · In practice</div>
+        <h2>Running a session</h2>
+        <p>The prep template is the session's spine. If it arrives, you already know the assumption, the evidence, the decision and the ask before you start, and the hour goes to the decision rather than to a status recap.</p>
+        <ul class="checks">
+          <li><strong>Start from the template.</strong> If none was submitted, apply the program's missed-template rule rather than holding the session as normal. The first exception turns the requirement into a suggestion.</li>
+          <li><strong>Push for evidence, not activity.</strong> "I built the landing page" is activity. "Twelve of forty target users clicked through, none paid" is evidence. Keep returning to field 3.</li>
+          <li><strong>Anchor on one dimension and one assumption.</strong> Name which readiness axis this week's work is de-risking. Resist spreading the session across all six.</li>
+          <li><strong>Separate motion from progress, out loud.</strong> Busy weeks with no tested assumption are the warning sign, not the reassurance.</li>
+          <li><strong>Reframe disconfirming evidence as a win.</strong> If the evidence moved the founder down a level for the right reason, that is progress. Help them act on it instead of defending the original plan.</li>
+          <li><strong>Close on the decision and the next ask.</strong> Every session should end with what the founder now decides and what they will test next.</li>
+        </ul>
+        <div class="callout teal">
+          <span class="k">Your job in one line</span>
+          <p>Multiply the founder's de-risking work. Hold the standard that real founders test their assumptions between sessions, and make every hour move a named dimension.</p>
+        </div>
+      </section>
+
+      <!-- 07 -->
+      <section class="doc" id="escalation">
+        <div class="eyebrow">07 · When the exchange breaks down</div>
+        <h2>Recognising disengagement</h2>
+        <p>When a founder stops doing the de-risking work, support is no longer multiplying anything, and continuing it does not help them: it keeps them comfortable while the venture quietly stalls, and our involvement makes that decline look endorsed. The program responds with a defined ladder that protects two things at once: <strong>our resources</strong> (we stop spending them where they are not used) and <strong>our reputation</strong> (a founder who is stepped back from should never be able to say truthfully that it came from nowhere).</p>
+        <div class="callout">
+          <span class="k">Your part</span>
+          <p>You <strong>observe and flag</strong>. When the patterns below appear, record them and raise them with the EPFL program team. The program runs the steps and owns the decision to reduce or end support. You are never asked to deliver a termination on your own.</p>
+        </div>
+        <h3>The patterns to flag</h3>
+        <ul class="checks">
+          <li>Two consecutive missed weekly prep templates.</li>
+          <li>A missed monthly update.</li>
+          <li>Three consecutive prep templates submitted but empty of evidence.</li>
+          <li>Building continuing, but no assumption being tested and no dimension moving.</li>
+        </ul>
+        <p class="muted">The trigger is always "no de-risking work", never "too slow for their field". A founder producing real evidence at their current level is meeting the bar, even if the number is barely moving.</p>
+
+        <h3>What your flag sets in motion</h3>
+        <p>For context, so you understand where a flag leads. Each step is triggered by an observable threshold, is recorded, and leaves a reversal path open until the final one.</p>
+        <div class="steps">
+          <div class="step"><span class="lvl" style="--c:var(--green-d)">Step 0 · Active</span><div><h3>Requirements met</h3><p class="muted">Cadence in Section 5 is being met. Full support continues.</p></div></div>
+          <div class="step"><span class="lvl" style="--c:var(--blue-d)">Step 1 · Confront</span><div><h3>A direct conversation, with a reset</h3><p class="trig">Trigger: 2 consecutive missed weekly preps · or 1 missed monthly update · or 3 consecutive empty templates.</p><p class="muted">The program names the specific misses, restates the allocation rule, and sets a concrete reset: what needs to happen, by when. The conversation and the reset date are logged.</p></div></div>
+          <div class="step"><span class="lvl" style="--c:var(--orange-d)">Step 2 · Named disengagement</span><div><h3>Involvement reduced, in writing</h3><p class="trig">Trigger: no change by the Step 1 reset date.</p><p class="muted">The founder is told explicitly what reduces, why (the logged misses), and the specific, observable condition that reverses it. The path back is always stated, because this is a lever to restart the work, not a punishment.</p></div></div>
+          <div class="step"><span class="lvl" style="--c:var(--alert)">Step 3 · Stop</span><div><h3>Support ends</h3><p class="trig">Trigger: the Step 2 reversal condition is not met by its deadline.</p><p class="muted">Support ends and active status is withdrawn, administered by EPFL. A founder always keeps the right to state truthfully that they were previously part of the program; we never erase a true past fact for ordinary non-performance.</p></div></div>
+        </div>
+        <div class="callout teal">
+          <span class="k">Why this is fair</span>
+          <p>At every step the same answer holds: it was observable, it was recorded, the founder was told directly, and a way back was open until they declined it. Because the triggers are fixed thresholds rather than judgement calls, the decision tracks the founder's behaviour and not a mentor's patience or rapport.</p>
+        </div>
+      </section>
+
+      <!-- 08 -->
+      <section class="doc" id="reference">
+        <div class="eyebrow">08 · One page</div>
+        <h2>Quick reference</h2>
+        <div class="grid cols-2">
+          <div class="card"><span class="tag" style="--cd:var(--blue-d)">Six readiness dimensions</span>
+            <p style="color:var(--ink)">Customer · Technology · Business model · IPR · Team · Funding. Scored 1–9. Target the lagging axis; measure evidence at the current level.</p></div>
+          <div class="card"><span class="tag" style="--cd:var(--ember)">Weekly prep · five fields</span>
+            <p style="color:var(--ink)">1 Assumption · 2 What was done · 3 What was learned · 4 Decision · 5 Ask. Due 24h before the session.</p></div>
+          <div class="card"><span class="tag" style="--cd:var(--teal-d)">Cadence</span>
+            <p style="color:var(--ink)">Weekly prep · monthly update · mid-term review · final report.</p></div>
+          <div class="card"><span class="tag" style="--cd:var(--orange-d)">Flag to the program when</span>
+            <p style="color:var(--ink)">2 missed weekly preps · 1 missed monthly · 3 empty templates · building with no assumption tested.</p></div>
+        </div>
+        <div class="callout">
+          <span class="k">Hold these in mind</span>
+          <p>Support is a multiplier on the founder's de-risking work, not a service they consume. Both scaling and killing fast are wins; the only failure is staying busy in the middle. Everything we require is observable, and every step back is recorded and reversible until the end.</p>
+        </div>
+        <p class="muted">Questions, intake trajectories, thresholds, and anything that needs an EPFL decision: <strong>[program team contact — set before distribution]</strong>.</p>
+      </section>
+
+      <!-- Appendix -->
+      <section class="doc" id="appendix">
+        <div class="eyebrow">Appendix A · Source &amp; detail</div>
+        <h2>About the KTH model</h2>
+        <p>The readiness-level model used throughout this handbook is the <strong>KTH Innovation Readiness Level™</strong>, developed by <a href="https://www.kth.se/en/om/innovation/kth-innovation-1.956839" target="_blank" rel="noopener">KTH Innovation</a>, the innovation office of the KTH Royal Institute of Technology in Stockholm. It builds on NASA's original Technology Readiness Level (TRL) and extends it with five further areas that turn a working technology into a viable company. It has been openly available under a Creative Commons (BY-NC-SA 4.0) licence since 2021.</p>
+        <p>We use it for <strong>structure only</strong>: a shared, reasonably objective language that lets founders and mentors describe where a venture stands without it becoming a matter of opinion. The model is deliberately generic, aimed at early-stage and technology-based ideas, and aligns with the lean startup method and the business model / lean canvas that founders already use.</p>
+
+        <h3>The six readiness levels</h3>
+        <p class="muted">KTH's own one-line definition of each area.</p>
+        <table class="t">
+          <thead><tr><th style="width:160px">Area</th><th>What it confirms</th></tr></thead>
+          <tbody>
+            <tr><td><span class="when">CRL · Customer</span></td><td>Confirm customer need and interest.</td></tr>
+            <tr><td><span class="when">TRL · Technology</span></td><td>Develop and test the technology, product, service, or concept.</td></tr>
+            <tr><td><span class="when">BRL · Business model</span></td><td>Establish that the concept can be financially, environmentally, and socially viable and feasible.</td></tr>
+            <tr><td><span class="when">IPRL · IPR</span></td><td>Clarify the legal and IP situation and secure relevant IP protection.</td></tr>
+            <tr><td><span class="when">TMRL · Team</span></td><td>Secure the right competencies and align the team.</td></tr>
+            <tr><td><span class="when">FRL · Funding</span></td><td>Secure the necessary funding to take the idea to the market.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>How the 1–9 scale works</h3>
+        <p>Each of the six areas is scored independently on a nine-point scale, visualised as a thermometer. Every level comes with defined <strong>criteria, milestones and activities</strong>, and a venture has to meet all of a level's milestones before it can advance to the next. The scale runs from an early-stage idea or hypothesis through to an innovation proven on the market. As a general reading:</p>
+        <div class="scale">
+          <div class="seg s1"><span class="rng">Levels 1–3</span><span class="lab">Explore</span></div>
+          <div class="seg s2"><span class="rng">Levels 4–6</span><span class="lab">Develop &amp; verify</span></div>
+          <div class="seg s3"><span class="rng">Levels 7–9</span><span class="lab">Ready for market</span></div>
+        </div>
+        <p class="muted">Indicative only. The exact criteria for each of the 54 levels live in KTH's resource library; this handbook uses the model's structure, not a reproduction of its level text.</p>
+
+        <h3>How we apply it on the Blue Team</h3>
+        <ul class="checks">
+          <li><strong>Score each area separately.</strong> A single composite number hides the weakest axis; we work the dimensions individually.</li>
+          <li><strong>Target the lagging dimension.</strong> A gap of more than two or three steps between areas holds the whole venture back, so the gap is where support goes.</li>
+          <li><strong>Measure evidence at the current level.</strong> Slow-moving fields (deep tech, medtech, regulated) still meet the bar by producing real evidence; the concern is no de-risking, never pace.</li>
+          <li><strong>Moving down can be progress.</strong> Hard evidence sometimes reveals a venture was further from market than it thought. Knowing that is a gain, not a setback.</li>
+        </ul>
+
+        <div class="callout teal">
+          <span class="k">Attribution</span>
+          <p>KTH Innovation Readiness Level™ is developed by KTH Innovation and licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">Creative Commons BY-NC-SA 4.0</a>. Full model, level criteria and toolkit: <a href="https://kthinnovationreadinesslevel.com/" target="_blank" rel="noopener">kthinnovationreadinesslevel.com</a> · contact innovation@kth.se. This handbook references the model for internal coaching structure and does not reproduce its licensed level descriptions.</p>
+        </div>
+      </section>
+
+      <!-- Appendix B -->
+      <section class="doc" id="criteria">
+        <div class="eyebrow">Appendix B · Level-by-level criteria</div>
+        <h2>What each level means</h2>
+        <p>The criteria for all nine levels of each readiness area, condensed from KTH's published level descriptions. Use them to place a venture honestly and to agree the milestones that move it up. A venture has to meet <strong>all</strong> of a level's milestones before it counts as having reached that level. Select an area:</p>
+        <div class="lvltabs" id="lvltabs"></div>
+        <div id="lvlpanel"></div>
+        <p class="muted">These are condensed summaries for coaching use. The full criteria, milestones and activities for each level are in KTH's resource library.</p>
+        <div class="callout teal">
+          <span class="k">Source</span>
+          <p>Adapted from the KTH Innovation Readiness Level™ model by KTH Innovation, licensed <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a>. Full model and level definitions: <a href="https://kthinnovationreadinesslevel.com/" target="_blank" rel="noopener">kthinnovationreadinesslevel.com</a>.</p>
+        </div>
+      </section>
+
+      <!-- Appendix C -->
+      <section class="doc" id="advancing">
+        <div class="eyebrow">Appendix C · Practitioner notes</div>
+        <h2>Moving between levels &amp; reading a profile</h2>
+        <p>The model names <em>what</em> a venture must have achieved, never <em>how</em> to get there. But each scale has an internal logic that tells you what kind of work raises that axis. Use it to turn a level number into a concrete next step.</p>
+
+        <h3>The spine of each scale</h3>
+        <table class="t">
+          <thead><tr><th style="width:150px">Area</th><th>What raises this axis</th></tr></thead>
+          <tbody>
+            <tr><td><span class="when">Customer · CRL</span></td><td>Levels 1-4 are about understanding the need (discovery, problem-solution fit); 5-9 about getting the solution into users' hands and selling (sales process, agreements, traction).</td></tr>
+            <tr><td><span class="when">Technology · TRL</span></td><td>Climbs with environment realism, integration and prototype finish: test a more complete prototype in progressively more realistic settings.</td></tr>
+            <tr><td><span class="when">Business model · BRL</span></td><td>1-3 describe the model in increasing detail; 4-6 calculate viability from assumptions and feedback; 7-9 prove it with pilots and real sales.</td></tr>
+            <tr><td><span class="when">IPR · IPRL</span></td><td>1-4 identify, describe and assess what is protectable; 5-9 act on a strategy: file, enter national phases, secure and manage rights.</td></tr>
+            <tr><td><span class="when">Team · TMRL</span></td><td>1-4 the team to validate the idea; 5-6 assemble the founding team; 7-9 build and scale the organisation. Levers: competence, capacity, alignment, diversity.</td></tr>
+            <tr><td><span class="when">Funding · FRL</span></td><td>1-4 fund the verification that finds a viable model; 5-9 fund realising it. External funding becomes the focus from level 5.</td></tr>
+          </tbody>
+        </table>
+        <div class="callout">
+          <span class="k">The coaching move</span>
+          <p>For the lagging axis, ask two questions: <strong>what evidence would the next level require</strong>, and <strong>what single experiment produces it?</strong> That converts a level number straight into next week's prep template (assumption → test → evidence → decision).</p>
+        </div>
+
+        <h3>Reading a profile</h3>
+        <ul class="checks">
+          <li>A score is a per-axis snapshot of distance to market, not a grade. Low is not bad, and axes move down as often as up when real evidence arrives.</li>
+          <li><strong>Read the shape, not an average.</strong> The lowest axis is the binding constraint, and that is where support goes.</li>
+          <li><strong>Mind the gap.</strong> More than two or three steps between axes becomes inhibiting and raises failure risk. Close the gap before pushing the leaders higher.</li>
+          <li>Calibrate per venture by first defining what level 9 means for this specific case (deep tech and software differ), then reassess every three to six months.</li>
+        </ul>
+
+        <p>The axes are also interdependent, in this order: customer and business model shape the technology and vice versa; those three shape IPR; all of them shape the team; and all together shape funding. A lagging upstream axis caps the value of downstream progress.</p>
+        <div class="flow">
+          <span class="chip">Customer ⇄ Technology ⇄ Business model</span><span class="ar">→</span>
+          <span class="chip">IPR</span><span class="ar">→</span>
+          <span class="chip">Team</span><span class="ar">→</span>
+          <span class="chip">Funding</span>
+        </div>
+
+        <h3>Two profiles, same scores read differently</h3>
+        <div class="radarwrap">
+          <svg class="radar" viewBox="0 0 360 360" role="img" aria-label="Radar chart comparing a balanced readiness profile with a lagging-customer profile across the six dimensions">
+            <!-- rings -->
+            <circle cx="180" cy="180" r="43.33" fill="none" style="stroke:var(--sand)"/>
+            <circle cx="180" cy="180" r="86.67" fill="none" style="stroke:var(--sand)"/>
+            <circle cx="180" cy="180" r="130" fill="none" style="stroke:var(--sand)"/>
+            <!-- axes -->
+            <g style="stroke:var(--sand)">
+              <line x1="180" y1="180" x2="180" y2="50"/>
+              <line x1="180" y1="180" x2="292.58" y2="115"/>
+              <line x1="180" y1="180" x2="292.58" y2="245"/>
+              <line x1="180" y1="180" x2="180" y2="310"/>
+              <line x1="180" y1="180" x2="67.42" y2="245"/>
+              <line x1="180" y1="180" x2="67.42" y2="115"/>
+            </g>
+            <!-- ring scale labels on top axis -->
+            <g style="fill:var(--ash)" font-family="var(--mono)" font-size="9">
+              <text x="185" y="139">3</text><text x="185" y="95">6</text><text x="185" y="52">9</text>
+            </g>
+            <!-- balanced profile (teal) -->
+            <polygon points="180,93.33 255.05,136.67 242.54,216.11 180,252.22 104.95,223.33 117.46,143.89"
+              style="fill:var(--teal);fill-opacity:.14;stroke:var(--teal-d);stroke-width:2"/>
+            <!-- lagging-customer profile (ember) -->
+            <polygon points="180,151.11 267.56,129.44 217.53,201.67 180,252.22 117.46,216.11 142.47,158.33"
+              style="fill:var(--ember);fill-opacity:.12;stroke:var(--ember);stroke-width:2"/>
+            <!-- axis labels -->
+            <g style="fill:var(--ink)" font-family="var(--mono)" font-size="11">
+              <text x="180" y="34" text-anchor="middle">CRL</text>
+              <text x="300" y="112" text-anchor="start">TRL</text>
+              <text x="300" y="252" text-anchor="start">BRL</text>
+              <text x="180" y="332" text-anchor="middle">IPRL</text>
+              <text x="60" y="252" text-anchor="end">TMRL</text>
+              <text x="60" y="112" text-anchor="end">FRL</text>
+            </g>
+          </svg>
+          <div class="legend">
+            <span class="lg"><span class="sw" style="background:var(--teal)"></span><span><strong>Balanced</strong><small>Axes within a step or two of each other. Push the lowest.</small></span></span>
+            <span class="lg"><span class="sw" style="background:var(--ember)"></span><span><strong>Lagging customer</strong><small>High TRL, low CRL: built before the customer was validated.</small></span></span>
+          </div>
+        </div>
+        <p class="muted">The red profile is the classic engineering-led shape: strong technology, unvalidated customers. Funding and team cannot compensate for the gap, so support goes to customer discovery and structured experiments, not more building. This is the readiness-level version of motion versus progress.</p>
+
+        <div class="callout teal">
+          <span class="k">Source</span>
+          <p>Drawn from the KTH IRL User Guide (KTH Innovation, free) and practitioner guidance from Linden Innovation, under the model's CC BY-NC-SA 4.0 licence. Some third-party summaries misrepresent the model as a single nine-step process; it scores six separate axes from 1 to 9.</p>
+        </div>
+      </section>
+
+      <footer class="foot">EPFL Startup Launchpad · Fast Track Programs · Blue Team mentor handbook · internal reference</footer>
+    </main>
+  </div>
+
+<script>
+/* scroll-spy: highlight the active section in the sidebar */
+(function(){
+  const links=[...document.querySelectorAll('#nav a')];
+  const map=new Map(links.map(a=>[a.getAttribute('href').slice(1), a]));
+  const secs=[...document.querySelectorAll('section.doc')];
+  function setActive(id){ links.forEach(a=>a.classList.remove('active')); const a=map.get(id); if(a) a.classList.add('active'); }
+  const obs=new IntersectionObserver(entries=>{
+    const vis=entries.filter(e=>e.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);
+    if(vis.length) setActive(vis[0].target.id);
+  },{ rootMargin:'-70px 0px -70% 0px', threshold:0 });
+  secs.forEach(s=>obs.observe(s));
+  // click: keep active state immediate
+  links.forEach(a=>a.addEventListener('click',()=>setActive(a.getAttribute('href').slice(1))));
+})();
+
+/* Appendix B — level-by-level criteria (condensed from KTH IRL, CC BY-NC-SA 4.0) */
+(function(){
+  const LEVELS={
+    crl:{ tab:"Customer · CRL", rows:[
+      "A hunch that a need, problem or opportunity might exist in a market. No clear or supported hypothesis; little market knowledge.",
+      "Some desk research from secondary sources; brief familiarity with the market, customers and alternatives; a first clear problem/need hypothesis.",
+      "First primary research — direct contact with a few possible users/customers or industry experts; problem hypothesis updated from their feedback.",
+      "The problem and its importance confirmed by multiple customers/users; initial segmentation; user, paying customer and decision-maker identified.",
+      "Target customers confirm the solution can address their problem (initial problem-solution fit); first value proposition and entry segment defined.",
+      "Customer/user testing confirms the value and benefits; first structured sales activity defined; possible partners or key stakeholders identified.",
+      "Customer agreements in place — first or test sales of early versions; a small number of active users; partner discussions initiated.",
+      "Market-ready product sold near target price; substantial active users; a real sales/acquisition process with dedicated people and CRM (initial traction).",
+      "Widespread, repeatable and scalable sales to several customers; large and growing user base; focus shifts to growth and customer acquisition."
+    ]},
+    trl:{ tab:"Technology · TRL", rows:[
+      "Research results with potential benefits or applications identified; a vague idea of the technology to be developed.",
+      "A potential technology concept defined and described; applications still speculative, with no proof or detailed analysis.",
+      "Lab tests of key parameters/functions show the concept could work and be feasible; active R&D started; first idea of end-user requirements.",
+      "Basic components integrated and shown to work together in a lab environment (initial validation).",
+      "Components integrated and tested in a more realistic, relevant environment; results validate that the technology will work.",
+      "A representative prototype demonstrated to work in a relevant environment, meeting most important performance requirements.",
+      "A prototype near the complete product shown to work in an operational environment; complete end-user requirements/use cases in place.",
+      "Complete technology proven to work in actual operations by first users, meeting all performance specifications.",
+      "Complete technology proven, scalable and in real use by several users over time; continuous improvement and optimisation ongoing."
+    ]},
+    brl:{ tab:"Business model · BRL", rows:[
+      "Vague or missing description of the business idea, value proposition or model; little insight into market size or competition.",
+      "Business concept and value proposition described in some structured form; brief familiarity with market size, segments and competitors (secondary sources).",
+      "A proposed business model described (e.g. canvas); target market and size estimates (TAM, SAM); competition mapped; sustainability factors identified.",
+      "First simplified P&L (main costs and revenue streams) suggests economic viability; initial sustainability assessment, on own assumptions.",
+      "Revenue and cost sides validated with feedback from a few customers, experts and suppliers; P&L and target-market sizing updated; sustainability measures specified.",
+      "The complete business model tested in one or a few realistic scenarios (pilot, pre-order, tender); full financial projections show viability.",
+      "First commercial-terms sales show willingness to pay from many customers; projections validated by real data; key supplier/partner agreements in place.",
+      "1-3 years of operating metrics show the model holds and is sustainable; sales channels and supply chain operational; model fine-tuned.",
+      "Sustainable business model operational, meeting or exceeding profit, growth and impact expectations; historic data proves it works over time."
+    ]},
+    iprl:{ tab:"IPR · IPRL", rows:[
+      "Hypothesising that results or ideas might contain some form of IPR; speculative and undocumented; legal aspects (ownership, use-rights) unclear.",
+      "Different forms of possible IPR mapped; ownership clarified and you can use the relevant IPR; aware of applicable IP policies and contract restrictions.",
+      "Possible key IPR described in some detail; initial evaluation of whether it can be protected (own or prior-art searches).",
+      "Confirmed (ideally via a professional) what can be protected and why it matters for the business; possibly a first basic filing.",
+      "Draft IPR strategy in place; first formal application/registration of key IPR filed with a professional; basic agreements securing ownership.",
+      "A complete IPR strategy (validated by a professional) aligned to the business; initial freedom-to-operate assessment; positive response on applications.",
+      "Key IPR entered the national/regional phase (US, EU, JP, etc.); clearer freedom-to-operate and understanding of dependency on other IPR.",
+      "IPR strategy fully implemented and professionally managed; key IPR granted in a first country/region; complementary IPR filed.",
+      "Strong IPR protection supporting the business; key and complementary IPR granted and maintained in relevant countries; access to needed external IPR secured."
+    ]},
+    tmrl:{ tab:"Team · TMRL", rows:[
+      "Typically one individual lacking key competencies (tech, business, etc.); little insight into what people and resources are needed.",
+      "Limited competence and capacity (1-2 people); a first idea of which additional competencies are needed and of the overall goal.",
+      "One or more people with some but not all needed competencies; gaps in competence, capacity and diversity identified; a near-term plan to fill them.",
+      "A clear idea of the route to market; at least one committed champion; several (not all) competencies present; recruitment plan started; roles/ownership discussed.",
+      "A founding team working together, all spending significant time and jointly holding the main competencies; roles, goals and equity agreed and signed.",
+      "A complementary, diverse founding team able to start building a business; all near-term competencies present incl. a clear CEO; committed and accountable.",
+      "A well-functioning team with clear roles; vision, goals and culture documented; a plan to grow the organisation (~2 yrs); board and advisors operational.",
+      "A clear leadership/management team with professional experience; competent, diverse board and advisors; HR policies in place; planned recruitment ongoing.",
+      "A high-performing, well-functioning organisation; continuous learning at all levels; culture, structure and incentives continuously improved; management sustained over time."
+    ]},
+    frl:{ tab:"Funding · FRL", rows:[
+      "Little or no insight into the activities, costs or funding options needed to verify the idea.",
+      "Initial activities and costs to test feasibility described; a basic plan with funding options for the first milestones (e.g. 1-6 months).",
+      "Funding secured for initial verification/feasibility (e.g. 1-6 months); aware of funding types (own, soft, equity, customer) and their typical pros and cons.",
+      "A verification plan elaborated (hypotheses, goals, timeline, funding need); relevant funding sources identified; funding secured for a substantial part of the plan.",
+      "A funding pitch elaborated and tested on a relevant audience; initial 12-month P&L and cash flow; funding strategy and sources decided.",
+      "Pitch updated and tested; a 3-5 year P&L budget and cash flow clarifying near- and medium-term funding needs.",
+      "Discussions with potential funders around a defined offer (amount, terms, valuation); a complete, tested pitch and business plan; basic accounting in place.",
+      "Concrete term-sheet-level discussions with interested funders; all supporting material ready; a suitable legal entity/ownership; documentation ready for due diligence.",
+      "Funding secured for 6-12 months runway (cash in bank or predictable recurring revenue); financial monitoring and forecasting fully implemented."
+    ]}
+  };
+  const order=["crl","trl","brl","iprl","tmrl","frl"];
+  const tabsEl=document.getElementById("lvltabs"), panelEl=document.getElementById("lvlpanel");
+  if(!tabsEl||!panelEl) return;
+  function render(dim){
+    tabsEl.querySelectorAll(".lvltab").forEach(b=>b.classList.toggle("active",b.dataset.dim===dim));
+    const rows=LEVELS[dim].rows.map((txt,i)=>{ const lvl=i+1; const band=lvl>=7?"band-mkt":"";
+      return `<tr class="${band}"><td class="lv">L${lvl}</td><td>${txt}</td></tr>`; }).reverse().join("");
+    panelEl.innerHTML=`<table class="lvl"><thead><tr><th>Level</th><th>Criteria to have reached this level</th></tr></thead><tbody>${rows}</tbody></table>`;
+  }
+  tabsEl.innerHTML=order.map(d=>`<button type="button" class="lvltab" data-dim="${d}">${LEVELS[d].tab}</button>`).join("");
+  tabsEl.querySelectorAll(".lvltab").forEach(b=>b.addEventListener("click",()=>render(b.dataset.dim)));
+  render("crl");
+})();
+</script>
+</body>
+</html>
