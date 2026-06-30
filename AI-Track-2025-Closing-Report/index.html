@@ -9,7 +9,8 @@
   EPFL Startup Launchpad — AI Track 2025 Grant · Closing report submission page.
   Follows EPFL Brand/EPFL-design-system.md (Part A). Single self-contained HTML doc.
   Audience: AI Track 2025 Grant recipients (founders/teams). Purpose: structured closing report.
-  Submission: builds a pre-filled mailto to the program lead (same pattern as Contributors page).
+  Submission: POSTs the report to a Cloudflare Pages Function (functions/api/closing-report.js)
+  that relays it via Resend. A JSON backup download is offered in case submission fails.
   The form fields are woven into each content section (one <form> wraps the whole report).
   Colour code (one hue = one meaning): Red = report accent / EPFL,
   Blue = Feasibility (technical), Teal = Desirability (users), Orange = Viability (financial).
@@ -145,6 +146,9 @@
     margin:20px 0 6px; }
   .cta:hover{ text-decoration:none; background:#c70612; }
   button.cta{ cursor:pointer; }
+  .ghostbtn{ font:14px var(--sans); border:1px solid var(--ink); background:transparent; color:var(--ink);
+    border-radius:var(--r); padding:12px 18px; cursor:pointer; }
+  .ghostbtn:hover{ background:var(--stone); }
 
   /* form fields, woven into the content */
   .fields{ margin:18px 0 6px; }
@@ -312,7 +316,7 @@
       <div class="privacy">
         <span class="k">How your data is handled</span>
         <p>As you fill it in, your answers are saved only in <strong>this browser, on this device</strong>, so you can close the tab and pick up later. That local draft can be lost if you clear your browser data before submitting.</p>
-        <p>When you press <strong>Submit</strong>, your report is sent directly and securely to the program team and you'll see a confirmation here. If automatic sending ever fails, it falls back to opening your own mail client with the report pre-filled.</p>
+        <p>When you press <strong>Submit</strong>, your report is sent directly and securely to the program team and you'll see a confirmation here. You can also download a copy of your answers at any time as a backup, in case anything goes wrong with the submission.</p>
         <p class="privacy-foot"><button type="button" class="linkbtn" id="clearBtn">Clear saved answers on this device</button><span class="saveflag" id="savedDot"></span></p>
       </div>
 
@@ -551,9 +555,11 @@
             <textarea id="note" data-q="Note"></textarea>
           </div>
         </div>
+        <p class="hint" style="margin:0 0 12px">Before submitting, you can download a copy of your answers as a backup, in case the submission fails.</p>
         <div class="formfoot">
           <button type="submit" class="cta">Submit report ›</button>
-          <span class="formnote" id="formNote">Submitting opens your email app with everything pre-filled. Just hit send.</span>
+          <button type="button" class="ghostbtn" id="downloadBtn">⤓ Download a copy (JSON)</button>
+          <span class="formnote" id="formNote">Your report is sent directly to the program. You'll see a confirmation here once it's in.</span>
         </div>
         <p class="muted">Prefer to send it another way, or have questions? Marius Conti, Program Lead · <a href="mailto:marius.conti@epfl.ch">marius.conti@epfl.ch</a>.</p>
       </section>
@@ -579,7 +585,7 @@
   links.forEach(a=>a.addEventListener('click',()=>setActive(a.getAttribute('href').slice(1))));
 })();
 
-/* report form: build a pre-filled mailto on submit */
+/* report form: build the report text and POST it to the Resend-backed endpoint */
 (function(){
   const f=document.getElementById('reportForm'); if(!f) return;
   const noteEl=document.getElementById('formNote');
@@ -817,7 +823,6 @@
 
     const subject='AI Track 2025 — Closing report — '+project;
     const bodyText=L.join('\n');
-    const mailtoHref='mailto:'+TO+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(bodyText);
     const hp=(document.getElementById('hp_website')||{}).value||'';
     const tokenEl=f.querySelector('[name="cf-turnstile-response"]');
     const token=tokenEl?tokenEl.value:'';
@@ -829,10 +834,23 @@
       .catch(()=>{
         if(btn) btn.disabled=false;
         noteEl.classList.add('err');
-        noteEl.innerHTML='Couldn’t send automatically. <a id="mailtoFallback" href="'+mailtoHref.replace(/"/g,'&quot;')+'">Open it in your mail app instead</a>, then just press send.';
-        try{ window.location.href=mailtoHref; }catch(_){}
+        noteEl.innerHTML='Submission failed. <a href="#" id="dlBackup">Download a copy of your answers</a> as a backup, then press Submit to try again.';
+        const dl=document.getElementById('dlBackup'); if(dl) dl.addEventListener('click',ev=>{ ev.preventDefault(); downloadJSON(); });
       });
   });
+
+  /* download a JSON backup of all answers (use before submitting, or if submission fails) */
+  function downloadJSON(){
+    const data=Object.assign({_meta:{form:'AI Track 2025 closing report',version:FORM_VERSION,savedAt:new Date().toISOString()}}, collectState());
+    const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    const proj=(txt('project')||'report').replace(/[^\w.-]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40)||'report';
+    a.href=url; a.download='ai-track-closing-'+proj+'-'+new Date().toISOString().slice(0,10)+'.json';
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }
+  const downloadBtn=document.getElementById('downloadBtn');
+  if(downloadBtn) downloadBtn.addEventListener('click',downloadJSON);
 
   const ENDPOINT='/api/closing-report';
   function sendReport(p){
