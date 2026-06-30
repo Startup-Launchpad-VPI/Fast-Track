@@ -1,0 +1,893 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Track 2025 Grant — Closing Report — EPFL Startup Launchpad</title>
+<meta name="description" content="Closing report for AI Track 2025 Grant recipients: how the support became achievements, where the project stands now, and what comes next.">
+<!--
+  EPFL Startup Launchpad — AI Track 2025 Grant · Closing report submission page.
+  Follows EPFL Brand/EPFL-design-system.md (Part A). Single self-contained HTML doc.
+  Audience: AI Track 2025 Grant recipients (founders/teams). Purpose: structured closing report.
+  Submission: builds a pre-filled mailto to the program lead (same pattern as Contributors page).
+  The form fields are woven into each content section (one <form> wraps the whole report).
+  Colour code (one hue = one meaning): Red = report accent / EPFL,
+  Blue = Feasibility (technical), Teal = Desirability (users), Orange = Viability (financial).
+  Form version: 1.1 (2026-06-29) — FORM_VERSION + BUILD_DATE in the script; sent with every submission.
+-->
+<style>
+  :root{ color-scheme: light;
+    --ink:#212121; --charcoal:#000000;
+    --parchment:#fafafa; --stone:#f0f0f0; --sand:#dcdcdc; --inset:#cdcdc9;
+    --clay:#6b6b6b; --ash:#8a8a8a; --smoke:#a1a1a1;
+    --ember:#e30713; --alert:#b3412a;
+    --blue:#4a90e2; --blue-d:#2275d7;
+    --orange:#f5a623; --orange-d:#cf8509;
+    --teal:#007480; --teal-d:#005a63;
+    --green:#7ed321; --green-d:#5d9c18;
+    --sans:"Suisse Int'l","SuisseIntl","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --r:3px; --maxw:1180px;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; }
+  html{ scroll-behavior:smooth; }
+  body{ background:#fff; color:var(--ink); font-family:var(--sans);
+    font-size:16px; line-height:1.55; letter-spacing:.005em; -webkit-font-smoothing:antialiased; }
+  a{ color:var(--ember); text-decoration:none; } a:hover{ text-decoration:underline; }
+
+  /* top bar */
+  .topbar{ display:flex; align-items:center; gap:16px; padding:14px clamp(16px,4vw,40px);
+    border-bottom:1px solid var(--sand); position:sticky; top:0; background:#fff; z-index:30; }
+  .brand{ display:flex; align-items:center; gap:10px; font-weight:600; letter-spacing:.01em; }
+  .brand a{ display:flex; align-items:center; }
+  .brand .logo{ height:22px; width:auto; display:block; }
+  .brand .logo .st0{ fill:var(--ember); }
+  .brand .sub{ color:var(--clay); font-weight:400; font-size:13px; border-left:1px solid var(--sand); padding-left:10px; }
+  .tools{ margin-left:auto; display:flex; gap:8px; align-items:center; }
+  .tbtn{ font:13px var(--sans); border:1px solid var(--sand); background:var(--parchment); color:var(--ink);
+    border-radius:var(--r); padding:6px 12px; cursor:pointer; }
+  .tbtn:hover{ background:var(--stone); }
+
+  .layout{ max-width:var(--maxw); margin:0 auto; display:grid; grid-template-columns:248px 1fr; gap:36px;
+    padding:0 clamp(16px,4vw,40px); }
+
+  /* sidebar nav */
+  .side{ position:sticky; top:62px; align-self:start; height:calc(100vh - 62px); overflow:auto; padding:26px 0 40px; }
+  .side .navlabel{ font:11px var(--mono); text-transform:uppercase; letter-spacing:.07em; color:var(--ash); margin:0 0 12px; }
+  .side nav{ display:flex; flex-direction:column; gap:3px; }
+  .side a{ display:flex; gap:10px; align-items:baseline; font:14px var(--sans); color:var(--clay);
+    border:1px solid transparent; border-radius:var(--r); padding:8px 12px; }
+  .side a .n{ font:11px var(--mono); color:var(--ash); }
+  .side a:hover{ color:#fff; background:var(--ember); text-decoration:none; }
+  .side a:hover .n{ color:rgba(255,255,255,.85); }
+  .side a.active{ color:#fff; background:var(--ember); }
+  .side a.active .n{ color:rgba(255,255,255,.85); }
+
+  /* content */
+  main{ padding:30px 0 80px; min-width:0; max-width:800px; }
+  .hero{ border-bottom:1px solid var(--sand); padding-bottom:26px; margin-bottom:34px; }
+  .eyebrow{ font:12px var(--mono); letter-spacing:.06em; text-transform:uppercase; color:var(--ember); }
+  h1{ font-size:clamp(30px,4.6vw,48px); line-height:1.04; letter-spacing:-.02em; font-weight:600; margin:.25em 0 .3em; }
+  .hero .lead{ font-size:clamp(17px,2vw,21px); color:var(--clay); max-width:700px; }
+  .meta{ margin-top:18px; display:flex; flex-wrap:wrap; gap:8px; }
+  .badge{ display:inline-flex; align-items:center; font:11px var(--mono); letter-spacing:.02em;
+    border:1px solid var(--sand); border-radius:var(--r); padding:4px 11px; color:var(--ink); background:var(--parchment); }
+  .badge .dot{ width:9px; height:9px; border-radius:50%; background:var(--c,var(--ash)); margin-right:7px; }
+
+  /* data-handling note */
+  .privacy{ border:1px solid var(--sand); border-left:4px solid var(--blue); background:var(--parchment);
+    border-radius:4px; padding:15px 17px; margin:0 0 30px; }
+  .privacy .k{ font:11px var(--mono); text-transform:uppercase; letter-spacing:.06em; color:var(--blue-d); display:block; margin-bottom:6px; }
+  .privacy p{ margin:0 0 8px; font-size:13.5px; color:var(--clay); }
+  .privacy p:last-child{ margin-bottom:0; }
+  .privacy-foot{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:10px; }
+  .linkbtn{ background:none; border:0; padding:0; color:var(--ember); font:13px var(--sans); cursor:pointer; text-decoration:underline; }
+  .linkbtn:hover{ color:#c20610; }
+  .saveflag{ font:11px var(--mono); text-transform:uppercase; letter-spacing:.05em; color:var(--green-d); }
+
+  /* honeypot (hidden from humans) + success state */
+  .hp{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+  .done{ display:none; border-top:2px solid var(--green-d); padding-top:26px; margin-top:8px; }
+  .done .eyebrow{ color:var(--green-d); }
+  .done h2{ color:var(--ink); }
+
+  section.doc{ padding-top:18px; margin-top:30px; border-top:1px solid var(--sand); scroll-margin-top:74px; }
+  section.doc:first-of-type{ border-top:none; margin-top:0; }
+  section.doc > .eyebrow{ display:block; color:var(--cd,var(--ember)); }
+  h2{ font-size:clamp(22px,3vw,30px); line-height:1.12; letter-spacing:-.018em; font-weight:600; margin:.18em 0 .5em; color:var(--cd,var(--ink)); }
+  h3{ font-size:17px; font-weight:600; letter-spacing:-.01em; margin:26px 0 8px; }
+  p{ margin:0 0 14px; } .muted{ color:var(--clay); }
+  .lead2{ font-size:17px; color:var(--clay); max-width:680px; }
+
+  .grid{ display:grid; gap:14px; margin:18px 0; }
+  .cols-2{ grid-template-columns:repeat(2,1fr); } .cols-3{ grid-template-columns:repeat(3,1fr); }
+  @media(max-width:680px){ .cols-2,.cols-3{ grid-template-columns:1fr; } }
+  .card{ background:var(--stone); border:1px solid var(--sand); border-radius:4px; padding:18px; }
+  .card.accent{ background:#fff; border-left:4px solid var(--c,var(--blue)); }
+  .card .tag{ display:inline-block; font:11px var(--mono); text-transform:uppercase; letter-spacing:.05em;
+    color:var(--cd,var(--clay)); margin-bottom:8px; }
+  .card h3{ margin:0 0 6px; font-size:16px; color:var(--cd,var(--ink)); }
+  .card p{ margin:0; color:var(--clay); font-size:14px; }
+
+  .callout{ border:1px solid var(--sand); border-left:4px solid var(--ember); background:var(--parchment);
+    border-radius:4px; padding:16px 18px; margin:20px 0; }
+  .callout .k{ font:11px var(--mono); text-transform:uppercase; letter-spacing:.06em; color:var(--ember); display:block; margin-bottom:6px; }
+  .callout p:last-child{ margin-bottom:0; }
+  .callout.blue{ border-left-color:var(--blue); } .callout.blue .k{ color:var(--blue-d); }
+  .callout.amber{ border-left-color:var(--orange); } .callout.amber .k{ color:var(--orange-d); }
+  .callout.teal{ border-left-color:var(--teal); } .callout.teal .k{ color:var(--teal-d); }
+
+  ul.checks{ list-style:none; padding:0; margin:14px 0; }
+  ul.checks li{ padding:8px 0 8px 26px; position:relative; border-bottom:1px solid var(--sand); }
+  ul.checks li:before{ content:"\203A"; position:absolute; left:6px; color:var(--c,var(--ember)); font-weight:600; }
+  ul.checks li:last-child{ border-bottom:none; }
+
+  table.t{ width:100%; border-collapse:collapse; margin:18px 0; font-size:14px; }
+  table.t th{ text-align:left; font:11px var(--mono); text-transform:uppercase; letter-spacing:.05em; color:var(--clay);
+    font-weight:400; padding:10px 12px; background:var(--stone); border-bottom:1px solid var(--sand); }
+  table.t td{ padding:11px 12px; border-bottom:1px solid var(--sand); vertical-align:top; }
+  table.t td .role{ font-weight:600; display:inline-flex; align-items:center; gap:8px; white-space:nowrap; }
+  table.t td .role .dot{ width:9px; height:9px; border-radius:50%; background:var(--c,var(--ash)); flex:none; }
+  table.t td .when{ font:12px var(--mono); color:var(--ink); }
+
+  .kv{ display:grid; grid-template-columns:auto 1fr; gap:8px 18px; margin:16px 0; font-size:14.5px; }
+  .kv .k{ color:var(--clay); font:12px var(--mono); text-transform:uppercase; letter-spacing:.04em; padding-top:1px; }
+
+  .flow{ display:flex; flex-wrap:wrap; align-items:stretch; gap:10px; margin:18px 0 6px; }
+  .beat{ flex:1 1 200px; border:1px solid var(--sand); border-top:4px solid var(--c,var(--ember)); border-radius:4px; padding:14px 16px; background:#fff; }
+  .beat .n{ font:11px var(--mono); color:var(--cd,var(--ember)); letter-spacing:.05em; }
+  .beat h3{ margin:4px 0 6px; font-size:15px; }
+  .beat p{ margin:0; color:var(--clay); font-size:13.5px; }
+
+  .cta{ display:inline-flex; align-items:center; gap:9px; background:var(--ember); color:#fff;
+    border:1px solid var(--ember); border-radius:var(--r); padding:13px 24px; font:15px var(--sans); font-weight:600;
+    margin:20px 0 6px; }
+  .cta:hover{ text-decoration:none; background:#c70612; }
+  button.cta{ cursor:pointer; }
+
+  /* form fields, woven into the content */
+  .fields{ margin:18px 0 6px; }
+  .field{ margin:0 0 16px; }
+  .field .lbl{ display:block; font:11px var(--mono); text-transform:uppercase; letter-spacing:.05em; color:var(--clay); margin:0 0 6px; }
+  .field .req{ color:var(--ember); }
+  .field input[type=text], .field input[type=email], .field input[type=url], .field textarea, .field select{
+    width:100%; font:15px var(--sans); color:var(--ink); background:#fff; border:1px solid var(--sand);
+    border-radius:var(--r); padding:10px 12px; }
+  .field textarea{ min-height:92px; resize:vertical; }
+  .field textarea.tall{ min-height:130px; }
+  .field input:focus, .field textarea:focus, .field select:focus{ outline:none; border-color:var(--ember); box-shadow:0 0 0 1px var(--ember); }
+  .hint{ font-size:12.5px; color:var(--clay); margin:0 0 6px; }
+  .field .hint.under{ margin:6px 0 0; }
+
+  /* live word-target indicator */
+  .wc{ font:11px var(--mono); letter-spacing:.03em; color:var(--ash); margin:6px 0 0; }
+  .wc.mid{ color:var(--clay); }
+  .wc.ok{ color:var(--green-d); }
+
+  /* collapsible example answer */
+  details.ex{ margin:6px 0 0; }
+  details.ex summary{ font:11px var(--mono); text-transform:uppercase; letter-spacing:.05em; color:var(--clay);
+    cursor:pointer; list-style:none; display:inline-flex; align-items:center; gap:7px; }
+  details.ex summary::-webkit-details-marker{ display:none; }
+  details.ex summary:before{ content:"+"; display:inline-flex; width:15px; height:15px; align-items:center; justify-content:center;
+    border:1px solid var(--sand); border-radius:2px; color:var(--clay); font-size:12px; line-height:1; }
+  details.ex[open] summary:before{ content:"\2013"; }
+  details.ex .exbody{ margin:8px 0 0; padding:12px 14px; background:var(--parchment); border:1px solid var(--sand);
+    border-radius:var(--r); font-size:13.5px; color:var(--clay); }
+  .exbody .ex-row{ display:flex; gap:9px; padding:5px 0; }
+  .exbody .ex-row+.ex-row{ border-top:1px solid var(--sand); }
+  .exbody .ex-tag{ flex:none; font:10px var(--mono); text-transform:uppercase; letter-spacing:.04em; padding-top:2px; width:46px; }
+  .exbody .ex-row.good .ex-tag{ color:var(--green-d); } .exbody .ex-row.weak .ex-tag{ color:var(--clay); }
+  .exbody .ex-row.weak span:last-child{ color:var(--ash); }
+
+  .two{ display:grid; grid-template-columns:1fr 1fr; gap:0 16px; }
+  @media(max-width:680px){ .two{ grid-template-columns:1fr; } }
+
+  /* repeatable team rows */
+  .teamrow{ display:grid; grid-template-columns:1fr 1fr auto; gap:8px; margin:0 0 8px; }
+  .teamrow .rowdel{ border:1px solid var(--sand); background:var(--parchment); color:var(--clay);
+    border-radius:var(--r); width:40px; cursor:pointer; font-size:18px; line-height:1; }
+  .teamrow .rowdel:hover{ background:var(--stone); color:var(--ember); border-color:var(--ember); }
+  .addrow{ font:11px var(--mono); text-transform:uppercase; letter-spacing:.05em; border:1px dashed var(--sand);
+    background:#fff; color:var(--clay); border-radius:var(--r); padding:8px 14px; cursor:pointer; margin-top:2px; }
+  .addrow:hover{ border-color:var(--ember); color:var(--ember); }
+
+  /* IRL readiness block */
+  .irlwrap{ display:flex; flex-wrap:wrap; gap:24px; align-items:flex-start; margin:16px 0 6px; }
+  .irlcol{ flex:2 1 360px; min-width:0; }
+  .irlradar-col{ flex:1 1 230px; }
+  .irlradar{ width:100%; max-width:300px; }
+  .radleg{ display:flex; gap:16px; font:11px var(--mono); color:var(--clay); margin-top:6px; flex-wrap:wrap; }
+  .radleg span{ display:inline-flex; align-items:center; gap:7px; }
+  .radleg i{ width:18px; border-top:2px solid var(--ember); display:inline-block; }
+  .irlgrid{ display:grid; grid-template-columns:1fr; gap:10px; }
+  .irlrow{ border:1px solid var(--sand); border-left:4px solid var(--c,var(--ash)); border-radius:4px; padding:13px 15px; }
+  .irlrow .ih{ display:flex; align-items:baseline; gap:9px; flex-wrap:wrap; margin-bottom:3px; }
+  .irlrow .ih .t{ font-size:15px; font-weight:600; letter-spacing:-.01em; }
+  .irlrow .ih .code{ font:11px var(--mono); text-transform:uppercase; letter-spacing:.05em; color:var(--cd,var(--clay)); }
+  .irlrow .ih .delta{ margin-left:auto; font:11px var(--mono); letter-spacing:.03em; padding:2px 9px;
+    border-radius:var(--r); border:1px solid var(--sand); color:var(--ash); white-space:nowrap; }
+  .irlrow .ih .delta.up{ color:#fff; background:var(--green-d); border-color:var(--green-d); }
+  .irlrow .ih .delta.flat{ color:var(--clay); border-color:var(--sand); }
+  .irlrow .ih .delta.down{ color:var(--alert); border-color:var(--alert); }
+  .irlrow .iq{ font-size:13px; color:var(--clay); margin:0 0 10px; }
+  .irlsel{ display:grid; grid-template-columns:1fr 1fr; gap:0 14px; }
+  @media(max-width:560px){ .irlsel{ grid-template-columns:1fr; } }
+  .irlsel .field{ margin:0 0 4px; }
+  .irlsel .field .lbl{ margin-bottom:5px; }
+
+  .formfoot{ display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-top:10px; }
+  .formnote{ font-size:13px; color:var(--clay); } .formnote.err{ color:var(--ember); }
+
+  footer.foot{ border-top:1px solid var(--sand); margin-top:50px; padding-top:18px;
+    font:11px var(--mono); text-transform:uppercase; letter-spacing:.05em; color:var(--ash); }
+
+  @media(max-width:900px){
+    .layout{ grid-template-columns:1fr; gap:0; }
+    .side{ position:sticky; top:55px; height:auto; overflow:auto; padding:10px 0; background:#fff;
+      border-bottom:1px solid var(--sand); z-index:20; }
+    .side .navlabel{ display:none; }
+    .side nav{ flex-direction:row; gap:6px; overflow-x:auto; padding-bottom:4px; }
+    .side a{ white-space:nowrap; }
+    main{ padding-top:24px; }
+    table.t{ font-size:13px; }
+  }
+  @media print{
+    @page{ margin:15mm 14mm; }
+    *{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    html, body{ background:#fff; }
+    body{ font-size:10.5pt; line-height:1.42; }
+    .topbar .tools, .side, .formfoot{ display:none !important; }
+    .topbar{ position:static; padding:0 0 10px; margin-bottom:14px; border-bottom:1px solid var(--sand); }
+    .brand .logo{ height:19px; }
+    .layout{ display:block; max-width:none; margin:0; padding:0; gap:0; }
+    main{ max-width:none; min-width:0; padding:0; margin:0; }
+    .hero{ padding-bottom:14px; margin-bottom:18px; }
+    h1{ font-size:24pt; line-height:1.05; margin:.1em 0 .25em; }
+    .hero .lead{ font-size:12pt; color:var(--clay); }
+    section.doc{ margin-top:20px; padding-top:14px; }
+    h2{ font-size:15pt; }
+    h3{ font-size:11.5pt; }
+    .lead2{ font-size:11pt; }
+    p{ margin:0 0 9px; }
+    .card, .callout, .beat, ul.checks li, .meta, .field{ break-inside:avoid; }
+    table.t tr{ break-inside:avoid; }
+    .eyebrow, h2, h3{ break-after:avoid; }
+    a{ color:var(--ink); text-decoration:none; }
+    .callout, .card, table.t th{ background:var(--parchment); }
+    footer.foot{ margin-top:26px; border-top:1px solid var(--sand); }
+  }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="brand">
+      <a href="/" aria-label="Back to Fast Track home"><svg class="logo" viewBox="0 0 182.4 53" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="EPFL">
+        <g class="st0">
+          <polygon points="0,21.6 11.4,21.6 11.4,9.8 38.3,9.8 38.3,0 0,0"/>
+          <polygon points="0,53 38.3,53 38.3,43.2 11.4,43.2 11.4,31.4 0,31.4"/>
+          <rect x="11.4" y="21.6" width="24.6" height="9.8"/>
+          <path d="M86,4.9c-1.5-1.5-3.4-2.6-5.7-3.5C78,0.4,75.1,0,71.8,0H48.1v53h11.4V31.4h12.2c3.3,0,6.1-0.4,8.5-1.3 c2.3-0.9,4.2-2.1,5.7-3.5c1.5-1.5,2.5-3.1,3.2-5s1-3.8,1-5.8s-0.3-4-1-5.8C88.5,8,87.4,6.3,86,4.9z M78,18.7 c-0.6,0.8-1.3,1.4-2.3,1.8c-0.9,0.4-2,0.7-3.3,0.9c-1.2,0.1-2.5,0.2-3.9,0.2h-9.1V9.8h9.1c1.3,0,2.6,0.1,3.9,0.2 c1.2,0.1,2.3,0.4,3.3,0.9c0.9,0.4,1.7,1,2.3,1.8c0.6,0.8,0.9,1.8,0.9,3S78.6,18,78,18.7z"/>
+          <polygon points="155.5,43.2 155.5,0 144,0 144,53 182.4,53 182.4,43.2"/>
+          <polygon points="97.4,21.6 108.9,21.6 108.9,9.8 135.8,9.8 135.8,0 97.4,0"/>
+          <rect x="97.4" y="31.4" width="11.4" height="21.6"/>
+          <rect x="108.9" y="21.6" width="24.6" height="9.8"/>
+        </g>
+      </svg></a>
+      <span class="sub">Startup Launchpad · AI Track 2025 Grant</span>
+    </div>
+    <div class="tools">
+      <button type="button" class="tbtn" onclick="window.print()">⎙ Print / PDF</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <aside class="side">
+      <p class="navlabel">Closing report</p>
+      <nav id="nav">
+        <a href="#why"><span class="n">01</span><span>Why this report</span></a>
+        <a href="#identity"><span class="n">02</span><span>Your project</span></a>
+        <a href="#achievements"><span class="n">03</span><span>Support to achievements</span></a>
+        <a href="#funds"><span class="n">04</span><span>Use of funds</span></a>
+        <a href="#now"><span class="n">05</span><span>Where you stand now</span></a>
+        <a href="#irl"><span class="n">06</span><span>Readiness check</span></a>
+        <a href="#next"><span class="n">07</span><span>What comes next</span></a>
+        <a href="#send"><span class="n">08</span><span>A quote &amp; send</span></a>
+      </nav>
+    </aside>
+
+    <main>
+      <div class="hero">
+        <div class="eyebrow">EPFL Startup Launchpad · AI Track 2025 Grant · powered by UBS</div>
+        <h1>AI Track 2025 Grant — closing report</h1>
+        <p class="lead">You received non-dilutive support to move an AI project from proof-of-concept toward real-world validation. This is where you close the loop: what the support became, where the project stands now, and what comes next. Fill each section as you read, then send at the end.</p>
+        <div class="meta">
+          <span class="badge"><span class="dot" style="--c:var(--ember)"></span>For AI Track 2025 Grant recipients</span>
+          <span class="badge"><span class="dot" style="--c:var(--green)"></span>~30 minutes</span>
+        </div>
+      </div>
+
+      <div class="privacy">
+        <span class="k">How your data is handled</span>
+        <p>As you fill it in, your answers are saved only in <strong>this browser, on this device</strong>, so you can close the tab and pick up later. That local draft can be lost if you clear your browser data before submitting.</p>
+        <p>When you press <strong>Submit</strong>, your report is sent directly and securely to the program team and you'll see a confirmation here. If automatic sending ever fails, it falls back to opening your own mail client with the report pre-filled.</p>
+        <p class="privacy-foot"><button type="button" class="linkbtn" id="clearBtn">Clear saved answers on this device</button><span class="saveflag" id="savedDot"></span></p>
+      </div>
+
+      <form id="reportForm" novalidate>
+      <div class="hp" aria-hidden="true"><label>Leave this field empty<input type="text" id="hp_website" name="website" tabindex="-1" autocomplete="off"></label></div>
+      <!-- To enable Cloudflare Turnstile (free): add the widget script + a <div class="cf-turnstile" data-sitekey="..."></div>
+           inside the #send section, then set TURNSTILE_SECRET in Cloudflare. The submit code already passes the token. -->
+
+      <!-- 01 -->
+      <section class="doc" id="why">
+        <div class="eyebrow">01 · The point of this</div>
+        <h2>Why this report</h2>
+        <p>The AI Track grant was a <strong>bridge, not a destination</strong>: up to CHF 50,000 over six months to test feasibility, user desirability, and early financial viability without giving up equity or IP. This report is how we, and you, see what that bought.</p>
+        <p>It is short on purpose. We are not grading you. We want an honest read on <strong>what the support turned into</strong>, an accurate snapshot of <strong>where the project is today</strong>, and a clear view of <strong>what you need next</strong>. A project that found its honest limits and pivoted or stopped is as useful to report as one that took off.</p>
+        <div class="callout">
+          <span class="k">What we do with it</span>
+          <p>Your report helps us improve the program, account to UBS as the partner behind the track, and spot where the Launchpad can still help you, through coaching, introductions, follow-on programs, or comms.</p>
+        </div>
+      </section>
+
+      <!-- 02 -->
+      <section class="doc" id="identity">
+        <div class="eyebrow">02 · Identity</div>
+        <h2>Your project</h2>
+        <p class="lead2">The basics, so we can match this report to your file.</p>
+        <div class="fields">
+          <div class="two">
+            <div class="field">
+              <span class="lbl">Project / startup name <span class="req">*</span></span>
+              <input type="text" id="project" data-q="Project / startup name">
+            </div>
+            <div class="field">
+              <span class="lbl">One-line description</span>
+              <input type="text" id="oneliner" data-q="One-liner" placeholder="What you do, in a sentence">
+            </div>
+          </div>
+          <div class="two">
+            <div class="field">
+              <span class="lbl">Contact full name <span class="req">*</span></span>
+              <input type="text" id="fullname" data-q="Contact name" autocomplete="name">
+            </div>
+            <div class="field">
+              <span class="lbl">Email <span class="req">*</span></span>
+              <input type="email" id="email" data-q="Email" autocomplete="email">
+            </div>
+          </div>
+          <div class="field">
+            <span class="lbl">Team members &amp; roles</span>
+            <div id="teamRows">
+              <div class="teamrow">
+                <input type="text" class="tm-name" placeholder="Name">
+                <input type="text" class="tm-role" placeholder="Role">
+                <button type="button" class="rowdel" aria-label="Remove this member">×</button>
+              </div>
+            </div>
+            <button type="button" class="addrow" id="addMember">+ Add member</button>
+          </div>
+          <div class="two">
+            <div class="field">
+              <span class="lbl">EPFL affiliation</span>
+              <input type="text" id="affiliation" data-q="EPFL affiliation" placeholder="Lab, section, alum year...">
+            </div>
+            <div class="field">
+              <span class="lbl">Project / website link</span>
+              <input type="url" id="link" data-q="Link" placeholder="https://">
+            </div>
+          </div>
+          <div class="two">
+            <div class="field">
+              <span class="lbl">Grant amount received (CHF)</span>
+              <input type="text" id="amount" data-q="Grant amount (CHF)" inputmode="numeric" placeholder="e.g. 50000">
+            </div>
+            <div class="field">
+              <span class="lbl">Grant period</span>
+              <input type="text" id="period" data-q="Grant period" placeholder="e.g. Mar–Sep 2025">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 03 -->
+      <section class="doc" id="achievements" style="--cd:var(--blue-d); --c:var(--blue)">
+        <div class="eyebrow">03 · The core</div>
+        <h2>How support became achievements</h2>
+        <p class="lead2">The grant existed to close the gap between a proof-of-concept and a first real-world validation. Tell us, plainly, what moved.</p>
+        <p>Remind us what you set out to prove when the grant began, then what you actually achieved against it. Concrete beats polished: a working pipeline, a signed pilot, a churn number, a model that finally cleared a threshold. The three goals below are a prompt, not a grid, you don't have to answer them one by one.</p>
+        <div class="grid cols-3">
+          <div class="card accent" style="--c:var(--blue); --cd:var(--blue-d)"><span class="tag" style="--cd:var(--blue-d)">Goal 1</span><h3>Feasibility</h3><p>What is now technically proven that wasn't before?</p></div>
+          <div class="card accent" style="--c:var(--teal); --cd:var(--teal-d)"><span class="tag" style="--cd:var(--teal-d)">Goal 2</span><h3>Desirability</h3><p>What did real users do or say that shows they want it?</p></div>
+          <div class="card accent" style="--c:var(--orange); --cd:var(--orange-d)"><span class="tag" style="--cd:var(--orange-d)">Goal 3</span><h3>Viability</h3><p>What's the earliest credible signal it can pay for itself?</p></div>
+        </div>
+        <div class="fields">
+          <div class="field">
+            <span class="lbl">What you set out to prove with the grant <span class="req">*</span></span>
+            <p class="hint">Name the one or two assumptions that, if wrong, would have sunk the project.</p>
+            <textarea id="goals_start" data-q="Set out to prove" data-target="40" placeholder="The assumptions you most needed to de-risk when the grant began."></textarea>
+          </div>
+          <div class="field">
+            <span class="lbl">Your biggest achievements during the grant <span class="req">*</span></span>
+            <p class="hint">For each win, give the metric, the before/after number, and the evidence. Numbers beat adjectives.</p>
+            <textarea id="achievements_txt" class="tall" data-q="Achievements" data-target="70" placeholder="Concrete is best: a working pipeline, a signed pilot, a metric cleared, a number that moved."></textarea>
+            <details class="ex"><summary>See an example</summary><div class="exbody">
+              <div class="ex-row good"><span class="ex-tag">Strong</span><span>Cut inference latency from 4.2s to 380ms in production; signed 2 paid pilots (CHF 1.5k/mo each); 11 of 14 test users completed the core flow unaided.</span></div>
+              <div class="ex-row weak"><span class="ex-tag">Weak</span><span>Made good progress on the product and got positive feedback from users.</span></div>
+            </div></details>
+          </div>
+          <div class="field">
+            <span class="lbl">Which support actually moved the needle</span>
+            <p class="hint">Name the specific resource and what it unlocked, and call out anything that didn't help.</p>
+            <textarea id="support" data-q="Support that helped" data-target="35" placeholder="The Station, lab/researcher connections, partner intros, design/customer coaching, community. What helped, and what didn't."></textarea>
+          </div>
+        </div>
+        <div class="callout blue">
+          <span class="k">Honest is more useful than impressive</span>
+          <p>If a goal didn't move, or you learned the opposite of what you expected, say so. Knowing what didn't work is how the next cohort gets a better program.</p>
+        </div>
+      </section>
+
+      <!-- 04 -->
+      <section class="doc" id="funds" style="--cd:var(--orange-d); --c:var(--orange)">
+        <div class="eyebrow">04 · Accountability</div>
+        <h2>Use of funds</h2>
+        <p class="lead2">A short narrative is enough, no line-by-line accounting.</p>
+        <p>Eligible categories were salaries, cloud/AI infrastructure, and technical outsourcing (prototyping, data annotation, UX/UI, user testing). Tell us roughly how the money went, and whether it went where you expected.</p>
+        <div class="fields">
+          <div class="field" style="margin-bottom:6px">
+            <span class="lbl">How the grant was used</span>
+            <p class="hint">A rough split across the categories is plenty, e.g. "~60% salaries, ~30% cloud, ~10% user testing".</p>
+            <textarea id="funds_txt" data-q="Use of funds" data-target="35" placeholder="Roughly how the money was spent, and any surprises."></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- 05 -->
+      <section class="doc" id="now" style="--cd:var(--teal-d); --c:var(--teal)">
+        <div class="eyebrow">05 · The snapshot</div>
+        <h2>Where things stand now</h2>
+        <p class="lead2">A clear picture of the project today, as of the moment you write this.</p>
+        <div class="kv">
+          <div class="k">Stage</div><div>Prototype, pilot, in market, paused, pivoted, or wound down.</div>
+          <div class="k">Team</div><div>Who is working on it now and at what intensity.</div>
+          <div class="k">Traction</div><div>Users, pilots, revenue, letters of intent, partnerships.</div>
+          <div class="k">Company</div><div>Incorporated or not, and where.</div>
+          <div class="k">Funding</div><div>Anything raised or committed since the grant.</div>
+        </div>
+        <div class="fields">
+          <div class="field">
+            <span class="lbl">Current stage <span class="req">*</span></span>
+            <select id="stage" data-q="Current stage">
+              <option value="">Select...</option>
+              <option>Prototype / pre-pilot</option>
+              <option>In pilot</option>
+              <option>In market / generating revenue</option>
+              <option>Pivoted</option>
+              <option>Paused</option>
+              <option>Wound down</option>
+            </select>
+          </div>
+          <div class="field">
+            <span class="lbl">Current situation in your words <span class="req">*</span></span>
+            <p class="hint">Cover team size and intensity, traction with numbers, and your single current focus.</p>
+            <textarea id="now_txt" class="tall" data-q="Current situation" data-target="60" placeholder="Team and intensity, traction (users, pilots, revenue, LOIs, partnerships), and what you're focused on right now."></textarea>
+            <details class="ex"><summary>See an example</summary><div class="exbody">
+              <div class="ex-row good"><span class="ex-tag">Strong</span><span>Two co-founders full-time, one engineer part-time. 3 active pilots, CHF 4.5k MRR, incorporating as a Sàrl in August, in talks with two angels.</span></div>
+              <div class="ex-row weak"><span class="ex-tag">Weak</span><span>Things are going well and we're growing steadily.</span></div>
+            </div></details>
+          </div>
+          <div class="two">
+            <div class="field">
+              <span class="lbl">Incorporated?</span>
+              <input type="text" id="incorporated" data-q="Incorporation" placeholder="Yes/No, and where">
+            </div>
+            <div class="field">
+              <span class="lbl">Funding since the grant</span>
+              <input type="text" id="funding" data-q="Funding since grant" placeholder="Grants, angels, VC, revenue, or none yet">
+            </div>
+          </div>
+        </div>
+        <div class="callout teal">
+          <span class="k">Pivots and stops count</span>
+          <p>If the project changed direction or stopped, that's a valid outcome. Tell us what you're doing now instead and what you carried forward.</p>
+        </div>
+      </section>
+
+      <!-- 06 -->
+      <section class="doc" id="irl">
+        <div class="eyebrow">06 · Readiness</div>
+        <h2>Readiness check</h2>
+        <p class="lead2">A quick quantified read on how far the venture moved.</p>
+        <p>For each dimension, pick the highest level that was already true <strong>at the start of the grant</strong>, and the highest that is true <strong>now</strong>. The number itself matters less than the movement and where the gaps sit. Honest beats flattering, a zero-change with a clear reason is more useful than an inflated jump, and we may sanity-check it against your application.</p>
+        <div class="irlwrap">
+          <div class="irlcol">
+            <div class="irlgrid" id="irlGrid"></div>
+          </div>
+          <div class="irlradar-col">
+            <div class="irlradar" id="irlRadar"></div>
+            <div class="radleg">
+              <span><i style="border-top-style:dashed;border-color:var(--ash)"></i>At grant start</span>
+              <span><i></i>Now</span>
+            </div>
+          </div>
+        </div>
+        <p class="hint">Each option spells out what that level means. Leave a dimension blank if it doesn't apply, IPR is often not relevant.</p>
+      </section>
+
+      <!-- 07 -->
+      <section class="doc" id="next" style="--cd:var(--ember); --c:var(--ember)">
+        <div class="eyebrow">07 · The road ahead</div>
+        <h2>What comes next</h2>
+        <p class="lead2">Where you're headed, and how the Launchpad can still be useful.</p>
+        <div class="fields">
+          <div class="field">
+            <span class="lbl">Your next milestones (6–12 months) <span class="req">*</span></span>
+            <p class="hint">Two or three milestones, each with a rough date and a number where you can.</p>
+            <textarea id="milestones" data-q="Next milestones" data-target="40" placeholder="The two or three things that matter most, with rough timing."></textarea>
+            <details class="ex"><summary>See an example</summary><div class="exbody">
+              <div class="ex-row good"><span class="ex-tag">Strong</span><span>Q3: convert 2 pilots to annual contracts. Q4: hire one ML engineer, close a CHF 300k pre-seed. Q1 2027: reach CHF 10k MRR.</span></div>
+              <div class="ex-row weak"><span class="ex-tag">Weak</span><span>Get more customers and try to raise some money.</span></div>
+            </div></details>
+          </div>
+        </div>
+      </section>
+
+      <!-- 08 -->
+      <section class="doc" id="send" style="--cd:var(--ember); --c:var(--ember)">
+        <div class="eyebrow">08 · A quote &amp; send</div>
+        <h2>One last thing, then send</h2>
+        <p class="lead2">An optional line we can quote in EPFL and UBS communications, in your own voice.</p>
+        <div class="fields">
+          <div class="field">
+            <span class="lbl">An optional quote / testimonial</span>
+            <textarea id="testimonial" data-q="Testimonial" data-target="25" placeholder="A sentence or two on what the AI Track grant meant for the project."></textarea>
+          </div>
+          <div class="field">
+            <span class="lbl">Anything else?</span>
+            <textarea id="note" data-q="Note"></textarea>
+          </div>
+        </div>
+        <div class="formfoot">
+          <button type="submit" class="cta">Submit report ›</button>
+          <span class="formnote" id="formNote">Submitting opens your email app with everything pre-filled. Just hit send.</span>
+        </div>
+        <p class="muted">Prefer to send it another way, or have questions? Marius Conti, Program Lead · <a href="mailto:marius.conti@epfl.ch">marius.conti@epfl.ch</a>.</p>
+      </section>
+
+      </form>
+
+      <footer class="foot">EPFL Startup Launchpad · AI Track 2025 Grant · closing report · powered by UBS</footer>
+    </main>
+  </div>
+
+<script>
+/* scroll-spy: highlight the active section in the sidebar */
+(function(){
+  const links=[...document.querySelectorAll('#nav a')];
+  const map=new Map(links.map(a=>[a.getAttribute('href').slice(1), a]));
+  const secs=[...document.querySelectorAll('section.doc')];
+  function setActive(id){ links.forEach(a=>a.classList.remove('active')); const a=map.get(id); if(a) a.classList.add('active'); }
+  const obs=new IntersectionObserver(entries=>{
+    const vis=entries.filter(e=>e.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);
+    if(vis.length) setActive(vis[0].target.id);
+  },{ rootMargin:'-70px 0px -70% 0px', threshold:0 });
+  secs.forEach(s=>obs.observe(s));
+  links.forEach(a=>a.addEventListener('click',()=>setActive(a.getAttribute('href').slice(1))));
+})();
+
+/* report form: build a pre-filled mailto on submit */
+(function(){
+  const f=document.getElementById('reportForm'); if(!f) return;
+  const noteEl=document.getElementById('formNote');
+  const TO='marius.conti@epfl.ch';
+  const FORM_VERSION='1.3';        /* bump this when the form changes */
+  const BUILD_DATE='2026-06-29';   /* date this version shipped; both are sent with every submission */
+
+  const txt=id=>{ const e=document.getElementById(id); return e?(e.value||'').trim():''; };
+  const add=(arr,label,val)=>{ if(val&&val.length) arr.push(label+': '+val); };
+  const head=(arr,t)=>{ arr.push(''); arr.push('— '+t+' —'); };
+  const words=s=>{ s=(s||'').trim(); return s?s.split(/\s+/).length:0; };
+
+  /* live word-target indicator on every textarea with a data-target */
+  f.querySelectorAll('textarea[data-target]').forEach(ta=>{
+    const target=parseInt(ta.dataset.target,10)||30;
+    const wc=document.createElement('p'); wc.className='wc'; ta.insertAdjacentElement('afterend',wc);
+    const upd=()=>{
+      const n=words(ta.value);
+      wc.classList.remove('mid','ok');
+      if(n===0){ wc.textContent='Aim for roughly '+target+' words'; }
+      else if(n<target){ wc.textContent=n+' words · a bit more detail helps'; wc.classList.add('mid'); }
+      else { wc.textContent=n+' words · looks good ✓'; wc.classList.add('ok'); }
+    };
+    ta.addEventListener('input',upd); upd();
+  });
+
+  /* repeatable team rows: duplicate one row per member */
+  const teamRows=document.getElementById('teamRows');
+  const addMember=document.getElementById('addMember');
+  if(teamRows&&addMember){
+    addMember.addEventListener('click',()=>{
+      const r=teamRows.firstElementChild.cloneNode(true);
+      r.querySelectorAll('input').forEach(i=>i.value='');
+      teamRows.appendChild(r);
+      const fn=r.querySelector('.tm-name'); if(fn) fn.focus();
+    });
+    teamRows.addEventListener('click',ev=>{
+      if(!ev.target.classList.contains('rowdel')) return;
+      const row=ev.target.closest('.teamrow');
+      if(teamRows.children.length>1) row.remove();
+      else row.querySelectorAll('input').forEach(i=>i.value='');
+    });
+  }
+  const teamList=()=>[...(teamRows?teamRows.querySelectorAll('.teamrow'):[])].map(r=>{
+    const n=(r.querySelector('.tm-name').value||'').trim();
+    const ro=(r.querySelector('.tm-role').value||'').trim();
+    if(!n&&!ro) return '';
+    return ro ? n+' ('+ro+')' : n;
+  }).filter(Boolean).join('; ');
+
+  /* IRL readiness check (KTH Innovation Readiness Level) — start vs now */
+  const IRL=[
+    {key:'crl',code:'CRL',name:'Customer',q:'Is the need real, and will customers adopt and pay?',hue:'--blue',hued:'--blue-d',L:[
+      'A hypothesis that a need or problem might exist in a market.',
+      'Desk research done and a clearer problem / need hypothesis written.',
+      'Spoke directly with a few potential customers/experts and refined the problem.',
+      'Several customers confirm the problem; we know the user, payer and decision-maker.',
+      'Customers confirm our solution would address it (initial problem-solution fit); first segment chosen.',
+      'Customer testing confirmed the value; structured sales activity started.',
+      'Customer agreements and first/test sales of early versions, with a few active users.',
+      'Selling a market-ready product near target price to many active users, with a real sales process.',
+      'Widespread, repeatable, scalable sales and a large, growing user base.']},
+    {key:'trl',code:'TRL',name:'Technology',q:'Does the solution work, and is it fit for purpose?',hue:'--teal',hued:'--teal-d',L:[
+      'Identified research results or an idea with potential applications.',
+      'Defined and described a technology concept (still unproven).',
+      'Lab tests of key functions suggest it could work; active R&D started.',
+      'Basic components work together in the lab (initial validation).',
+      'Integrated technology tested in a realistic, relevant environment.',
+      'A representative prototype works in a relevant environment, meeting most requirements.',
+      'A near-complete prototype works in a real operational environment.',
+      'Complete technology proven in real operations by first users, meeting all specs.',
+      'Technology proven, scalable and in continuous real use by several users.']},
+    {key:'brl',code:'BRL',name:'Business model',q:'Is there a viable, sustainable model around it?',hue:'--orange',hued:'--orange-d',L:[
+      'Only a vague description of the business idea and value proposition.',
+      'Business concept and value proposition described in a structured form.',
+      'Full business model described (e.g. canvas), with market, size and competition.',
+      'A first simplified P&L suggests economic viability.',
+      'Revenue and cost sides validated with feedback from customers/experts/suppliers.',
+      'Whole model tested in a realistic scenario (pilot, pre-order, tender); projections show viability.',
+      'First commercial-terms sales show willingness to pay; key partner agreements in place.',
+      '1-3 years of operating metrics show the model holds and is sustainable.',
+      'Sustainable model operational, meeting or exceeding profit, growth and impact expectations.']},
+    {key:'iprl',code:'IPRL',name:'IPR',q:'Is the IP identified, owned, and protectable?',hue:'--blue',hued:'--blue-d',na:true,L:[
+      'We suspect there may be some IP, but it is undocumented.',
+      'Possible forms of IP mapped and ownership clarified (we can use it).',
+      'Key IP described in detail and protectability assessed.',
+      'A professional confirmed what can be protected and why it matters.',
+      'Draft IPR strategy and a first formal application/registration filed.',
+      'Complete, professionally validated IPR strategy and an initial freedom-to-operate view.',
+      'Key IP entered national/regional phases (US, EU, JP, etc.).',
+      'IPR strategy fully implemented; key IP granted in a first country/region.',
+      'Strong, granted and maintained IP protection in the relevant countries.']},
+    {key:'tmrl',code:'TMRL',name:'Team',q:'Are the right people present, with capacity and alignment?',hue:'--teal',hued:'--teal-d',L:[
+      'Essentially one person, missing key competencies, little view of what is needed.',
+      '1-2 people with a first idea of which competencies will be needed.',
+      'Some competencies present, gaps identified, and a near-term plan.',
+      'Clear route to market, a committed champion, recruitment plan underway.',
+      'A founding team working together, with agreed and signed roles and equity.',
+      'Complementary, diverse founding team with all near-term competencies and a clear CEO.',
+      'Well-functioning team with documented vision/roles, a growth plan, and advisors.',
+      'Professional leadership team, diverse board, HR in place, recruitment ongoing.',
+      'High-performing organisation with continuous learning and a sustained management team.']},
+    {key:'frl',code:'FRL',name:'Funding',q:'Is there enough runway to reach a viable model?',hue:'--orange',hued:'--orange-d',L:[
+      'Little insight into the activities, costs or funding options.',
+      'Initial activities/costs described, with funding options for first milestones.',
+      'Funding secured for initial verification / feasibility (e.g. 1-6 months).',
+      'Elaborated verification plan with funding secured for a substantial part.',
+      'Tested funding pitch, a 12-month P&L and cash flow, and a decided strategy.',
+      '3-5 year P&L budget and cash flow clarifying near and medium-term needs.',
+      'Discussing a defined offer with funders, with a complete, tested pitch and plan.',
+      'Term-sheet-level discussions with interested funders; due-diligence ready.',
+      '6-12 months runway secured (cash or recurring revenue) with full monitoring.']}
+  ];
+  const IRL_ANG={crl:-90,trl:-30,brl:30,iprl:90,tmrl:150,frl:210};
+  const irlGrid=document.getElementById('irlGrid');
+  const irlVal=(key,which)=>{ const el=irlGrid&&irlGrid.querySelector('.irl-'+which+'[data-key="'+key+'"]'); return el?el.value:''; };
+
+  if(irlGrid){
+    const opts=d=>{ let o='<option value="">Level…</option>';
+      d.L.forEach((s,i)=>{ o+='<option value="'+(i+1)+'">L'+(i+1)+' · '+s.replace(/"/g,'&quot;')+'</option>'; });
+      if(d.na) o+='<option value="na">Not applicable</option>'; return o; };
+    irlGrid.innerHTML=IRL.map(d=>'<div class="irlrow" data-key="'+d.key+'" style="--c:var('+d.hue+');--cd:var('+d.hued+')">'
+      +'<div class="ih"><span class="t">'+d.name+'</span><span class="code">'+d.code+'</span><span class="delta" data-delta>—</span></div>'
+      +'<p class="iq">'+d.q+'</p>'
+      +'<div class="irlsel">'
+      +'<div class="field"><span class="lbl">At grant start</span><select class="irl-start" data-key="'+d.key+'">'+opts(d)+'</select></div>'
+      +'<div class="field"><span class="lbl">Now</span><select class="irl-now" data-key="'+d.key+'">'+opts(d)+'</select></div>'
+      +'</div></div>').join('');
+
+    const axisEnd=k=>{ const a=IRL_ANG[k]*Math.PI/180; return [180+130*Math.cos(a),180+130*Math.sin(a)]; };
+    const lblPos={crl:['CRL',180,34,'middle'],trl:['TRL',300,112,'start'],brl:['BRL',300,252,'start'],iprl:['IPRL',180,332,'middle'],tmrl:['TMRL',60,252,'end'],frl:['FRL',60,112,'end']};
+    function irlRadarSVG(){
+      const pt=(k,v)=>{ const a=IRL_ANG[k]*Math.PI/180, r=(v/9)*130; return [180+r*Math.cos(a),180+r*Math.sin(a)]; };
+      const naSet=new Set(IRL.filter(d=>irlVal(d.key,'start')==='na'||irlVal(d.key,'now')==='na').map(d=>d.key));
+      const active=IRL.filter(d=>!naSet.has(d.key));
+      const num=v=>(v&&v!=='na')?(+v):0;
+      const polyOf=w=>active.map(d=>pt(d.key,num(irlVal(d.key,w))).map(n=>n.toFixed(1)).join(',')).join(' ');
+      const labels=IRL.map(d=>{const l=lblPos[d.key];const na=naSet.has(d.key);
+        return '<text x="'+l[1]+'" y="'+l[2]+'" text-anchor="'+l[3]+'" font-family="var(--mono)" font-size="11" style="fill:'+(na?'var(--ash)':'var(--ink)')+'">'+l[0]+(na?' n/a':'')+'</text>';}).join('');
+      return '<svg viewBox="0 0 360 360" width="100%" role="img" aria-label="Readiness radar, start vs now">'
+        +'<circle cx="180" cy="180" r="43.33" fill="none" style="stroke:var(--sand)"/>'
+        +'<circle cx="180" cy="180" r="86.67" fill="none" style="stroke:var(--sand)"/>'
+        +'<circle cx="180" cy="180" r="130" fill="none" style="stroke:var(--sand)"/>'
+        +'<g style="stroke:var(--sand)">'+IRL.map(d=>{const e=axisEnd(d.key);return '<line x1="180" y1="180" x2="'+e[0].toFixed(1)+'" y2="'+e[1].toFixed(1)+'"/>';}).join('')+'</g>'
+        +'<polygon points="'+polyOf('start')+'" style="fill:none;stroke:var(--ash);stroke-width:1.5;stroke-dasharray:4 3;stroke-linejoin:round"/>'
+        +'<polygon points="'+polyOf('now')+'" style="fill:var(--ember);fill-opacity:.10;stroke:var(--ember);stroke-width:2;stroke-linejoin:round"/>'
+        +'<g>'+labels+'</g></svg>';
+    }
+    function irlUpdate(){
+      IRL.forEach(d=>{ const row=irlGrid.querySelector('.irlrow[data-key="'+d.key+'"]'); if(!row) return;
+        const s=irlVal(d.key,'start'), n=irlVal(d.key,'now'); const b=row.querySelector('[data-delta]'); b.className='delta';
+        if(s==='na'||n==='na'){ b.textContent='n/a'; }
+        else if(s&&n){ const diff=(+n)-(+s); b.textContent=(diff>0?'+':'')+diff+(Math.abs(diff)===1?' level':' levels'); b.classList.add(diff>0?'up':diff<0?'down':'flat'); }
+        else { b.textContent='—'; } });
+      const r=document.getElementById('irlRadar'); if(r) r.innerHTML=irlRadarSVG();
+    }
+    irlGrid.addEventListener('change',irlUpdate); irlUpdate();
+  }
+  const irlLines=()=>{ const out=[]; let any=false;
+    IRL.forEach(d=>{ const s=irlVal(d.key,'start'), n=irlVal(d.key,'now'); if(!s&&!n) return; any=true;
+      if(s==='na'||n==='na'){ out.push(d.name+' ('+d.code+'): n/a'); return; }
+      const ss=s?('L'+s):'—', nn=n?('L'+n):'—'; let diff=''; if(s&&n){ const dd=(+n)-(+s); diff=' ('+(dd>0?'+':'')+dd+')'; }
+      out.push(d.name+' ('+d.code+'): start '+ss+' → now '+nn+diff); });
+    return any?out.join('\n'):''; };
+
+  /* required narrative fields that get a soft "looks brief" nudge */
+  const BRIEF=[['goals_start','what you set out to prove'],['achievements_txt','your achievements'],
+    ['now_txt','your current situation'],['milestones','your next milestones']];
+  const BRIEF_MIN=25; /* words */
+  let briefAck=false;
+
+  f.addEventListener('submit',e=>{
+    e.preventDefault();
+    const project=txt('project'), name=txt('fullname'), email=txt('email');
+    const goals=txt('goals_start'), ach=txt('achievements_txt'), stage=txt('stage');
+    const now=txt('now_txt'), miles=txt('milestones');
+    if(!project||!name||!email||!goals||!ach||!stage||!now||!miles){
+      noteEl.textContent='Please complete the required fields (*): project, name, email, what you set out to prove, achievements, current stage, current situation, and next milestones.';
+      noteEl.classList.add('err');
+      const first=!project?'project':!name?'fullname':!email?'email':!goals?'goals_start':!ach?'achievements_txt':!stage?'stage':!now?'now_txt':'milestones';
+      const el=document.getElementById(first); if(el){ el.focus(); el.scrollIntoView({behavior:'smooth',block:'center'}); }
+      return;
+    }
+    /* soft nudge: warn once if required answers look thin, but never block a second send */
+    if(!briefAck){
+      const thin=BRIEF.filter(([id])=>words(txt(id))<BRIEF_MIN);
+      if(thin.length){
+        briefAck=true;
+        noteEl.textContent='A few answers look brief: '+thin.map(t=>t[1]).join(', ')+'. More detail makes the report far more useful, but you can submit as is, just hit Submit again.';
+        noteEl.classList.add('err');
+        const el=document.getElementById(thin[0][0]); if(el){ el.focus(); el.scrollIntoView({behavior:'smooth',block:'center'}); }
+        return;
+      }
+    }
+    noteEl.classList.remove('err');
+
+    const L=[];
+    L.push('AI Track 2025 Grant — Closing report');
+    head(L,'Identity');
+    add(L,'Project / startup',project);
+    add(L,'One-liner',txt('oneliner'));
+    add(L,'Contact',name);
+    add(L,'Email',email);
+    add(L,'Team',teamList());
+    add(L,'EPFL affiliation',txt('affiliation'));
+    add(L,'Link',txt('link'));
+    add(L,'Grant amount (CHF)',txt('amount'));
+    add(L,'Grant period',txt('period'));
+
+    head(L,'How support became achievements');
+    add(L,'What we set out to prove',goals);
+    add(L,'Biggest achievements',ach);
+    add(L,'Support that moved the needle',txt('support'));
+
+    head(L,'Use of funds');
+    add(L,'How the grant was used',txt('funds_txt'));
+
+    head(L,'Where things stand now');
+    add(L,'Current stage',stage);
+    add(L,'Current situation',now);
+    add(L,'Incorporation',txt('incorporated'));
+    add(L,'Funding since the grant',txt('funding'));
+
+    const irl=irlLines();
+    if(irl){ head(L,'Readiness check (IRL · KTH model, levels 1-9)'); irl.split('\n').forEach(x=>L.push(x)); }
+
+    head(L,'What comes next');
+    add(L,'Next milestones (6–12 months)',miles);
+
+    head(L,'A quote & more');
+    add(L,'Testimonial',txt('testimonial'));
+    add(L,'Note',txt('note'));
+
+    L.push(''); L.push('Form version: '+FORM_VERSION+' · '+BUILD_DATE);
+
+    const subject='AI Track 2025 — Closing report — '+project;
+    const bodyText=L.join('\n');
+    const mailtoHref='mailto:'+TO+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(bodyText);
+    const hp=(document.getElementById('hp_website')||{}).value||'';
+    const tokenEl=f.querySelector('[name="cf-turnstile-response"]');
+    const token=tokenEl?tokenEl.value:'';
+    const btn=f.querySelector('button[type="submit"]');
+
+    noteEl.classList.remove('err'); noteEl.textContent='Sending your report…'; if(btn) btn.disabled=true;
+    sendReport({subject, body:bodyText, replyTo:email, website:hp, token})
+      .then(()=>{ try{ localStorage.removeItem(STORE_KEY); }catch(_){} showSuccess(); })
+      .catch(()=>{
+        if(btn) btn.disabled=false;
+        noteEl.classList.add('err');
+        noteEl.innerHTML='Couldn’t send automatically. <a id="mailtoFallback" href="'+mailtoHref.replace(/"/g,'&quot;')+'">Open it in your mail app instead</a>, then just press send.';
+        try{ window.location.href=mailtoHref; }catch(_){}
+      });
+  });
+
+  const ENDPOINT='/api/closing-report';
+  function sendReport(p){
+    return fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)})
+      .then(res=>{ if(!res.ok) throw new Error('status '+res.status); return res.json().catch(()=>({})); })
+      .then(d=>{ if(!d||!d.ok) throw new Error('not ok'); return d; });
+  }
+  function showSuccess(){
+    f.style.display='none';
+    const priv=document.querySelector('.privacy'); if(priv) priv.style.display='none';
+    let s=document.getElementById('reportDone');
+    if(!s){ s=document.createElement('section'); s.id='reportDone'; s.className='done';
+      s.innerHTML='<div class="eyebrow">Submitted</div><h2>Thank you, your report is in.</h2>'
+        +'<p class="lead2">We’ve received your closing report for the AI Track 2025 grant. Nothing else to do, we’ll be in touch.</p>';
+      f.parentNode.insertBefore(s, f.nextSibling); }
+    s.style.display='block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  /* local draft autosave — this browser/device only, no server, no database */
+  const STORE_KEY='epfl-aitrack-closing-v1';
+  let saveT=null, flashT=null;
+  const savedDot=document.getElementById('savedDot');
+  function flashSaved(){ if(!savedDot) return; savedDot.textContent='✓ Draft saved'; clearTimeout(flashT); flashT=setTimeout(()=>{ savedDot.textContent=''; },1600); }
+  function collectState(){
+    const st={byId:{},team:[],irl:{}};
+    f.querySelectorAll('input[id],textarea[id],select[id]').forEach(el=>{ st.byId[el.id]=el.value; });
+    if(teamRows) st.team=[...teamRows.querySelectorAll('.teamrow')].map(r=>({n:r.querySelector('.tm-name').value,role:r.querySelector('.tm-role').value}));
+    IRL.forEach(d=>{ st.irl[d.key]={s:irlVal(d.key,'start'),n:irlVal(d.key,'now')}; });
+    return st;
+  }
+  function persist(){ try{ localStorage.setItem(STORE_KEY,JSON.stringify(collectState())); }catch(e){} flashSaved(); }
+  function schedulePersist(){ clearTimeout(saveT); saveT=setTimeout(persist,400); }
+  function restoreState(){
+    let st; try{ st=JSON.parse(localStorage.getItem(STORE_KEY)); }catch(e){} if(!st) return;
+    if(st.byId) Object.keys(st.byId).forEach(id=>{ const el=document.getElementById(id); if(el&&st.byId[id]!=null) el.value=st.byId[id]; });
+    if(teamRows&&Array.isArray(st.team)&&st.team.length){
+      while(teamRows.children.length<st.team.length){ const r=teamRows.firstElementChild.cloneNode(true); r.querySelectorAll('input').forEach(i=>i.value=''); teamRows.appendChild(r); }
+      [...teamRows.querySelectorAll('.teamrow')].forEach((r,i)=>{ const t=st.team[i]||{}; r.querySelector('.tm-name').value=t.n||''; r.querySelector('.tm-role').value=t.role||''; });
+    }
+    if(st.irl&&irlGrid) IRL.forEach(d=>{ const v=st.irl[d.key]; if(!v) return;
+      const ss=irlGrid.querySelector('.irl-start[data-key="'+d.key+'"]'); const nn=irlGrid.querySelector('.irl-now[data-key="'+d.key+'"]');
+      if(ss&&v.s!=null) ss.value=v.s; if(nn&&v.n!=null) nn.value=v.n; });
+    /* refresh derived UI: word counters + IRL deltas/radar */
+    f.querySelectorAll('textarea[data-target]').forEach(ta=>ta.dispatchEvent(new Event('input')));
+    if(irlGrid) irlGrid.dispatchEvent(new Event('change'));
+  }
+  ['input','change'].forEach(ev=>f.addEventListener(ev,schedulePersist));
+  const clearBtn=document.getElementById('clearBtn');
+  if(clearBtn) clearBtn.addEventListener('click',()=>{
+    if(!confirm('Clear your saved answers on this device? This cannot be undone.')) return;
+    try{ localStorage.removeItem(STORE_KEY); }catch(e){} location.reload();
+  });
+  restoreState();
+})();
+</script>
+</body>
+</html>
