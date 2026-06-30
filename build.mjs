@@ -3,12 +3,18 @@
  * Fast-Track homepage generator.
  *
  * Scans top-level folders that contain an `index.html` and (re)writes the root
- * `index.html` — a branded list of those pages, by folder name. The generated
- * index.html is committed, so Cloudflare serves the repo root directly with no
- * build step.
+ * `index.html` — a branded hub that lists those pages, grouped into sections.
+ * The generated index.html is committed, so Cloudflare serves the repo root
+ * directly with no build step.
+ *
+ * Config files (both at the repo root):
+ *   sections.json  ordered groups: [{ "name": "Tools", "folders": ["IRL-..."] }, ...]
+ *                  Folders not listed in any section fall into a trailing "Other"
+ *                  group, so a new folder still shows up automatically.
+ *   private.json   folders requiring the shared password (see functions/_middleware.js
+ *                  + the SITE_PASSWORD env var). They get a "Restricted" badge.
  *
  * Workflow: add a folder with an index.html, run `node build.mjs`, commit, push.
- * Folders listed in private.json get a "Restricted" badge (see functions/_middleware.js).
  * No dependencies.
  */
 import { readdirSync, statSync, readFileSync, writeFileSync } from "node:fs";
@@ -19,12 +25,16 @@ const ROOT = process.cwd();
 // Folders never treated as pages.
 const IGNORE = new Set(["dist", "node_modules", "functions", "00_Brand", "Contributors-assets"]);
 
-// Folders that require the shared password (see functions/_middleware.js + the
-// SITE_PASSWORD env var in Cloudflare). Listed in private.json at the repo root.
-let PRIVATE = new Set();
-try {
-  PRIVATE = new Set(JSON.parse(readFileSync(join(ROOT, "private.json"), "utf8")));
-} catch {}
+function readJson(file, fallback) {
+  try {
+    return JSON.parse(readFileSync(join(ROOT, file), "utf8"));
+  } catch {
+    return fallback;
+  }
+}
+
+const PRIVATE = new Set(readJson("private.json", []));
+const SECTIONS = readJson("sections.json", []);
 
 function isPageDir(name) {
   if (name.startsWith(".") || IGNORE.has(name)) return false;
@@ -50,7 +60,7 @@ function escapeHtml(s) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
-// Collect pages
+// Collect pages (one per top-level folder containing index.html)
 const pages = readdirSync(ROOT)
   .filter(isPageDir)
   .sort((a, b) => a.localeCompare(b))
@@ -61,21 +71,42 @@ const pages = readdirSync(ROOT)
     return { dir, name: prettify(dir), title, desc, private: PRIVATE.has(dir) };
   });
 
+// Group pages into ordered sections; unlisted folders fall into "Other".
+const byDir = new Map(pages.map((p) => [p.dir, p]));
+const used = new Set();
+const groups = [];
+for (const sec of SECTIONS) {
+  const items = (sec.folders || []).map((d) => byDir.get(d)).filter(Boolean);
+  items.forEach((p) => used.add(p.dir));
+  if (items.length) groups.push({ name: sec.name, items });
+}
+const leftovers = pages.filter((p) => !used.has(p.dir));
+if (leftovers.length) groups.push({ name: SECTIONS.length ? "Other" : "", items: leftovers });
+
 // EPFL logo (inline SVG, matches the page brand bar)
 const LOGO = `<svg class="logo" viewBox="0 0 182.4 53" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="EPFL"><g class="st0"><polygon points="0,21.6 11.4,21.6 11.4,9.8 38.3,9.8 38.3,0 0,0"/><polygon points="0,53 38.3,53 38.3,43.2 11.4,43.2 11.4,31.4 0,31.4"/><rect x="11.4" y="21.6" width="24.6" height="9.8"/><path d="M86,4.9c-1.5-1.5-3.4-2.6-5.7-3.5C78,0.4,75.1,0,71.8,0H48.1v53h11.4V31.4h12.2c3.3,0,6.1-0.4,8.5-1.3 c2.3-0.9,4.2-2.1,5.7-3.5c1.5-1.5,2.5-3.1,3.2-5s1-3.8,1-5.8s-0.3-4-1-5.8C88.5,8,87.4,6.3,86,4.9z M78,18.7 c-0.6,0.8-1.3,1.4-2.3,1.8c-0.9,0.4-2,0.7-3.3,0.9c-1.2,0.1-2.5,0.2-3.9,0.2h-9.1V9.8h9.1c1.3,0,2.6,0.1,3.9,0.2 c1.2,0.1,2.3,0.4,3.3,0.9c0.9,0.4,1.7,1,2.3,1.8c0.6,0.8,0.9,1.8,0.9,3S78.6,18,78,18.7z"/><polygon points="155.5,43.2 155.5,0 144,0 144,53 182.4,53 182.4,43.2"/><polygon points="97.4,21.6 108.9,21.6 108.9,9.8 135.8,9.8 135.8,0 97.4,0"/><rect x="97.4" y="31.4" width="11.4" height="21.6"/><rect x="108.9" y="21.6" width="24.6" height="9.8"/></g></svg>`;
 
-const cards = pages.map((p) => {
+function renderCard(p) {
   const sub = escapeHtml(p.desc || p.title || "");
   const restricted = p.private ? `<span class="opentag">Restricted</span>` : "";
-  return `        <a class="card" href="./${encodeURI(p.dir)}/">
-          <div class="tags"><span class="tag">${escapeHtml(p.dir)}</span>${restricted}</div>
-          <h3>${escapeHtml(p.name)}</h3>
-          <p>${sub}</p>
-          <span class="more">${p.private ? "Unlock ›" : "Open ›"}</span>
-        </a>`;
+  return `          <a class="card" href="./${encodeURI(p.dir)}/">
+            <div class="tags"><span class="tag">${escapeHtml(p.dir)}</span>${restricted}</div>
+            <h3>${escapeHtml(p.name)}</h3>
+            <p>${sub}</p>
+            <span class="more">${p.private ? "Unlock ›" : "Open ›"}</span>
+          </a>`;
+}
+
+const sectionsHtml = groups.map((g) => {
+  const title = g.name ? `        <h2 class="sec-title">${escapeHtml(g.name)}</h2>\n` : "";
+  return `      <section class="section">
+${title}        <div class="grid">
+${g.items.map(renderCard).join("\n")}
+        </div>
+      </section>`;
 }).join("\n");
 
-const empty = `        <div class="empty"><span class="opentag">No pages yet</span><p>Add a folder with an <code>index.html</code> and rebuild.</p></div>`;
+const empty = `      <div class="empty"><span class="opentag">No pages yet</span><p>Add a folder with an <code>index.html</code> and rebuild.</p></div>`;
 
 const page = `<!doctype html>
 <html lang="en">
@@ -116,7 +147,11 @@ const page = `<!doctype html>
   .wrap{ max-width:var(--maxw); margin:0 auto; padding:clamp(28px,5vw,64px) clamp(16px,4vw,40px); }
   .eyebrow{ font:12px var(--mono); text-transform:uppercase; letter-spacing:.06em; color:var(--ember); margin:0 0 10px; }
   h1{ font-size:clamp(32px,5vw,52px); font-weight:600; line-height:1.04; letter-spacing:-.02em; margin:0 0 14px; }
-  .lead{ font-size:clamp(18px,2.1vw,21px); color:var(--clay); max-width:740px; margin:0 0 40px; }
+  .lead{ font-size:clamp(18px,2.1vw,21px); color:var(--clay); max-width:740px; margin:0 0 44px; }
+
+  .section{ margin:0 0 40px; }
+  .sec-title{ font:12px var(--mono); text-transform:uppercase; letter-spacing:.08em; color:var(--ink);
+    margin:0 0 16px; padding-bottom:8px; border-bottom:1px solid var(--sand); }
 
   .grid{ display:grid; gap:16px; grid-template-columns:repeat(3,1fr); }
   @media(max-width:900px){ .grid{ grid-template-columns:repeat(2,1fr); } }
@@ -134,7 +169,7 @@ const page = `<!doctype html>
   .card p{ margin:0 0 16px; color:var(--clay); font-size:14.5px; }
   .card .more{ margin-top:auto; font:12px var(--mono); text-transform:uppercase; letter-spacing:.05em; color:var(--ember); }
 
-  .empty{ grid-column:1/-1; border:1.5px dashed var(--orange); background:#fdfbf3; border-radius:4px; padding:28px; }
+  .empty{ border:1.5px dashed var(--orange); background:#fdfbf3; border-radius:4px; padding:28px; }
   .opentag{ font:10.5px var(--mono); color:var(--orange-d); border:1px dashed var(--orange-d); border-radius:var(--r); padding:2px 10px; }
   .empty p{ color:var(--clay); margin:12px 0 0; }
 
@@ -156,9 +191,7 @@ const page = `<!doctype html>
     <h1>Resources &amp; pages</h1>
     <p class="lead">Public resources supporting the Fast Track programs run by the EPFL Startup Launchpad.</p>
 
-    <div class="grid">
-${pages.length ? cards : empty}
-    </div>
+${pages.length ? sectionsHtml : empty}
   </main>
 
   <footer>
@@ -171,4 +204,5 @@ ${pages.length ? cards : empty}
 `;
 
 writeFileSync(join(ROOT, "index.html"), page, "utf8");
-console.log(`Wrote index.html with ${pages.length} page(s): ${pages.map((p) => p.dir).join(", ") || "(none)"}`);
+const summary = groups.map((g) => `${g.name || "(ungrouped)"}: ${g.items.map((p) => p.dir).join(", ")}`).join(" | ");
+console.log(`Wrote index.html — ${pages.length} page(s). Sections -> ${summary}`);
