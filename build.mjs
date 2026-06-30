@@ -142,6 +142,7 @@ const page = `<!doctype html>
   .brand a{ display:flex; align-items:center; }
   .brand .logo{ height:22px; width:auto; display:block; }
   .brand .logo .st0{ fill:var(--ember); }
+  .lp-logo{ height:40px; width:auto; display:block; }
   .brand .sub{ color:var(--clay); font-size:13px; border-left:1px solid var(--sand); padding-left:12px; }
 
   .wrap{ max-width:var(--maxw); margin:0 auto; padding:clamp(28px,5vw,64px) clamp(16px,4vw,40px); }
@@ -182,7 +183,8 @@ const page = `<!doctype html>
   <div class="topbar">
     <div class="brand">
       <a href="/" aria-label="Fast Track home">${LOGO}</a>
-      <span class="sub">Startup Launchpad · Fast Track Programs</span>
+      <img class="lp-logo" src="/assets/startup-launchpad.png" alt="Startup Launchpad">
+      <span class="sub">Fast Track Programs</span>
     </div>
   </div>
 
